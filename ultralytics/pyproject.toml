@@ -49,7 +49,6 @@ classifiers = [
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
-    "Programming Language :: Python :: 3.13",
     "Topic :: Software Development",
     "Topic :: Scientific/Engineering",
     "Topic :: Scientific/Engineering :: Artificial Intelligence",
@@ -69,8 +68,8 @@ dependencies = [
     "requests>=2.23.0",
     "scipy>=1.4.1",
     "torch>=1.8.0",
-    "torch>=1.8.0,!=2.4.0; sys_platform == 'win32'", # Windows CPU errors w/ 2.4.0 https://github.com/ultralytics/ultralytics/issues/15049
-    "torchvision>=0.9.0",
+    "torch>=1.8.0,!=2.11.0; sys_platform == 'win32'",
+    "torchvision>=0.26.0",
     "psutil>=5.8.0", # system utilization
     "polars>=0.20.0",
     "nvidia-ml-py>=12.0.0", # NVIDIA GPU monitoring https://pypi.org/project/nvidia-ml-py
