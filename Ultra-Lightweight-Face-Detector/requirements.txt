@@ -1,0 +1,12 @@
+# Core (training + inference)
+numpy
+opencv-python
+torch
+torchvision
+
+# Optional
+onnx
+onnxruntime
+wandb
+pandas
+matplotlib

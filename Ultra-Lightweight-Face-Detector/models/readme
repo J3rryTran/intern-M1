@@ -1,0 +1,7 @@
+A place to store your models. This fork keeps only the RFB-640 model.
+
+./pretrained:
+    version-RFB-640.pth  : version-RFB / trained with input size 640x480
+
+./onnx:
+    version-RFB-640.onnx : version-RFB / trained with 640x480 / with postprocessing

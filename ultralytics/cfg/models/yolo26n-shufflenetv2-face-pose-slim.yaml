@@ -1,0 +1,61 @@
+# YOLO26n + ShuffleNetV2 backbone, face detection + 5-point landmark (pose) — SLIM variant.
+# So với yolo26n-shufflenetv2-face-pose.yaml (baseline A/B):
+#   1. Bỏ C2PSA (-63K params) — giữ SPPF cho receptive field.
+#   2. Slim nhánh P5 neck: C3k2 cuối 512→384 (ra 96ch thay vì 128) + bỏ attn=True (~-69K params).
+#   3. GIỮ đủ 3 scale P3/P4/P5 — data train là mặt nhỏ/đông (recall-focused), không cắt P3.
+# Mọi index concat/head đã đánh lại do bỏ C2PSA (mỗi layer sau nó lùi 1).
+
+nc: 1
+end2end: True
+reg_max: 1
+kpt_shape: [5, 3]   # 5 landmark khuôn mặt (2 mắt, mũi, 2 khoé miệng); mỗi điểm (x, y, visible)
+
+scales:
+  n: [0.50, 0.25, 1024]
+
+# Backbone outputs:
+# layer 4  = P3/8
+# layer 8  = P4/16
+# layer 12 = P5/32 (SPPF, không còn C2PSA)
+backbone:
+  # [from, repeats, module, args]
+
+  # Stem
+  - [-1, 1, Conv, [32, 3, 2]]              # 0-P1/2
+  - [-1, 1, Conv, [64, 3, 2]]              # 1-P2/4
+
+  # P3 stage
+  - [-1, 1, ShuffleV2Block, [128, 2]]      # 2-P3/8
+  - [-1, 1, ShuffleV2Block, [128, 1]]      # 3
+  - [-1, 1, ShuffleV2Block, [128, 1]]      # 4-P3/8
+
+  # P4 stage
+  - [-1, 1, ShuffleV2Block, [256, 2]]      # 5-P4/16
+  - [-1, 1, ShuffleV2Block, [256, 1]]      # 6
+  - [-1, 1, ShuffleV2Block, [256, 1]]      # 7
+  - [-1, 1, ShuffleV2Block, [256, 1]]      # 8-P4/16
+
+  # P5 stage
+  - [-1, 1, ShuffleV2Block, [512, 2]]      # 9-P5/32
+  - [-1, 1, ShuffleV2Block, [512, 1]]      # 10
+  - [-1, 1, ShuffleV2Block, [512, 1]]      # 11
+  - [-1, 1, SPPF, [512, 5, 3, True]]       # 12-P5/32  (slim: bỏ C2PSA)
+
+head:
+  - [-1, 1, nn.Upsample, [None, 2, "nearest"]]   # 13
+  - [[-1, 8], 1, Concat, [1]]                    # 14 cat P4
+  - [-1, 2, C3k2, [256, True]]                   # 15
+
+  - [-1, 1, nn.Upsample, [None, 2, "nearest"]]   # 16
+  - [[-1, 4], 1, Concat, [1]]                    # 17 cat P3
+  - [-1, 2, C3k2, [128, True]]                   # 18 P3/8-small
+
+  - [-1, 1, Conv, [128, 3, 2]]                   # 19
+  - [[-1, 15], 1, Concat, [1]]                   # 20 cat P4
+  - [-1, 2, C3k2, [256, True]]                   # 21 P4/16-medium
+
+  - [-1, 1, Conv, [256, 3, 2]]                   # 22
+  - [[-1, 12], 1, Concat, [1]]                   # 23 cat P5 (SPPF out)
+  - [-1, 1, C3k2, [384, True, 0.5]]              # 24 P5/32-large  (slim: 512→384, bỏ attn)
+
+  - [[18, 21, 24], 1, Pose26, [nc, kpt_shape]]   # 25 Pose26(P3, P4, P5)
