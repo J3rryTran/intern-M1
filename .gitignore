@@ -6,3 +6,6 @@ __pycache__/
 *$py.class
 
 *.drawio
+
+intern-M1/ultralytics/runs
+intern-M1/ultralytics/ultralytics.egg-info
