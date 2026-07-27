@@ -1,32 +1,3 @@
-#!/usr/bin/env python
-# Ultralytics 🚀 AGPL-3.0 License - https://ultralytics.com/license
-"""Quantize a (optionally pruned + fine-tuned) YOLO model to INT8 for edge inference.
-
-Methods (pick with --method) — run each and compare, as requested:
-
-  fx     PyTorch FX-graph post-training static quantization -> INT8 model for CPU torch/ONNX.
-         Robust only after `model.fuse()`; the Detect head sometimes resists FX symbolic tracing, in which
-         case the script reports it and you should fall back to --method onnx. Saved as TorchScript.
-
-  onnx   Export FP32 ONNX (via Ultralytics) then ONNX Runtime *static* INT8 quantization (QDQ, per-channel).
-         This is the most portable edge path (ONNX Runtime on ARM/x86). Output: <model>.int8.onnx
-
-  ncnn   Export to NCNN (via Ultralytics) and print the exact ncnn2table + ncnn2int8 calibration commands.
-         Produces an INT8 NCNN model for ARM mobile.
-
-All methods calibrate INT8 activation ranges on REAL images from --data (a folder of images, or the val
-images of a dataset). Calibration data should resemble deployment data.
-
-Examples
---------
-    python edge/quantize.py --model runs/yolo26n_struct.pt --method onnx --data datasets/coco8/images/val --imgsz 640
-    python edge/quantize.py --model runs/yolo26n_struct.pt --method fx   --data datasets/coco8/images/val
-    python edge/quantize.py --model runs/yolo26n_struct.pt --method ncnn --data datasets/coco8/images/val
-
-NOTE: not executed in the authoring environment (no torch). Run on a machine with torch + onnxruntime
-(and the ncnn tools for --method ncnn) installed.
-"""
-
 from __future__ import annotations
 
 import argparse

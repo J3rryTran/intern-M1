@@ -1,29 +1,3 @@
-#!/usr/bin/env python
-# Ultralytics 🚀 AGPL-3.0 License - https://ultralytics.com/license
-"""Prune a YOLO (yolo26n / shufflenetv2 / repvit / hybrid) model for edge deployment.
-
-Two modes — run each and compare, as requested:
-
-  structured    Physically removes the least-important conv *channels* using a dependency graph, so FLOPs,
-                latency and on-disk size all shrink for a normal dense runtime (ONNX Runtime / NCNN).
-                Needs `pip install torch-pruning`. ALWAYS fine-tune afterwards to recover accuracy.
-
-  unstructured  Zeros the smallest-magnitude individual weights globally (torch.nn.utils.prune, built-in).
-                Gives high sparsity + small compressed files, but NO dense speedup unless the target
-                runtime exploits sparsity. Good for size-constrained MCUs.
-
-Examples
---------
-    python edge/prune.py --model yolo26n.pt                    --mode structured   --ratio 0.3 --out runs/yolo26n_struct.pt
-    python edge/prune.py --model yolo26n-shufflenetv2.yaml     --mode unstructured --ratio 0.5 --out runs/sn_sparse.pt
-
-After pruning, FINE-TUNE to recover accuracy, then hand the result to edge/quantize.py:
-    yolo detect train model=runs/yolo26n_struct.pt data=coco8.yaml epochs=100 imgsz=640
-
-NOTE: this script is not executed in the authoring environment (no torch). Run it on a machine with
-torch (+ torch-pruning for structured) installed.
-"""
-
 from __future__ import annotations
 
 import argparse
