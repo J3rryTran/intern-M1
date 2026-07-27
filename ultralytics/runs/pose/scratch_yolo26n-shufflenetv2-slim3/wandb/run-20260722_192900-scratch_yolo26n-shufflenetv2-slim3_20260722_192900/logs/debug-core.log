@@ -1,0 +1,11 @@
+{"time":"2026-07-22T19:28:41.615449608Z","level":"INFO","msg":"main: starting server","port-filename":"/tmp/tmps1k6kb3r/port-7672.txt","pid":7672,"detached":false,"idle-timeout":600000000000,"log-level":0,"disable-analytics":false,"shutdown-on-parent-exit":false,"enable-dcgm-profiling":false}
+{"time":"2026-07-22T19:28:41.618067202Z","level":"INFO","msg":"server: will exit if parent process dies","ppid":7672}
+{"time":"2026-07-22T19:28:41.618041256Z","level":"INFO","msg":"server: accepting connections","addr":{"Name":"/tmp/wandb-7672-8299-3117565272/socket","Net":"unix"}}
+{"time":"2026-07-22T19:28:41.7506391Z","level":"INFO","msg":"connection: ManageConnectionData: new connection created","id":"1(@)"}
+{"time":"2026-07-22T19:29:00.881336974Z","level":"INFO","msg":"handleInformInit: received","streamId":"scratch_yolo26n-shufflenetv2-slim3_20260722_192900","id":"1(@)"}
+{"time":"2026-07-22T19:29:01.217178259Z","level":"INFO","msg":"handleInformInit: stream started","streamId":"scratch_yolo26n-shufflenetv2-slim3_20260722_192900","id":"1(@)"}
+{"time":"2026-07-22T19:29:07.928018333Z","level":"INFO","msg":"connection: cancelling request","id":"1(@)","requestId":"r7teb3lmrq5r"}
+{"time":"2026-07-23T07:09:26.333414245Z","level":"INFO","msg":"connection: cancelling request","id":"1(@)","requestId":"r7teb3lmrq5r"}
+{"time":"2026-07-23T07:09:33.797350971Z","level":"INFO","msg":"connection: cancelling request","id":"1(@)","requestId":"r7teb3lmrq5r"}
+{"time":"2026-07-23T07:09:33.802748954Z","level":"INFO","msg":"handleInformFinish: finish message received","streamId":"scratch_yolo26n-shufflenetv2-slim3_20260722_192900","id":"1(@)"}
+{"time":"2026-07-23T07:09:33.806458725Z","level":"INFO","msg":"handleInformFinish: stream closed","streamId":"scratch_yolo26n-shufflenetv2-slim3_20260722_192900","id":"1(@)"}

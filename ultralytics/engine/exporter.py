@@ -1157,8 +1157,8 @@ class Exporter:
                 .astype(np.float32)
             )
 
-        # Export to ONNX
-        if isinstance(self.model.model[-1], RTDETRDecoder):
+        # Export to ONNX (RTDETRDecoder đã bị gỡ khỏi fork — kiểm tra theo tên, không import class)
+        if type(self.model.model[-1]).__name__ == "RTDETRDecoder":
             self.args.opset = self.args.opset or 19
             assert 16 <= self.args.opset <= 19, "RTDETR export requires opset>=16;<=19"
         self.args.simplify = True

@@ -1,0 +1,42 @@
+{
+  "os":  "Linux-6.6.87.2-microsoft-standard-WSL2-x86_64-with-glibc2.31",
+  "python":  "CPython 3.13.9",
+  "startedAt":  "2026-07-24T19:20:48.502478Z",
+  "args":  [
+    "repvit-slim2"
+  ],
+  "program":  "/mnt/d/DOC/Face_identity_detection_system/experiment/intern-M1/ultralytics/train.py",
+  "codePath":  "ultralytics/train.py",
+  "codePathLocal":  "train.py",
+  "git":  {
+    "remote":  "https://github.com/J3rryTran/intern-M1.git",
+    "commit":  "63e6fad302ef19e25a607fa1c387b931cf6572d0"
+  },
+  "email":  "trantrung20023@gmail.com",
+  "root":  "/mnt/d/DOC/Face_identity_detection_system/experiment/intern-M1/ultralytics/runs/pose/repvit-slim2/yolo26n-repvit-face-pose-slim2_150e",
+  "host":  "j3rrytr",
+  "executable":  "/home/j3rry/micromamba/envs/faceDetect/bin/python",
+  "cpu_count":  10,
+  "cpu_count_logical":  20,
+  "gpu":  "NVIDIA GeForce RTX 3060",
+  "gpu_count":  1,
+  "disk":  {
+    "/":  {
+      "total":  "1081101176832",
+      "used":  "111011934208"
+    }
+  },
+  "memory":  {
+    "total":  "16633724928"
+  },
+  "gpu_nvidia":  [
+    {
+      "name":  "NVIDIA GeForce RTX 3060",
+      "memoryTotal":  "12884901888",
+      "architecture":  "Ampere",
+      "uuid":  "GPU-7badebd4-5fc1-eae3-384a-b8f141ff98c1"
+    }
+  ],
+  "cudaVersion":  "12.8",
+  "writerId":  "ui5nsyav87ha53uk7ji6uyfpldqkgetc"
+}

@@ -1,0 +1,60 @@
+# YOLO26n + RepViT backbone, face detection + 5-point landmark (pose) — SLIM2 variant.
+# Cùng phép mổ với yolo26n-shufflenetv2-face-pose-slim2.yaml (A/B đối xứng 2 backbone):
+#   1. Bỏ 1× RepViTBlock s=1 SE cuối P5 (−92,7K params — khối đơn lẻ to nhất model).
+#   2. SPPF → SimSPPF (ReLU thay SiLU: 0 params đổi, nhanh hơn edge, INT8-friendly).
+#   3. Kế thừa slim: bỏ C2PSA, P5 C3k2 512→384 bỏ attn (ra 96ch), giữ đủ 3 scale P3/P4/P5.
+# Mọi index concat/head đã đánh lại (mỗi layer sau vị trí cắt lùi 1).
+
+nc: 1
+end2end: True
+reg_max: 1
+kpt_shape: [5, 3]   # 5 landmark khuôn mặt (2 mắt, mũi, 2 khoé miệng); mỗi điểm (x, y, visible)
+
+scales:
+  n: [0.50, 0.25, 1024]
+
+# Backbone outputs:
+# layer 4  = P3/8
+# layer 8  = P4/16
+# layer 11 = P5/32 (SimSPPF)
+backbone:
+  # [from, repeats, module, args]
+
+  # Stem
+  - [-1, 1, Conv, [32, 3, 2]]                  # 0-P1/2
+  - [-1, 1, Conv, [64, 3, 2]]                  # 1-P2/4
+
+  # P3 stage
+  - [-1, 1, RepViTBlock, [128, 2, 2.0, false]] # 2-P3/8
+  - [-1, 1, RepViTBlock, [128, 1, 2.0, false]] # 3
+  - [-1, 1, RepViTBlock, [128, 1, 2.0, false]] # 4-P3/8
+
+  # P4 stage
+  - [-1, 1, RepViTBlock, [256, 2, 2.0, false]] # 5-P4/16
+  - [-1, 1, RepViTBlock, [256, 1, 2.0, false]] # 6
+  - [-1, 1, RepViTBlock, [256, 1, 2.0, true]]  # 7
+  - [-1, 1, RepViTBlock, [256, 1, 2.0, true]]  # 8-P4/16
+
+  # P5 stage (slim2: chỉ còn s2 + 1×s1)
+  - [-1, 1, RepViTBlock, [512, 2, 2.0, true]]  # 9-P5/32
+  - [-1, 1, RepViTBlock, [512, 1, 2.0, true]]  # 10
+  - [-1, 1, SimSPPF, [512, 5, 3, True]]        # 11-P5/32  (slim2: SimSPPF — ReLU, INT8-friendly)
+
+head:
+  - [-1, 1, nn.Upsample, [None, 2, "nearest"]] # 12
+  - [[-1, 8], 1, Concat, [1]]                  # 13 cat P4
+  - [-1, 2, C3k2, [256, True]]                 # 14
+
+  - [-1, 1, nn.Upsample, [None, 2, "nearest"]] # 15
+  - [[-1, 4], 1, Concat, [1]]                  # 16 cat P3
+  - [-1, 2, C3k2, [128, True]]                 # 17 P3/8-small
+
+  - [-1, 1, Conv, [128, 3, 2]]                 # 18
+  - [[-1, 14], 1, Concat, [1]]                 # 19 cat P4
+  - [-1, 2, C3k2, [256, True]]                 # 20 P4/16-medium
+
+  - [-1, 1, Conv, [256, 3, 2]]                 # 21
+  - [[-1, 11], 1, Concat, [1]]                 # 22 cat P5 (SimSPPF out)
+  - [-1, 1, C3k2, [384, True, 0.5]]            # 23 P5/32-large  (slim: 512→384, bỏ attn)
+
+  - [[17, 20, 23], 1, Pose26, [nc, kpt_shape]] # 24 Pose26(P3, P4, P5)

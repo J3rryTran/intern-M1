@@ -1,0 +1,404 @@
+_wandb:
+    value:
+        cli_version: 0.28.1
+        e:
+            ui5nsyav87ha53uk7ji6uyfpldqkgetc:
+                args:
+                    - repvit-slim2
+                codePath: ultralytics/train.py
+                codePathLocal: train.py
+                cpu_count: 10
+                cpu_count_logical: 20
+                cudaVersion: "12.8"
+                disk:
+                    /:
+                        total: "1081101176832"
+                        used: "111011934208"
+                email: trantrung20023@gmail.com
+                executable: /home/j3rry/micromamba/envs/faceDetect/bin/python
+                git:
+                    commit: 63e6fad302ef19e25a607fa1c387b931cf6572d0
+                    remote: https://github.com/J3rryTran/intern-M1.git
+                gpu: NVIDIA GeForce RTX 3060
+                gpu_count: 1
+                gpu_nvidia:
+                    - architecture: Ampere
+                      memoryTotal: "12884901888"
+                      name: NVIDIA GeForce RTX 3060
+                      uuid: GPU-7badebd4-5fc1-eae3-384a-b8f141ff98c1
+                host: j3rrytr
+                memory:
+                    total: "16633724928"
+                os: Linux-6.6.87.2-microsoft-standard-WSL2-x86_64-with-glibc2.31
+                program: /mnt/d/DOC/Face_identity_detection_system/experiment/intern-M1/ultralytics/train.py
+                python: CPython 3.13.9
+                root: /mnt/d/DOC/Face_identity_detection_system/experiment/intern-M1/ultralytics/runs/pose/repvit-slim2/yolo26n-repvit-face-pose-slim2_150e
+                startedAt: "2026-07-24T19:20:48.502478Z"
+                writerId: ui5nsyav87ha53uk7ji6uyfpldqkgetc
+        m: []
+        python_version: 3.13.9
+        t:
+            "1":
+                - 1
+            "2":
+                - 1
+                - 41
+            "3":
+                - 2
+                - 13
+                - 14
+                - 16
+                - 61
+            "4": 3.13.9
+            "5": 0.28.1
+            "12": 0.28.1
+            "13": linux-x86_64
+        visualize:
+            curves/F1-Confidence(B):
+                panel_config:
+                    fieldSettings:
+                        class: class
+                        x: x
+                        "y": "y"
+                    panelDefId: wandb/area-under-curve/v0
+                    stringSettings:
+                        title: F1-Confidence(B)
+                        x-axis-title: Confidence
+                        y-axis-title: F1
+                    transform:
+                        name: tableWithLeafColNames
+                    userQuery:
+                        queryFields:
+                            - args:
+                                - name: runSets
+                                  value: ${runSets}
+                              fields:
+                                - fields: []
+                                  name: id
+                                - fields: []
+                                  name: name
+                                - fields: []
+                                  name: _defaultColorIndex
+                                - args:
+                                    - name: tableKey
+                                      value: curves/F1-Confidence(B)_table
+                                  fields: []
+                                  name: summaryTable
+                              name: runSets
+                panel_type: Vega2
+            curves/Precision-Confidence(B):
+                panel_config:
+                    fieldSettings:
+                        class: class
+                        x: x
+                        "y": "y"
+                    panelDefId: wandb/area-under-curve/v0
+                    stringSettings:
+                        title: Precision-Confidence(B)
+                        x-axis-title: Confidence
+                        y-axis-title: Precision
+                    transform:
+                        name: tableWithLeafColNames
+                    userQuery:
+                        queryFields:
+                            - args:
+                                - name: runSets
+                                  value: ${runSets}
+                              fields:
+                                - fields: []
+                                  name: id
+                                - fields: []
+                                  name: name
+                                - fields: []
+                                  name: _defaultColorIndex
+                                - args:
+                                    - name: tableKey
+                                      value: curves/Precision-Confidence(B)_table
+                                  fields: []
+                                  name: summaryTable
+                              name: runSets
+                panel_type: Vega2
+            curves/Precision-Recall(B):
+                panel_config:
+                    fieldSettings:
+                        class: class
+                        x: x
+                        "y": "y"
+                    panelDefId: wandb/area-under-curve/v0
+                    stringSettings:
+                        title: Precision-Recall(B)
+                        x-axis-title: Recall
+                        y-axis-title: Precision
+                    transform:
+                        name: tableWithLeafColNames
+                    userQuery:
+                        queryFields:
+                            - args:
+                                - name: runSets
+                                  value: ${runSets}
+                              fields:
+                                - fields: []
+                                  name: id
+                                - fields: []
+                                  name: name
+                                - fields: []
+                                  name: _defaultColorIndex
+                                - args:
+                                    - name: tableKey
+                                      value: curves/Precision-Recall(B)_table
+                                  fields: []
+                                  name: summaryTable
+                              name: runSets
+                panel_type: Vega2
+            curves/Recall-Confidence(B):
+                panel_config:
+                    fieldSettings:
+                        class: class
+                        x: x
+                        "y": "y"
+                    panelDefId: wandb/area-under-curve/v0
+                    stringSettings:
+                        title: Recall-Confidence(B)
+                        x-axis-title: Confidence
+                        y-axis-title: Recall
+                    transform:
+                        name: tableWithLeafColNames
+                    userQuery:
+                        queryFields:
+                            - args:
+                                - name: runSets
+                                  value: ${runSets}
+                              fields:
+                                - fields: []
+                                  name: id
+                                - fields: []
+                                  name: name
+                                - fields: []
+                                  name: _defaultColorIndex
+                                - args:
+                                    - name: tableKey
+                                      value: curves/Recall-Confidence(B)_table
+                                  fields: []
+                                  name: summaryTable
+                              name: runSets
+                panel_type: Vega2
+agnostic_nms:
+    value: false
+amp:
+    value: false
+angle:
+    value: 1
+augment:
+    value: false
+auto_augment:
+    value: randaugment
+batch:
+    value: 32
+bgr:
+    value: 0
+box:
+    value: 8.5
+cache:
+    value: false
+cfg:
+    value: null
+classes:
+    value: null
+close_mosaic:
+    value: 20
+cls:
+    value: 0.5
+cls_pw:
+    value: 0
+compile:
+    value: false
+conf:
+    value: null
+copy_paste:
+    value: 0
+copy_paste_mode:
+    value: flip
+cos_lr:
+    value: true
+cutmix:
+    value: 0
+data:
+    value: /mnt/d/DOC/Face_identity_detection_system/experiment/data/exp/filtered2_recall/dataset_cus/dataset.yaml
+degrees:
+    value: 5
+deterministic:
+    value: true
+device:
+    value: "0"
+dfl:
+    value: 1.5
+dnn:
+    value: false
+dropout:
+    value: 0
+dynamic:
+    value: false
+embed:
+    value: null
+end2end:
+    value: null
+epochs:
+    value: 150
+erasing:
+    value: 0.4
+exist_ok:
+    value: false
+fliplr:
+    value: 0.5
+flipud:
+    value: 0
+format:
+    value: torchscript
+fraction:
+    value: 1
+freeze:
+    value: null
+half:
+    value: false
+hsv_h:
+    value: 0.015
+hsv_s:
+    value: 0.7
+hsv_v:
+    value: 0.4
+imgsz:
+    value: 320
+int8:
+    value: false
+iou:
+    value: 0.7
+keras:
+    value: false
+kobj:
+    value: 1
+line_width:
+    value: null
+lr0:
+    value: 0.003
+lrf:
+    value: 0.01
+mask_ratio:
+    value: 4
+max_det:
+    value: 300
+mixup:
+    value: 0
+mode:
+    value: train
+model:
+    value: yolo26n-repvit-face-pose-slim2.yaml
+momentum:
+    value: 0.937
+mosaic:
+    value: 1
+multi_scale:
+    value: 0
+name:
+    value: yolo26n-repvit-face-pose-slim2_150e
+nbs:
+    value: 64
+nms:
+    value: false
+opset:
+    value: null
+optimize:
+    value: false
+optimizer:
+    value: AdamW
+overlap_mask:
+    value: true
+patience:
+    value: 20
+perspective:
+    value: 0
+plots:
+    value: true
+pose:
+    value: 12
+pretrained:
+    value: false
+profile:
+    value: false
+project:
+    value: repvit-slim2
+rect:
+    value: false
+resume:
+    value: false
+retina_masks:
+    value: false
+rle:
+    value: 1
+save:
+    value: true
+save_conf:
+    value: false
+save_crop:
+    value: false
+save_dir:
+    value: /mnt/d/DOC/Face_identity_detection_system/experiment/intern-M1/ultralytics/runs/pose/repvit-slim2/yolo26n-repvit-face-pose-slim2_150e
+save_frames:
+    value: false
+save_json:
+    value: false
+save_period:
+    value: 50
+save_txt:
+    value: false
+scale:
+    value: 0.5
+seed:
+    value: 0
+shear:
+    value: 0
+show:
+    value: false
+show_boxes:
+    value: true
+show_conf:
+    value: true
+show_labels:
+    value: true
+simplify:
+    value: true
+single_cls:
+    value: true
+source:
+    value: null
+split:
+    value: val
+stream_buffer:
+    value: false
+task:
+    value: pose
+time:
+    value: null
+tracker:
+    value: botsort.yaml
+translate:
+    value: 0.1
+val:
+    value: true
+verbose:
+    value: true
+vid_stride:
+    value: 1
+visualize:
+    value: false
+warmup_bias_lr:
+    value: 0.1
+warmup_epochs:
+    value: 3
+warmup_momentum:
+    value: 0.8
+weight_decay:
+    value: 0.0005
+workers:
+    value: 8
+workspace:
+    value: null

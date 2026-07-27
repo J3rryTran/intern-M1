@@ -13,8 +13,8 @@ from pathlib import Path
 from ultralytics import YOLO
 
 DATA = "/mnt/d/DOC/Face_identity_detection_system/experiment/data/exp/filtered2_recall/dataset_cus/dataset.yaml"
-IMGSZ = 640
-CALIB_FRACTION = 0.03  # ~3% train (~900 anh) lam calibration - toi thieu nen ~300
+IMGSZ = 320
+CALIB_FRACTION = 0.06  # ~3% train (~900 anh) lam calibration - toi thieu nen ~300
 
 
 def val_metrics(model, tag, device):
