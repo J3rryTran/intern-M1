@@ -88,7 +88,7 @@ class WandbLogger(NullWandbLogger):
             mode=cfg.wandb_mode,
             dir=save_dir,
             config=config,
-            reinit=True,   # allow several runs in one process (sweeps)
+            reinit="finish_previous",  # allow several runs in one process (sweeps)
         )
         # Two separate x-axes so the globs don't collide:
         #   step/*  -> global_step  (per-step curves, one point per optimizer step)
@@ -99,6 +99,10 @@ class WandbLogger(NullWandbLogger):
         wandb.define_metric("train/*", step_metric="epoch")
         wandb.define_metric("val/*", step_metric="epoch")
         wandb.define_metric("time/*", step_metric="epoch")
+        # per-epoch scalars without a train/val prefix -> keep them on the epoch axis
+        wandb.define_metric("lr", step_metric="epoch")
+        wandb.define_metric("stage", step_metric="epoch")
+        wandb.define_metric("landm_weight", step_metric="epoch")
         wandb.define_metric("val/nme", step_metric="epoch", summary="min")
         wandb.define_metric("val/loss", step_metric="epoch", summary="min")
         wandb.define_metric("val/pos_recall", step_metric="epoch", summary="max")
@@ -106,6 +110,9 @@ class WandbLogger(NullWandbLogger):
         wandb.define_metric("val/map50", step_metric="epoch", summary="max")
         wandb.define_metric("val/map", step_metric="epoch", summary="max")
         wandb.define_metric("val/landm_acc", step_metric="epoch", summary="max")
+        wandb.define_metric("train/nme", step_metric="epoch", summary="min")
+        wandb.define_metric("train/landm_acc", step_metric="epoch", summary="max")
+        wandb.define_metric("train/loss", step_metric="epoch", summary="min")
         self.run_url = getattr(self.run, "url", "") or ""
         self._save_model = cfg.wandb_save_model
         self._log_steps = cfg.wandb_log_steps
@@ -131,13 +138,18 @@ class WandbLogger(NullWandbLogger):
         self._guard(self._wandb.log, payload, step=global_step)
 
     def log_epoch(self, row, global_step):
-        payload = {"epoch": row["epoch"], "global_step": global_step,
+        # epoch is the x-axis for every panel; no global_step key here so the
+        # epoch-only workspace has no stray Step-axis charts
+        payload = {"epoch": row["epoch"],
                    "stage": row.get("stage"), "lr": row.get("lr")}
         if row.get("landm_weight") is not None:
             payload["landm_weight"] = row["landm_weight"]
-        for k in ("train_loss", "train_reg", "train_cls", "train_landm",
+        for k in ("train_loss", "train_reg", "train_cls", "train_landm", "train_nme",
                   "train_acc", "train_landm_acc",
-                  "train_pos_precision", "train_pos_recall", "train_pos_f1"):
+                  "train_landm_acc_eyeL", "train_landm_acc_eyeR", "train_landm_acc_nose",
+                  "train_landm_acc_mouthL", "train_landm_acc_mouthR",
+                  "train_pos_precision", "train_pos_recall", "train_pos_f1",
+                  "train_neg_precision", "train_neg_recall"):
             if row.get(k) is not None:
                 payload[f"train/{k[len('train_'):]}"] = row[k]
         for k in ("val_loss", "val_reg", "val_cls", "val_landm", "val_nme",

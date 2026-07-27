@@ -1,0 +1,1156 @@
+priors nums:5875
+2026-07-23 09:21:53,343 - root - INFO - Use Cuda.
+2026-07-23 09:21:53,367 - root - INFO - Using GPU: NVIDIA GeForce RTX 3060
+2026-07-23 09:21:53,448 - root - INFO - Loaded models/pretrained/version-RFB-640.pth: all old keys matched; 14 landmark head keys keep their random init.
+priors nums:5875
+2026-07-23 09:21:53,620 - root - INFO - Input size 320x320 -> 5875 priors
+2026-07-23 09:21:53,625 - root - INFO - Run dir: models/rfb_landmark_20260723_092141  |  device: cuda:0
+2026-07-23 09:21:53,625 - root - INFO - TrainConfig(data=['/mnt/d/DOC/Face_identity_detection_system/experiment/data/exp/filtered2_recall/dataset_cus'], val_data=None, test_data=None, train_split='train', val_split='val', test_split='', img_size=320, epochs=150, freeze_epochs=5, batch=16, workers=4, stage1_lr=0.001, stage2_lr=0.0001, backbone_lr_factor=0.1, momentum=0.9, weight_decay=0.0005, optimizer='SGD', scheduler='cosine', milestones='30,45', t_max=-1, plateau_factor=0.5, plateau_patience=5, plateau_min_lr=1e-06, loc_weight=2.0, landm_weight=1.0, landm_loss='wing', wing_w=10.0, wing_epsilon=2.0, neg_pos_ratio=3, overlap_threshold=0.35, pck_threshold=0.1, warmup_epochs=1.0, clip_grad_norm=10.0, landm_guard=True, landm_guard_margin=1.1, landm_guard_factor=0.7, landm_guard_min=0.1, project='models', name='rfb_landmark_20260723_092141', exist_ok=True, val_period=1, verbose=True, log_interval_s=60.0, map_period=0, map_conf=0.02, map_nms_iou=0.5, map_max_det=200, wandb=True, wandb_project='rfb640-landmark', wandb_entity=None, wandb_run_name='rfb_landmark_20260723_092141', wandb_tags=None, wandb_notes='', wandb_mode='online', wandb_log_steps=False, wandb_save_model=True, seed=0, resume=None)
+2026-07-23 09:21:53,744 - root - INFO - YoloPoseDataset: 30583 images from /mnt/d/DOC/Face_identity_detection_system/experiment/data/exp/filtered2_recall/dataset_cus/images/train
+2026-07-23 09:21:53,774 - root - INFO - YoloPoseDataset: 7642 images from /mnt/d/DOC/Face_identity_detection_system/experiment/data/exp/filtered2_recall/dataset_cus/images/val
+2026-07-23 09:21:53,787 - root - INFO - Train batches: 1912  Val batches: 478
+wandb: [wandb.login()] Loaded credentials for https://api.wandb.ai from WANDB_API_KEY.
+wandb: Currently logged in as: trantrung20023 (trantrung20023-lmao) to https://api.wandb.ai. Use `wandb login --relogin` to force relogin
+wandb: setting up run 1nran1ks
+wandb: Tracking run with wandb version 0.28.1
+wandb: Run data is saved locally in models/rfb_landmark_20260723_092141/wandb/run-20260723_092207-1nran1ks
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run rfb_landmark_20260723_092141
+wandb: ⭐️ View project at https://wandb.ai/trantrung20023-lmao/rfb640-landmark
+wandb: 🚀 View run at https://wandb.ai/trantrung20023-lmao/rfb640-landmark/runs/1nran1ks
+                   from  n    params  module                                  arguments
+  0                  -1  1       464  conv_bn (Conv+BN+ReLU)                  [3, 16, s2]
+  1                  -1  1       752  conv_dw (depthwise separable)           [16, 32, s1]
+  2                  -1  1      1440  conv_dw (depthwise separable)           [32, 32, s2]
+  3                  -1  1      1440  conv_dw (depthwise separable)           [32, 32, s1]
+  4                  -1  1      2528  conv_dw (depthwise separable)           [32, 64, s2]
+  5                  -1  1      4928  conv_dw (depthwise separable)           [64, 64, s1]
+  6                  -1  1      4928  conv_dw (depthwise separable)           [64, 64, s1]
+  7                  -1  1     21032  BasicRFB                                [64, 64, s1]
+  8                  -1  1      9152  conv_dw (depthwise separable)           [64, 128, s2]
+  9                  -1  1     18048  conv_dw (depthwise separable)           [128, 128, s1]
+ 10                  -1  1     18048  conv_dw (depthwise separable)           [128, 128, s1]
+ 11                  -1  1     34688  conv_dw (depthwise separable)           [128, 256, s2]
+ 12                  -1  1     68864  conv_dw (depthwise separable)           [256, 256, s1]
+ 13                  12  1     33728  extras (Conv1x1+SepConv)                [256, 256, s2]
+ 14     [7, 10, 12, 13]  4     20244  classification_headers                  -> priors*2 (cls)
+ 15     [7, 10, 12, 13]  4     36008  regression_headers                      -> priors*4 (box)
+ 16     [7, 10, 12, 13]  4     83300  landmark_headers (NEW)                  -> priors*10 (5 kp)
+RFB-640-landmark summary: 180 layers, 359,592 parameters, 359,592 gradients, 0.28 GFLOPs (input 3x320x320)
+2026-07-23 09:22:09,373 - root - INFO - wandb run: https://wandb.ai/trantrung20023-lmao/rfb640-landmark/runs/1nran1ks
+2026-07-23 09:22:09,373 - root - INFO - Computing baseline on the val set (478 batches)...
+2026-07-23 09:23:08,548 - root - INFO - Baseline (pretrained, random landmark head): Regression Loss 0.3041, Classification Loss 0.8137
+2026-07-23 09:23:09,626 - root - INFO - Stage 1: training ONLY the landmark heads for 5 epochs at LR 0.001 (frozen modules kept in eval mode).
+2026-07-23 09:24:09,635 - root - INFO - epoch 0: step 354/1912 (19%), avg loss 42.119, 94.4 img/s, ETA 4.4 min
+2026-07-23 09:25:09,755 - root - INFO - epoch 0: step 724/1912 (38%), avg loss 37.334, 96.4 img/s, ETA 3.3 min
+2026-07-23 09:26:10,140 - root - INFO - epoch 0: step 1095/1912 (57%), avg loss 34.669, 97.1 img/s, ETA 2.2 min
+2026-07-23 09:27:10,424 - root - INFO - epoch 0: step 1454/1912 (76%), avg loss 33.046, 96.6 img/s, ETA 1.3 min
+2026-07-23 09:28:10,424 - root - INFO - epoch 0: step 1803/1912 (94%), avg loss 31.739, 95.9 img/s, ETA 0.3 min
+2026-07-23 09:28:43,426 - root - INFO - Epoch: 0 (stage 1) - 333.8s - Train Loss: 31.4069, Regression 0.3260, Classification 0.8273, Landmark 29.9276, Train Acc 0.9995, Landmark Acc 0.5737, NME 0.1193, Face Recall 0.8627 F1 0.8678, lr 1.00e-03
+2026-07-23 09:29:17,761 - root - INFO - Epoch: 0, Validation (34.3s) Loss: 26.9651, Validation Regression Loss 0.3041 (baseline 0.3041), Validation Classification Loss: 0.8137 (baseline 0.8137), Validation Landmark Loss: 25.5431, Validation Landmark NME: 0.0958
+2026-07-23 09:29:17,761 - root - INFO -            Val Acc 0.9995  |  Face - Precision 0.8739, Recall 0.8624, F1 0.8681
+2026-07-23 09:29:17,761 - root - INFO -            Landmark Acc@0.1: 0.6527  |  eyeL 0.696  eyeR 0.684  nose 0.516  mouthL 0.685  mouthR 0.683
+2026-07-23 09:29:17,913 - root - INFO - Saved last.pth (epoch 0) + best.pth (NME 0.0958)
+2026-07-23 09:30:18,126 - root - INFO - epoch 1: step 359/1912 (19%), avg loss 25.778, 95.4 img/s, ETA 4.3 min
+2026-07-23 09:31:18,341 - root - INFO - epoch 1: step 726/1912 (38%), avg loss 25.622, 96.5 img/s, ETA 3.3 min
+2026-07-23 09:32:18,538 - root - INFO - epoch 1: step 1088/1912 (57%), avg loss 25.546, 96.4 img/s, ETA 2.3 min
+2026-07-23 09:33:19,161 - root - INFO - epoch 1: step 1453/1912 (76%), avg loss 25.363, 96.4 img/s, ETA 1.3 min
+2026-07-23 09:34:19,639 - root - INFO - epoch 1: step 1827/1912 (96%), avg loss 25.310, 96.9 img/s, ETA 0.2 min
+2026-07-23 09:34:34,669 - root - INFO - Epoch: 1 (stage 1) - 316.8s - Train Loss: 25.2775, Regression 0.3278, Classification 0.8287, Landmark 23.7933, Train Acc 0.9995, Landmark Acc 0.6842, NME 0.0900, Face Recall 0.8625 F1 0.8674, lr 1.00e-03
+2026-07-23 09:35:08,592 - root - INFO - Epoch: 1, Validation (33.9s) Loss: 25.3112, Validation Regression Loss 0.3041 (baseline 0.3041), Validation Classification Loss: 0.8137 (baseline 0.8137), Validation Landmark Loss: 23.8893, Validation Landmark NME: 0.0889
+2026-07-23 09:35:08,593 - root - INFO -            Val Acc 0.9995  |  Face - Precision 0.8739, Recall 0.8624, F1 0.8681
+2026-07-23 09:35:08,593 - root - INFO -            Landmark Acc@0.1: 0.6901  |  eyeL 0.731  eyeR 0.732  nose 0.553  mouthL 0.725  mouthR 0.709
+2026-07-23 09:35:08,674 - root - INFO - Saved last.pth (epoch 1) + best.pth (NME 0.0889)
+2026-07-23 09:36:08,716 - root - INFO - epoch 2: step 370/1912 (19%), avg loss 24.728, 98.6 img/s, ETA 4.2 min
+2026-07-23 09:37:09,189 - root - INFO - epoch 2: step 757/1912 (40%), avg loss 24.438, 100.5 img/s, ETA 3.1 min
+2026-07-23 09:38:09,560 - root - INFO - epoch 2: step 1114/1912 (58%), avg loss 24.403, 98.5 img/s, ETA 2.2 min
+2026-07-23 09:39:09,633 - root - INFO - epoch 2: step 1471/1912 (77%), avg loss 24.371, 97.7 img/s, ETA 1.2 min
+2026-07-23 09:40:09,717 - root - INFO - epoch 2: step 1820/1912 (95%), avg loss 24.326, 96.7 img/s, ETA 0.3 min
+2026-07-23 09:40:23,827 - root - INFO - Epoch: 2 (stage 1) - 315.2s - Train Loss: 24.3190, Regression 0.3265, Classification 0.8273, Landmark 22.8387, Train Acc 0.9995, Landmark Acc 0.7072, NME 0.0858, Face Recall 0.8629 F1 0.8680, lr 1.00e-03
+2026-07-23 09:40:57,806 - root - INFO - Epoch: 2, Validation (34.0s) Loss: 24.5574, Validation Regression Loss 0.3041 (baseline 0.3041), Validation Classification Loss: 0.8137 (baseline 0.8137), Validation Landmark Loss: 23.1355, Validation Landmark NME: 0.0858
+2026-07-23 09:40:57,806 - root - INFO -            Val Acc 0.9995  |  Face - Precision 0.8739, Recall 0.8624, F1 0.8681
+2026-07-23 09:40:57,807 - root - INFO -            Landmark Acc@0.1: 0.7059  |  eyeL 0.751  eyeR 0.745  nose 0.569  mouthL 0.737  mouthR 0.728
+2026-07-23 09:40:57,879 - root - INFO - Saved last.pth (epoch 2) + best.pth (NME 0.0858)
+2026-07-23 09:41:57,906 - root - INFO - epoch 3: step 330/1912 (17%), avg loss 23.825, 88.0 img/s, ETA 4.8 min
+2026-07-23 09:42:57,929 - root - INFO - epoch 3: step 668/1912 (35%), avg loss 23.783, 89.0 img/s, ETA 3.7 min
+2026-07-23 09:43:58,531 - root - INFO - epoch 3: step 1032/1912 (54%), avg loss 23.887, 91.4 img/s, ETA 2.6 min
+2026-07-23 09:44:58,716 - root - INFO - epoch 3: step 1419/1912 (74%), avg loss 23.773, 94.3 img/s, ETA 1.4 min
+2026-07-23 09:45:59,010 - root - INFO - epoch 3: step 1807/1912 (95%), avg loss 23.770, 96.0 img/s, ETA 0.3 min
+2026-07-23 09:46:14,100 - root - INFO - Epoch: 3 (stage 1) - 316.2s - Train Loss: 23.7436, Regression 0.3260, Classification 0.8283, Landmark 22.2632, Train Acc 0.9995, Landmark Acc 0.7204, NME 0.0833, Face Recall 0.8627 F1 0.8675, lr 1.00e-03
+2026-07-23 09:46:47,486 - root - INFO - Epoch: 3, Validation (33.4s) Loss: 23.8315, Validation Regression Loss 0.3041 (baseline 0.3041), Validation Classification Loss: 0.8137 (baseline 0.8137), Validation Landmark Loss: 22.4096, Validation Landmark NME: 0.0827
+2026-07-23 09:46:47,486 - root - INFO -            Val Acc 0.9995  |  Face - Precision 0.8739, Recall 0.8624, F1 0.8681
+2026-07-23 09:46:47,487 - root - INFO -            Landmark Acc@0.1: 0.7235  |  eyeL 0.770  eyeR 0.759  nose 0.582  mouthL 0.752  mouthR 0.755
+2026-07-23 09:46:47,550 - root - INFO - Saved last.pth (epoch 3) + best.pth (NME 0.0827)
+2026-07-23 09:47:47,997 - root - INFO - epoch 4: step 364/1912 (19%), avg loss 23.428, 96.4 img/s, ETA 4.3 min
+2026-07-23 09:48:48,421 - root - INFO - epoch 4: step 728/1912 (38%), avg loss 23.557, 96.4 img/s, ETA 3.3 min
+2026-07-23 09:49:48,500 - root - INFO - epoch 4: step 1074/1912 (56%), avg loss 23.617, 95.0 img/s, ETA 2.4 min
+2026-07-23 09:50:48,882 - root - INFO - epoch 4: step 1446/1912 (76%), avg loss 23.502, 95.9 img/s, ETA 1.3 min
+2026-07-23 09:51:49,148 - root - INFO - epoch 4: step 1813/1912 (95%), avg loss 23.413, 96.2 img/s, ETA 0.3 min
+2026-07-23 09:52:04,352 - root - INFO - Epoch: 4 (stage 1) - 316.8s - Train Loss: 23.3900, Regression 0.3250, Classification 0.8275, Landmark 21.9124, Train Acc 0.9995, Landmark Acc 0.7292, NME 0.0818, Face Recall 0.8627 F1 0.8677, lr 1.00e-03
+2026-07-23 09:52:38,290 - root - INFO - Epoch: 4, Validation (33.9s) Loss: 23.8505, Validation Regression Loss 0.3041 (baseline 0.3041), Validation Classification Loss: 0.8137 (baseline 0.8137), Validation Landmark Loss: 22.4285, Validation Landmark NME: 0.0827
+2026-07-23 09:52:38,290 - root - INFO -            Val Acc 0.9995  |  Face - Precision 0.8739, Recall 0.8624, F1 0.8681
+2026-07-23 09:52:38,291 - root - INFO -            Landmark Acc@0.1: 0.7225  |  eyeL 0.772  eyeR 0.767  nose 0.562  mouthL 0.754  mouthR 0.758
+2026-07-23 09:52:38,368 - root - INFO - Saved last.pth (epoch 4) + best.pth (NME 0.0827)
+2026-07-23 09:52:38,369 - root - INFO - Stage 2: full network unfrozen. Head LR 0.0001, backbone LR 1e-05, cosine scheduler.
+2026-07-23 09:53:38,394 - root - INFO - epoch 5: step 348/1912 (18%), avg loss 26.847, 92.8 img/s, ETA 4.5 min
+2026-07-23 09:54:38,441 - root - INFO - epoch 5: step 711/1912 (37%), avg loss 25.948, 94.7 img/s, ETA 3.4 min
+2026-07-23 09:55:38,512 - root - INFO - epoch 5: step 1068/1912 (56%), avg loss 25.165, 94.9 img/s, ETA 2.4 min
+2026-07-23 09:56:38,915 - root - INFO - epoch 5: step 1434/1912 (75%), avg loss 24.511, 95.4 img/s, ETA 1.3 min
+2026-07-23 09:57:39,064 - root - INFO - epoch 5: step 1795/1912 (94%), avg loss 23.885, 95.5 img/s, ETA 0.3 min
+2026-07-23 09:57:58,441 - root - INFO - Epoch: 5 (stage 2) - 320.1s - Train Loss: 23.7073, Regression 0.3385, Classification 0.8660, Landmark 22.1643, Train Acc 0.9994, Landmark Acc 0.7245, NME 0.0824, Face Recall 0.8217 F1 0.8523, lr 1.00e-05
+2026-07-23 09:58:31,611 - root - INFO - Epoch: 5, Validation (33.2s) Loss: 20.9418, Validation Regression Loss 0.2370 (baseline 0.3041), Validation Classification Loss: 0.7605 (baseline 0.8137), Validation Landmark Loss: 19.7073, Validation Landmark NME: 0.0699
+2026-07-23 09:58:31,611 - root - INFO -            Val Acc 0.9995  |  Face - Precision 0.9004, Recall 0.8658, F1 0.8828
+2026-07-23 09:58:31,612 - root - INFO -            Landmark Acc@0.1: 0.7975  |  eyeL 0.841  eyeR 0.837  nose 0.683  mouthL 0.814  mouthR 0.813
+2026-07-23 09:58:31,677 - root - INFO - Saved last.pth (epoch 5) + best.pth (NME 0.0699)
+2026-07-23 09:59:33,038 - root - INFO - epoch 6: step 364/1912 (19%), avg loss 20.212, 94.9 img/s, ETA 4.3 min
+2026-07-23 10:00:33,215 - root - INFO - epoch 6: step 724/1912 (38%), avg loss 20.029, 95.3 img/s, ETA 3.3 min
+2026-07-23 10:01:33,220 - root - INFO - epoch 6: step 1092/1912 (57%), avg loss 19.857, 96.2 img/s, ETA 2.3 min
+2026-07-23 10:02:33,258 - root - INFO - epoch 6: step 1449/1912 (76%), avg loss 19.651, 96.0 img/s, ETA 1.3 min
+2026-07-23 10:03:33,332 - root - INFO - epoch 6: step 1819/1912 (95%), avg loss 19.439, 96.5 img/s, ETA 0.3 min
+2026-07-23 10:03:47,749 - root - INFO - Epoch: 6 (stage 2) - 316.1s - Train Loss: 19.3968, Regression 0.2522, Classification 0.7488, Landmark 18.1436, Train Acc 0.9995, Landmark Acc 0.8314, NME 0.0645, Face Recall 0.8642 F1 0.8832, lr 1.00e-05
+2026-07-23 10:04:21,335 - root - INFO - Epoch: 6, Validation (33.6s) Loss: 18.7053, Validation Regression Loss 0.2280 (baseline 0.3041), Validation Classification Loss: 0.7180 (baseline 0.8137), Validation Landmark Loss: 17.5312, Validation Landmark NME: 0.0603
+2026-07-23 10:04:21,335 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9109, Recall 0.8720, F1 0.8910
+2026-07-23 10:04:21,335 - root - INFO -            Landmark Acc@0.1: 0.8527  |  eyeL 0.887  eyeR 0.884  nose 0.769  mouthL 0.863  mouthR 0.861
+2026-07-23 10:04:21,400 - root - INFO - Saved last.pth (epoch 6) + best.pth (NME 0.0603)
+2026-07-23 10:05:21,418 - root - INFO - epoch 7: step 367/1912 (19%), avg loss 18.556, 97.8 img/s, ETA 4.2 min
+2026-07-23 10:06:21,510 - root - INFO - epoch 7: step 716/1912 (37%), avg loss 18.315, 95.4 img/s, ETA 3.3 min
+2026-07-23 10:07:21,805 - root - INFO - epoch 7: step 1073/1912 (56%), avg loss 18.272, 95.2 img/s, ETA 2.4 min
+2026-07-23 10:08:21,966 - root - INFO - epoch 7: step 1452/1912 (76%), avg loss 18.168, 96.6 img/s, ETA 1.3 min
+2026-07-23 10:09:22,111 - root - INFO - epoch 7: step 1797/1912 (94%), avg loss 18.086, 95.6 img/s, ETA 0.3 min
+2026-07-23 10:09:40,214 - root - INFO - Epoch: 7 (stage 2) - 318.8s - Train Loss: 18.0682, Regression 0.2496, Classification 0.7250, Landmark 16.8440, Train Acc 0.9996, Landmark Acc 0.8623, NME 0.0589, Face Recall 0.8673 F1 0.8868, lr 9.99e-06
+2026-07-23 10:10:13,720 - root - INFO - Epoch: 7, Validation (33.5s) Loss: 17.7538, Validation Regression Loss 0.2293 (baseline 0.3041), Validation Classification Loss: 0.7058 (baseline 0.8137), Validation Landmark Loss: 16.5895, Validation Landmark NME: 0.0564
+2026-07-23 10:10:13,720 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9123, Recall 0.8724, F1 0.8919
+2026-07-23 10:10:13,721 - root - INFO -            Landmark Acc@0.1: 0.8723  |  eyeL 0.902  eyeR 0.898  nose 0.804  mouthL 0.880  mouthR 0.877
+2026-07-23 10:10:13,786 - root - INFO - Saved last.pth (epoch 7) + best.pth (NME 0.0564)
+2026-07-23 10:11:14,945 - root - INFO - epoch 8: step 369/1912 (19%), avg loss 17.510, 96.5 img/s, ETA 4.3 min
+2026-07-23 10:12:14,949 - root - INFO - epoch 8: step 731/1912 (38%), avg loss 17.539, 96.5 img/s, ETA 3.3 min
+2026-07-23 10:13:14,986 - root - INFO - epoch 8: step 1071/1912 (56%), avg loss 17.443, 94.6 img/s, ETA 2.4 min
+2026-07-23 10:14:14,995 - root - INFO - epoch 8: step 1417/1912 (74%), avg loss 17.373, 94.0 img/s, ETA 1.4 min
+2026-07-23 10:15:15,169 - root - INFO - epoch 8: step 1788/1912 (94%), avg loss 17.294, 94.9 img/s, ETA 0.3 min
+2026-07-23 10:15:34,567 - root - INFO - Epoch: 8 (stage 2) - 320.8s - Train Loss: 17.2757, Regression 0.2472, Classification 0.7118, Landmark 16.0694, Train Acc 0.9996, Landmark Acc 0.8786, NME 0.0556, Face Recall 0.8667 F1 0.8872, lr 9.98e-06
+2026-07-23 10:16:08,158 - root - INFO - Epoch: 8, Validation (33.6s) Loss: 17.1254, Validation Regression Loss 0.2324 (baseline 0.3041), Validation Classification Loss: 0.6982 (baseline 0.8137), Validation Landmark Loss: 15.9624, Validation Landmark NME: 0.0538
+2026-07-23 10:16:08,158 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9130, Recall 0.8716, F1 0.8918
+2026-07-23 10:16:08,159 - root - INFO -            Landmark Acc@0.1: 0.8851  |  eyeL 0.912  eyeR 0.907  nose 0.827  mouthL 0.892  mouthR 0.888
+2026-07-23 10:16:08,230 - root - INFO - Saved last.pth (epoch 8) + best.pth (NME 0.0538)
+2026-07-23 10:17:08,312 - root - INFO - epoch 9: step 350/1912 (18%), avg loss 16.899, 93.2 img/s, ETA 4.5 min
+2026-07-23 10:18:08,346 - root - INFO - epoch 9: step 724/1912 (38%), avg loss 16.851, 96.4 img/s, ETA 3.3 min
+2026-07-23 10:19:08,573 - root - INFO - epoch 9: step 1057/1912 (55%), avg loss 16.781, 93.8 img/s, ETA 2.4 min
+2026-07-23 10:20:09,027 - root - INFO - epoch 9: step 1419/1912 (74%), avg loss 16.762, 94.3 img/s, ETA 1.4 min
+2026-07-23 10:21:09,282 - root - INFO - epoch 9: step 1777/1912 (93%), avg loss 16.736, 94.4 img/s, ETA 0.4 min
+2026-07-23 10:21:31,544 - root - INFO - Epoch: 9 (stage 2) - 323.3s - Train Loss: 16.7095, Regression 0.2479, Classification 0.7059, Landmark 15.5078, Train Acc 0.9996, Landmark Acc 0.8889, NME 0.0534, Face Recall 0.8656 F1 0.8867, lr 9.97e-06
+2026-07-23 10:22:05,253 - root - INFO - Epoch: 9, Validation (33.7s) Loss: 16.6757, Validation Regression Loss 0.2354 (baseline 0.3041), Validation Classification Loss: 0.6924 (baseline 0.8137), Validation Landmark Loss: 15.5126, Validation Landmark NME: 0.0520
+2026-07-23 10:22:05,253 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9106, Recall 0.8742, F1 0.8920
+2026-07-23 10:22:05,254 - root - INFO -            Landmark Acc@0.1: 0.8942  |  eyeL 0.919  eyeR 0.915  nose 0.843  mouthL 0.899  mouthR 0.895
+2026-07-23 10:22:05,325 - root - INFO - Saved last.pth (epoch 9) + best.pth (NME 0.0520)
+2026-07-23 10:23:05,453 - root - INFO - epoch 10: step 362/1912 (19%), avg loss 16.523, 96.3 img/s, ETA 4.3 min
+2026-07-23 10:24:06,301 - root - INFO - epoch 10: step 711/1912 (37%), avg loss 16.470, 94.0 img/s, ETA 3.4 min
+2026-07-23 10:25:06,316 - root - INFO - epoch 10: step 1101/1912 (58%), avg loss 16.381, 97.3 img/s, ETA 2.2 min
+2026-07-23 10:26:06,341 - root - INFO - epoch 10: step 1444/1912 (76%), avg loss 16.309, 95.9 img/s, ETA 1.3 min
+2026-07-23 10:27:06,392 - root - INFO - epoch 10: step 1796/1912 (94%), avg loss 16.231, 95.4 img/s, ETA 0.3 min
+2026-07-23 10:27:26,571 - root - INFO - Epoch: 10 (stage 2) - 321.2s - Train Loss: 16.2256, Regression 0.2482, Classification 0.6983, Landmark 15.0308, Train Acc 0.9996, Landmark Acc 0.8978, NME 0.0515, Face Recall 0.8649 F1 0.8865, lr 9.96e-06
+2026-07-23 10:28:00,488 - root - INFO - Epoch: 10, Validation (33.9s) Loss: 16.2087, Validation Regression Loss 0.2368 (baseline 0.3041), Validation Classification Loss: 0.6871 (baseline 0.8137), Validation Landmark Loss: 15.0480, Validation Landmark NME: 0.0501
+2026-07-23 10:28:00,488 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9119, Recall 0.8708, F1 0.8909
+2026-07-23 10:28:00,488 - root - INFO -            Landmark Acc@0.1: 0.9022  |  eyeL 0.925  eyeR 0.920  nose 0.856  mouthL 0.906  mouthR 0.904
+2026-07-23 10:28:00,556 - root - INFO - Saved last.pth (epoch 10) + best.pth (NME 0.0501)
+2026-07-23 10:29:00,667 - root - INFO - epoch 11: step 362/1912 (19%), avg loss 16.065, 96.4 img/s, ETA 4.3 min
+2026-07-23 10:30:01,618 - root - INFO - epoch 11: step 698/1912 (37%), avg loss 16.003, 92.3 img/s, ETA 3.5 min
+2026-07-23 10:31:01,696 - root - INFO - epoch 11: step 1057/1912 (55%), avg loss 15.960, 93.4 img/s, ETA 2.4 min
+2026-07-23 10:32:02,059 - root - INFO - epoch 11: step 1430/1912 (75%), avg loss 15.895, 94.7 img/s, ETA 1.4 min
+2026-07-23 10:33:02,070 - root - INFO - epoch 11: step 1807/1912 (95%), avg loss 15.847, 95.9 img/s, ETA 0.3 min
+2026-07-23 10:33:19,191 - root - INFO - Epoch: 11 (stage 2) - 318.6s - Train Loss: 15.8249, Regression 0.2485, Classification 0.6908, Landmark 14.6371, Train Acc 0.9996, Landmark Acc 0.9041, NME 0.0499, Face Recall 0.8650 F1 0.8871, lr 9.94e-06
+2026-07-23 10:33:53,044 - root - INFO - Epoch: 11, Validation (33.9s) Loss: 15.8396, Validation Regression Loss 0.2349 (baseline 0.3041), Validation Classification Loss: 0.6806 (baseline 0.8137), Validation Landmark Loss: 14.6892, Validation Landmark NME: 0.0487
+2026-07-23 10:33:53,045 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9138, Recall 0.8689, F1 0.8908
+2026-07-23 10:33:53,045 - root - INFO -            Landmark Acc@0.1: 0.9075  |  eyeL 0.931  eyeR 0.924  nose 0.866  mouthL 0.909  mouthR 0.908
+2026-07-23 10:33:53,118 - root - INFO - Saved last.pth (epoch 11) + best.pth (NME 0.0487)
+2026-07-23 10:34:53,274 - root - INFO - epoch 12: step 390/1912 (20%), avg loss 15.535, 103.7 img/s, ETA 3.9 min
+2026-07-23 10:35:54,236 - root - INFO - epoch 12: step 743/1912 (39%), avg loss 15.579, 98.2 img/s, ETA 3.2 min
+2026-07-23 10:36:54,263 - root - INFO - epoch 12: step 1106/1912 (58%), avg loss 15.479, 97.7 img/s, ETA 2.2 min
+2026-07-23 10:37:54,308 - root - INFO - epoch 12: step 1460/1912 (76%), avg loss 15.469, 96.9 img/s, ETA 1.2 min
+2026-07-23 10:38:55,081 - root - INFO - epoch 12: step 1811/1912 (95%), avg loss 15.460, 96.0 img/s, ETA 0.3 min
+2026-07-23 10:39:09,946 - root - INFO - Epoch: 12 (stage 2) - 316.8s - Train Loss: 15.4708, Regression 0.2483, Classification 0.6862, Landmark 14.2879, Train Acc 0.9996, Landmark Acc 0.9097, NME 0.0486, Face Recall 0.8650 F1 0.8868, lr 9.93e-06
+2026-07-23 10:39:43,550 - root - INFO - Epoch: 12, Validation (33.6s) Loss: 15.4970, Validation Regression Loss 0.2381 (baseline 0.3041), Validation Classification Loss: 0.6768 (baseline 0.8137), Validation Landmark Loss: 14.3440, Validation Landmark NME: 0.0473
+2026-07-23 10:39:43,550 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9139, Recall 0.8683, F1 0.8905
+2026-07-23 10:39:43,551 - root - INFO -            Landmark Acc@0.1: 0.9129  |  eyeL 0.934  eyeR 0.929  nose 0.876  mouthL 0.914  mouthR 0.913
+2026-07-23 10:39:43,605 - root - INFO - Saved last.pth (epoch 12) + best.pth (NME 0.0473)
+2026-07-23 10:40:44,033 - root - INFO - epoch 13: step 367/1912 (19%), avg loss 15.283, 97.2 img/s, ETA 4.2 min
+2026-07-23 10:41:44,310 - root - INFO - epoch 13: step 715/1912 (37%), avg loss 15.220, 94.8 img/s, ETA 3.4 min
+2026-07-23 10:42:44,391 - root - INFO - epoch 13: step 1070/1912 (56%), avg loss 15.210, 94.7 img/s, ETA 2.4 min
+2026-07-23 10:43:45,408 - root - INFO - epoch 13: step 1416/1912 (74%), avg loss 15.193, 93.7 img/s, ETA 1.4 min
+2026-07-23 10:44:45,456 - root - INFO - epoch 13: step 1773/1912 (93%), avg loss 15.143, 94.0 img/s, ETA 0.4 min
+2026-07-23 10:45:07,293 - root - INFO - Epoch: 13 (stage 2) - 323.7s - Train Loss: 15.1468, Regression 0.2483, Classification 0.6813, Landmark 13.9689, Train Acc 0.9996, Landmark Acc 0.9144, NME 0.0474, Face Recall 0.8636 F1 0.8860, lr 9.91e-06
+2026-07-23 10:45:41,307 - root - INFO - Epoch: 13, Validation (34.0s) Loss: 15.1922, Validation Regression Loss 0.2369 (baseline 0.3041), Validation Classification Loss: 0.6710 (baseline 0.8137), Validation Landmark Loss: 14.0474, Validation Landmark NME: 0.0462
+2026-07-23 10:45:41,308 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9118, Recall 0.8713, F1 0.8911
+2026-07-23 10:45:41,308 - root - INFO -            Landmark Acc@0.1: 0.9172  |  eyeL 0.936  eyeR 0.933  nose 0.883  mouthL 0.916  mouthR 0.917
+2026-07-23 10:45:41,396 - root - INFO - Saved last.pth (epoch 13) + best.pth (NME 0.0462)
+2026-07-23 10:46:41,619 - root - INFO - epoch 14: step 365/1912 (19%), avg loss 15.011, 97.0 img/s, ETA 4.3 min
+2026-07-23 10:47:41,955 - root - INFO - epoch 14: step 739/1912 (39%), avg loss 14.899, 98.1 img/s, ETA 3.2 min
+2026-07-23 10:48:42,180 - root - INFO - epoch 14: step 1085/1912 (57%), avg loss 14.908, 96.0 img/s, ETA 2.3 min
+2026-07-23 10:49:42,988 - root - INFO - epoch 14: step 1435/1912 (75%), avg loss 14.889, 95.0 img/s, ETA 1.3 min
+2026-07-23 10:50:43,536 - root - INFO - epoch 14: step 1776/1912 (93%), avg loss 14.888, 94.1 img/s, ETA 0.4 min
+2026-07-23 10:51:03,026 - root - INFO - Epoch: 14 (stage 2) - 321.6s - Train Loss: 14.8669, Regression 0.2472, Classification 0.6746, Landmark 13.6979, Train Acc 0.9996, Landmark Acc 0.9187, NME 0.0463, Face Recall 0.8644 F1 0.8867, lr 9.88e-06
+2026-07-23 10:51:36,839 - root - INFO - Epoch: 14, Validation (33.8s) Loss: 14.9346, Validation Regression Loss 0.2379 (baseline 0.3041), Validation Classification Loss: 0.6679 (baseline 0.8137), Validation Landmark Loss: 13.7909, Validation Landmark NME: 0.0452
+2026-07-23 10:51:36,840 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9128, Recall 0.8691, F1 0.8904
+2026-07-23 10:51:36,840 - root - INFO -            Landmark Acc@0.1: 0.9209  |  eyeL 0.939  eyeR 0.935  nose 0.889  mouthL 0.921  mouthR 0.921
+2026-07-23 10:51:36,908 - root - INFO - Saved last.pth (epoch 14) + best.pth (NME 0.0452)
+2026-07-23 10:52:36,945 - root - INFO - epoch 15: step 352/1912 (18%), avg loss 14.793, 93.8 img/s, ETA 4.4 min
+2026-07-23 10:53:37,137 - root - INFO - epoch 15: step 721/1912 (38%), avg loss 14.740, 96.0 img/s, ETA 3.3 min
+2026-07-23 10:54:37,158 - root - INFO - epoch 15: step 1089/1912 (57%), avg loss 14.742, 96.7 img/s, ETA 2.3 min
+2026-07-23 10:55:37,559 - root - INFO - epoch 15: step 1450/1912 (76%), avg loss 14.657, 96.4 img/s, ETA 1.3 min
+2026-07-23 10:56:37,680 - root - INFO - epoch 15: step 1821/1912 (95%), avg loss 14.618, 96.9 img/s, ETA 0.3 min
+2026-07-23 10:56:53,515 - root - INFO - Epoch: 15 (stage 2) - 316.6s - Train Loss: 14.6088, Regression 0.2471, Classification 0.6707, Landmark 13.4439, Train Acc 0.9996, Landmark Acc 0.9223, NME 0.0454, Face Recall 0.8637 F1 0.8863, lr 9.86e-06
+2026-07-23 10:57:27,463 - root - INFO - Epoch: 15, Validation (33.9s) Loss: 14.6876, Validation Regression Loss 0.2363 (baseline 0.3041), Validation Classification Loss: 0.6639 (baseline 0.8137), Validation Landmark Loss: 13.5511, Validation Landmark NME: 0.0443
+2026-07-23 10:57:27,464 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9141, Recall 0.8670, F1 0.8899
+2026-07-23 10:57:27,464 - root - INFO -            Landmark Acc@0.1: 0.9242  |  eyeL 0.942  eyeR 0.938  nose 0.894  mouthL 0.923  mouthR 0.924
+2026-07-23 10:57:27,539 - root - INFO - Saved last.pth (epoch 15) + best.pth (NME 0.0443)
+2026-07-23 10:58:27,592 - root - INFO - epoch 16: step 357/1912 (19%), avg loss 14.504, 95.1 img/s, ETA 4.4 min
+2026-07-23 10:59:29,208 - root - INFO - epoch 16: step 714/1912 (37%), avg loss 14.378, 93.9 img/s, ETA 3.4 min
+2026-07-23 11:00:29,768 - root - INFO - epoch 16: step 1093/1912 (57%), avg loss 14.393, 96.0 img/s, ETA 2.3 min
+2026-07-23 11:01:29,840 - root - INFO - epoch 16: step 1459/1912 (76%), avg loss 14.420, 96.3 img/s, ETA 1.3 min
+2026-07-23 11:02:30,383 - root - INFO - epoch 16: step 1800/1912 (94%), avg loss 14.413, 95.1 img/s, ETA 0.3 min
+2026-07-23 11:02:45,707 - root - INFO - Epoch: 16 (stage 2) - 318.2s - Train Loss: 14.4029, Regression 0.2451, Classification 0.6657, Landmark 13.2469, Train Acc 0.9996, Landmark Acc 0.9250, NME 0.0446, Face Recall 0.8640 F1 0.8867, lr 9.83e-06
+2026-07-23 11:03:19,473 - root - INFO - Epoch: 16, Validation (33.8s) Loss: 14.5800, Validation Regression Loss 0.2366 (baseline 0.3041), Validation Classification Loss: 0.6590 (baseline 0.8137), Validation Landmark Loss: 13.4478, Validation Landmark NME: 0.0439
+2026-07-23 11:03:19,473 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9128, Recall 0.8681, F1 0.8899
+2026-07-23 11:03:19,473 - root - INFO -            Landmark Acc@0.1: 0.9270  |  eyeL 0.944  eyeR 0.941  nose 0.898  mouthL 0.925  mouthR 0.926
+2026-07-23 11:03:19,554 - root - INFO - Saved last.pth (epoch 16) + best.pth (NME 0.0439)
+2026-07-23 11:04:19,575 - root - INFO - epoch 17: step 353/1912 (18%), avg loss 14.247, 94.1 img/s, ETA 4.4 min
+2026-07-23 11:05:19,669 - root - INFO - epoch 17: step 694/1912 (36%), avg loss 14.243, 92.4 img/s, ETA 3.5 min
+2026-07-23 11:06:20,006 - root - INFO - epoch 17: step 1043/1912 (55%), avg loss 14.169, 92.5 img/s, ETA 2.5 min
+2026-07-23 11:07:20,265 - root - INFO - epoch 17: step 1408/1912 (74%), avg loss 14.199, 93.6 img/s, ETA 1.4 min
+2026-07-23 11:08:20,659 - root - INFO - epoch 17: step 1788/1912 (94%), avg loss 14.181, 95.0 img/s, ETA 0.3 min
+2026-07-23 11:08:40,776 - root - INFO - Epoch: 17 (stage 2) - 321.2s - Train Loss: 14.1924, Regression 0.2438, Classification 0.6628, Landmark 13.0420, Train Acc 0.9996, Landmark Acc 0.9279, NME 0.0438, Face Recall 0.8631 F1 0.8866, lr 9.80e-06
+2026-07-23 11:09:14,992 - root - INFO - Epoch: 17, Validation (34.2s) Loss: 14.3653, Validation Regression Loss 0.2358 (baseline 0.3041), Validation Classification Loss: 0.6583 (baseline 0.8137), Validation Landmark Loss: 13.2354, Validation Landmark NME: 0.0431
+2026-07-23 11:09:14,992 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9141, Recall 0.8669, F1 0.8899
+2026-07-23 11:09:14,992 - root - INFO -            Landmark Acc@0.1: 0.9296  |  eyeL 0.945  eyeR 0.943  nose 0.904  mouthL 0.928  mouthR 0.928
+2026-07-23 11:09:15,059 - root - INFO - Saved last.pth (epoch 17) + best.pth (NME 0.0431)
+2026-07-23 11:10:15,073 - root - INFO - epoch 18: step 333/1912 (17%), avg loss 14.096, 88.8 img/s, ETA 4.7 min
+2026-07-23 11:11:15,081 - root - INFO - epoch 18: step 705/1912 (37%), avg loss 14.062, 94.0 img/s, ETA 3.4 min
+2026-07-23 11:12:15,207 - root - INFO - epoch 18: step 1080/1912 (56%), avg loss 14.046, 95.9 img/s, ETA 2.3 min
+2026-07-23 11:13:15,265 - root - INFO - epoch 18: step 1444/1912 (76%), avg loss 14.015, 96.2 img/s, ETA 1.3 min
+2026-07-23 11:14:15,641 - root - INFO - epoch 18: step 1809/1912 (95%), avg loss 13.997, 96.3 img/s, ETA 0.3 min
+2026-07-23 11:14:31,783 - root - INFO - Epoch: 18 (stage 2) - 316.7s - Train Loss: 14.0128, Regression 0.2432, Classification 0.6597, Landmark 12.8668, Train Acc 0.9996, Landmark Acc 0.9301, NME 0.0431, Face Recall 0.8624 F1 0.8863, lr 9.77e-06
+2026-07-23 11:15:05,442 - root - INFO - Epoch: 18, Validation (33.7s) Loss: 14.1589, Validation Regression Loss 0.2354 (baseline 0.3041), Validation Classification Loss: 0.6522 (baseline 0.8137), Validation Landmark Loss: 13.0359, Validation Landmark NME: 0.0423
+2026-07-23 11:15:05,442 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9116, Recall 0.8720, F1 0.8913
+2026-07-23 11:15:05,443 - root - INFO -            Landmark Acc@0.1: 0.9315  |  eyeL 0.947  eyeR 0.945  nose 0.906  mouthL 0.930  mouthR 0.930
+2026-07-23 11:15:05,507 - root - INFO - Saved last.pth (epoch 18) + best.pth (NME 0.0423)
+2026-07-23 11:16:05,803 - root - INFO - epoch 19: step 365/1912 (19%), avg loss 13.954, 96.9 img/s, ETA 4.3 min
+2026-07-23 11:17:05,850 - root - INFO - epoch 19: step 719/1912 (38%), avg loss 13.887, 95.6 img/s, ETA 3.3 min
+2026-07-23 11:18:05,906 - root - INFO - epoch 19: step 1084/1912 (57%), avg loss 13.834, 96.1 img/s, ETA 2.3 min
+2026-07-23 11:19:05,939 - root - INFO - epoch 19: step 1432/1912 (75%), avg loss 13.841, 95.3 img/s, ETA 1.3 min
+2026-07-23 11:20:06,779 - root - INFO - epoch 19: step 1786/1912 (93%), avg loss 13.805, 94.9 img/s, ETA 0.4 min
+2026-07-23 11:20:27,485 - root - INFO - Epoch: 19 (stage 2) - 322.0s - Train Loss: 13.8165, Regression 0.2422, Classification 0.6538, Landmark 12.6784, Train Acc 0.9996, Landmark Acc 0.9327, NME 0.0424, Face Recall 0.8634 F1 0.8870, lr 9.74e-06
+2026-07-23 11:21:01,628 - root - INFO - Epoch: 19, Validation (34.1s) Loss: 13.9639, Validation Regression Loss 0.2348 (baseline 0.3041), Validation Classification Loss: 0.6498 (baseline 0.8137), Validation Landmark Loss: 12.8444, Validation Landmark NME: 0.0415
+2026-07-23 11:21:01,629 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9114, Recall 0.8711, F1 0.8908
+2026-07-23 11:21:01,629 - root - INFO -            Landmark Acc@0.1: 0.9336  |  eyeL 0.949  eyeR 0.946  nose 0.909  mouthL 0.932  mouthR 0.932
+2026-07-23 11:21:01,694 - root - INFO - Saved last.pth (epoch 19) + best.pth (NME 0.0415)
+2026-07-23 11:22:01,714 - root - INFO - epoch 20: step 357/1912 (19%), avg loss 13.675, 95.2 img/s, ETA 4.4 min
+2026-07-23 11:23:02,034 - root - INFO - epoch 20: step 710/1912 (37%), avg loss 13.690, 94.4 img/s, ETA 3.4 min
+2026-07-23 11:24:02,076 - root - INFO - epoch 20: step 1071/1912 (56%), avg loss 13.725, 95.0 img/s, ETA 2.4 min
+2026-07-23 11:25:02,634 - root - INFO - epoch 20: step 1421/1912 (74%), avg loss 13.708, 94.4 img/s, ETA 1.4 min
+2026-07-23 11:26:02,685 - root - INFO - epoch 20: step 1772/1912 (93%), avg loss 13.678, 94.2 img/s, ETA 0.4 min
+2026-07-23 11:26:21,725 - root - INFO - Epoch: 20 (stage 2) - 320.0s - Train Loss: 13.6648, Regression 0.2395, Classification 0.6501, Landmark 12.5357, Train Acc 0.9996, Landmark Acc 0.9348, NME 0.0419, Face Recall 0.8631 F1 0.8869, lr 9.70e-06
+2026-07-23 11:26:55,141 - root - INFO - Epoch: 20, Validation (33.4s) Loss: 13.9278, Validation Regression Loss 0.2334 (baseline 0.3041), Validation Classification Loss: 0.6458 (baseline 0.8137), Validation Landmark Loss: 12.8151, Validation Landmark NME: 0.0415
+2026-07-23 11:26:55,142 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9139, Recall 0.8677, F1 0.8902
+2026-07-23 11:26:55,142 - root - INFO -            Landmark Acc@0.1: 0.9350  |  eyeL 0.950  eyeR 0.948  nose 0.911  mouthL 0.933  mouthR 0.933
+2026-07-23 11:26:55,221 - root - INFO - Saved last.pth (epoch 20) + best.pth (NME 0.0415)
+2026-07-23 11:27:55,229 - root - INFO - epoch 21: step 359/1912 (19%), avg loss 13.474, 95.7 img/s, ETA 4.3 min
+2026-07-23 11:28:55,417 - root - INFO - epoch 21: step 730/1912 (38%), avg loss 13.494, 97.2 img/s, ETA 3.2 min
+2026-07-23 11:29:56,113 - root - INFO - epoch 21: step 1106/1912 (58%), avg loss 13.518, 97.8 img/s, ETA 2.2 min
+2026-07-23 11:30:56,754 - root - INFO - epoch 21: step 1446/1912 (76%), avg loss 13.555, 95.8 img/s, ETA 1.3 min
+2026-07-23 11:31:56,770 - root - INFO - epoch 21: step 1788/1912 (94%), avg loss 13.507, 94.9 img/s, ETA 0.3 min
+2026-07-23 11:32:15,750 - root - INFO - Epoch: 21 (stage 2) - 320.5s - Train Loss: 13.5095, Regression 0.2386, Classification 0.6474, Landmark 12.3849, Train Acc 0.9996, Landmark Acc 0.9363, NME 0.0413, Face Recall 0.8630 F1 0.8870, lr 9.66e-06
+2026-07-23 11:32:49,713 - root - INFO - Epoch: 21, Validation (34.0s) Loss: 13.6361, Validation Regression Loss 0.2318 (baseline 0.3041), Validation Classification Loss: 0.6423 (baseline 0.8137), Validation Landmark Loss: 12.5301, Validation Landmark NME: 0.0404
+2026-07-23 11:32:49,713 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9159, Recall 0.8664, F1 0.8904
+2026-07-23 11:32:49,713 - root - INFO -            Landmark Acc@0.1: 0.9372  |  eyeL 0.951  eyeR 0.950  nose 0.916  mouthL 0.935  mouthR 0.934
+2026-07-23 11:32:49,774 - root - INFO - Saved last.pth (epoch 21) + best.pth (NME 0.0404)
+2026-07-23 11:33:49,904 - root - INFO - epoch 22: step 367/1912 (19%), avg loss 13.268, 97.7 img/s, ETA 4.2 min
+2026-07-23 11:34:49,906 - root - INFO - epoch 22: step 733/1912 (38%), avg loss 13.251, 97.6 img/s, ETA 3.2 min
+2026-07-23 11:35:49,934 - root - INFO - epoch 22: step 1096/1912 (57%), avg loss 13.337, 97.3 img/s, ETA 2.2 min
+2026-07-23 11:36:50,080 - root - INFO - epoch 22: step 1425/1912 (75%), avg loss 13.390, 94.9 img/s, ETA 1.4 min
+2026-07-23 11:37:50,372 - root - INFO - epoch 22: step 1791/1912 (94%), avg loss 13.354, 95.3 img/s, ETA 0.3 min
+2026-07-23 11:38:09,364 - root - INFO - Epoch: 22 (stage 2) - 319.6s - Train Loss: 13.3658, Regression 0.2383, Classification 0.6449, Landmark 12.2443, Train Acc 0.9996, Landmark Acc 0.9379, NME 0.0408, Face Recall 0.8624 F1 0.8865, lr 9.62e-06
+2026-07-23 11:38:42,558 - root - INFO - Epoch: 22, Validation (33.2s) Loss: 13.4953, Validation Regression Loss 0.2310 (baseline 0.3041), Validation Classification Loss: 0.6397 (baseline 0.8137), Validation Landmark Loss: 12.3935, Validation Landmark NME: 0.0399
+2026-07-23 11:38:42,558 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9141, Recall 0.8688, F1 0.8909
+2026-07-23 11:38:42,559 - root - INFO -            Landmark Acc@0.1: 0.9388  |  eyeL 0.952  eyeR 0.951  nose 0.918  mouthL 0.936  mouthR 0.936
+2026-07-23 11:38:42,628 - root - INFO - Saved last.pth (epoch 22) + best.pth (NME 0.0399)
+2026-07-23 11:39:42,653 - root - INFO - epoch 23: step 367/1912 (19%), avg loss 13.292, 97.8 img/s, ETA 4.2 min
+2026-07-23 11:40:42,656 - root - INFO - epoch 23: step 701/1912 (37%), avg loss 13.300, 93.4 img/s, ETA 3.5 min
+2026-07-23 11:41:42,666 - root - INFO - epoch 23: step 1075/1912 (56%), avg loss 13.284, 95.5 img/s, ETA 2.3 min
+2026-07-23 11:42:42,853 - root - INFO - epoch 23: step 1433/1912 (75%), avg loss 13.238, 95.4 img/s, ETA 1.3 min
+2026-07-23 11:43:42,905 - root - INFO - epoch 23: step 1796/1912 (94%), avg loss 13.239, 95.7 img/s, ETA 0.3 min
+2026-07-23 11:44:03,831 - root - INFO - Epoch: 23 (stage 2) - 321.2s - Train Loss: 13.2306, Regression 0.2371, Classification 0.6421, Landmark 12.1143, Train Acc 0.9996, Landmark Acc 0.9397, NME 0.0403, Face Recall 0.8628 F1 0.8869, lr 9.58e-06
+2026-07-23 11:44:37,317 - root - INFO - Epoch: 23, Validation (33.5s) Loss: 13.4629, Validation Regression Loss 0.2306 (baseline 0.3041), Validation Classification Loss: 0.6377 (baseline 0.8137), Validation Landmark Loss: 12.3641, Validation Landmark NME: 0.0398
+2026-07-23 11:44:37,318 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9156, Recall 0.8669, F1 0.8906
+2026-07-23 11:44:37,318 - root - INFO -            Landmark Acc@0.1: 0.9400  |  eyeL 0.953  eyeR 0.951  nose 0.921  mouthL 0.937  mouthR 0.937
+2026-07-23 11:44:37,374 - root - INFO - Saved last.pth (epoch 23) + best.pth (NME 0.0398)
+2026-07-23 11:45:37,402 - root - INFO - epoch 24: step 368/1912 (19%), avg loss 12.982, 98.1 img/s, ETA 4.2 min
+2026-07-23 11:46:37,519 - root - INFO - epoch 24: step 721/1912 (38%), avg loss 13.140, 96.0 img/s, ETA 3.3 min
+2026-07-23 11:47:37,555 - root - INFO - epoch 24: step 1079/1912 (56%), avg loss 13.129, 95.8 img/s, ETA 2.3 min
+2026-07-23 11:48:38,046 - root - INFO - epoch 24: step 1441/1912 (75%), avg loss 13.112, 95.8 img/s, ETA 1.3 min
+2026-07-23 11:49:38,391 - root - INFO - epoch 24: step 1796/1912 (94%), avg loss 13.077, 95.5 img/s, ETA 0.3 min
+2026-07-23 11:49:58,305 - root - INFO - Epoch: 24 (stage 2) - 320.9s - Train Loss: 13.0918, Regression 0.2354, Classification 0.6391, Landmark 11.9819, Train Acc 0.9996, Landmark Acc 0.9412, NME 0.0398, Face Recall 0.8626 F1 0.8869, lr 9.54e-06
+2026-07-23 11:50:32,231 - root - INFO - Epoch: 24, Validation (33.9s) Loss: 13.3031, Validation Regression Loss 0.2295 (baseline 0.3041), Validation Classification Loss: 0.6360 (baseline 0.8137), Validation Landmark Loss: 12.2081, Validation Landmark NME: 0.0392
+2026-07-23 11:50:32,232 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9140, Recall 0.8688, F1 0.8908
+2026-07-23 11:50:32,232 - root - INFO -            Landmark Acc@0.1: 0.9411  |  eyeL 0.954  eyeR 0.952  nose 0.923  mouthL 0.938  mouthR 0.938
+2026-07-23 11:50:32,296 - root - INFO - Saved last.pth (epoch 24) + best.pth (NME 0.0392)
+2026-07-23 11:51:32,487 - root - INFO - epoch 25: step 352/1912 (18%), avg loss 13.048, 93.6 img/s, ETA 4.4 min
+2026-07-23 11:52:32,537 - root - INFO - epoch 25: step 704/1912 (37%), avg loss 13.015, 93.7 img/s, ETA 3.4 min
+2026-07-23 11:53:32,969 - root - INFO - epoch 25: step 1063/1912 (56%), avg loss 12.982, 94.1 img/s, ETA 2.4 min
+2026-07-23 11:54:33,011 - root - INFO - epoch 25: step 1414/1912 (74%), avg loss 12.981, 94.0 img/s, ETA 1.4 min
+2026-07-23 11:55:33,097 - root - INFO - epoch 25: step 1752/1912 (92%), avg loss 12.974, 93.2 img/s, ETA 0.5 min
+2026-07-23 11:55:57,388 - root - INFO - Epoch: 25 (stage 2) - 325.1s - Train Loss: 12.9628, Regression 0.2343, Classification 0.6360, Landmark 11.8582, Train Acc 0.9996, Landmark Acc 0.9426, NME 0.0393, Face Recall 0.8631 F1 0.8871, lr 9.49e-06
+2026-07-23 11:56:30,753 - root - INFO - Epoch: 25, Validation (33.4s) Loss: 13.2243, Validation Regression Loss 0.2286 (baseline 0.3041), Validation Classification Loss: 0.6307 (baseline 0.8137), Validation Landmark Loss: 12.1364, Validation Landmark NME: 0.0390
+2026-07-23 11:56:30,754 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9154, Recall 0.8677, F1 0.8909
+2026-07-23 11:56:30,754 - root - INFO -            Landmark Acc@0.1: 0.9429  |  eyeL 0.955  eyeR 0.954  nose 0.926  mouthL 0.940  mouthR 0.940
+2026-07-23 11:56:30,818 - root - INFO - Saved last.pth (epoch 25) + best.pth (NME 0.0390)
+2026-07-23 11:57:30,827 - root - INFO - epoch 26: step 371/1912 (19%), avg loss 12.804, 98.9 img/s, ETA 4.2 min
+2026-07-23 11:58:31,230 - root - INFO - epoch 26: step 723/1912 (38%), avg loss 12.839, 96.1 img/s, ETA 3.3 min
+2026-07-23 11:59:31,791 - root - INFO - epoch 26: step 1058/1912 (55%), avg loss 12.848, 93.5 img/s, ETA 2.4 min
+2026-07-23 12:00:32,497 - root - INFO - epoch 26: step 1432/1912 (75%), avg loss 12.885, 94.8 img/s, ETA 1.4 min
+2026-07-23 12:01:32,519 - root - INFO - epoch 26: step 1780/1912 (93%), avg loss 12.861, 94.4 img/s, ETA 0.4 min
+2026-07-23 12:01:55,424 - root - INFO - Epoch: 26 (stage 2) - 324.6s - Train Loss: 12.8539, Regression 0.2338, Classification 0.6344, Landmark 11.7519, Train Acc 0.9996, Landmark Acc 0.9436, NME 0.0390, Face Recall 0.8628 F1 0.8872, lr 9.44e-06
+2026-07-23 12:02:28,773 - root - INFO - Epoch: 26, Validation (33.3s) Loss: 13.0749, Validation Regression Loss 0.2270 (baseline 0.3041), Validation Classification Loss: 0.6283 (baseline 0.8137), Validation Landmark Loss: 11.9926, Validation Landmark NME: 0.0385
+2026-07-23 12:02:28,774 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9147, Recall 0.8698, F1 0.8917
+2026-07-23 12:02:28,774 - root - INFO -            Landmark Acc@0.1: 0.9442  |  eyeL 0.956  eyeR 0.955  nose 0.928  mouthL 0.942  mouthR 0.941
+2026-07-23 12:02:28,832 - root - INFO - Saved last.pth (epoch 26) + best.pth (NME 0.0385)
+2026-07-23 12:03:29,006 - root - INFO - epoch 27: step 361/1912 (19%), avg loss 12.766, 96.0 img/s, ETA 4.3 min
+2026-07-23 12:04:29,547 - root - INFO - epoch 27: step 729/1912 (38%), avg loss 12.733, 96.6 img/s, ETA 3.3 min
+2026-07-23 12:05:30,047 - root - INFO - epoch 27: step 1073/1912 (56%), avg loss 12.724, 94.7 img/s, ETA 2.4 min
+2026-07-23 12:06:30,118 - root - INFO - epoch 27: step 1449/1912 (76%), avg loss 12.747, 96.1 img/s, ETA 1.3 min
+2026-07-23 12:07:30,549 - root - INFO - epoch 27: step 1800/1912 (94%), avg loss 12.733, 95.5 img/s, ETA 0.3 min
+2026-07-23 12:07:48,885 - root - INFO - Epoch: 27 (stage 2) - 320.1s - Train Loss: 12.7293, Regression 0.2310, Classification 0.6302, Landmark 11.6371, Train Acc 0.9996, Landmark Acc 0.9448, NME 0.0386, Face Recall 0.8635 F1 0.8880, lr 9.39e-06
+2026-07-23 12:08:22,309 - root - INFO - Epoch: 27, Validation (33.4s) Loss: 13.0183, Validation Regression Loss 0.2271 (baseline 0.3041), Validation Classification Loss: 0.6282 (baseline 0.8137), Validation Landmark Loss: 11.9359, Validation Landmark NME: 0.0383
+2026-07-23 12:08:22,309 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9148, Recall 0.8686, F1 0.8911
+2026-07-23 12:08:22,310 - root - INFO -            Landmark Acc@0.1: 0.9447  |  eyeL 0.956  eyeR 0.955  nose 0.929  mouthL 0.942  mouthR 0.942
+2026-07-23 12:08:22,390 - root - INFO - Saved last.pth (epoch 27) + best.pth (NME 0.0383)
+2026-07-23 12:09:22,566 - root - INFO - epoch 28: step 343/1912 (18%), avg loss 12.740, 91.2 img/s, ETA 4.6 min
+2026-07-23 12:10:24,030 - root - INFO - epoch 28: step 721/1912 (38%), avg loss 12.807, 94.8 img/s, ETA 3.3 min
+2026-07-23 12:11:25,065 - root - INFO - epoch 28: step 1055/1912 (55%), avg loss 12.699, 92.4 img/s, ETA 2.5 min
+2026-07-23 12:12:25,074 - root - INFO - epoch 28: step 1421/1912 (74%), avg loss 12.655, 93.7 img/s, ETA 1.4 min
+2026-07-23 12:13:25,097 - root - INFO - epoch 28: step 1781/1912 (93%), avg loss 12.636, 94.1 img/s, ETA 0.4 min
+2026-07-23 12:13:44,972 - root - INFO - Epoch: 28 (stage 2) - 322.6s - Train Loss: 12.6342, Regression 0.2305, Classification 0.6285, Landmark 11.5446, Train Acc 0.9996, Landmark Acc 0.9458, NME 0.0382, Face Recall 0.8639 F1 0.8879, lr 9.34e-06
+2026-07-23 12:14:18,837 - root - INFO - Epoch: 28, Validation (33.9s) Loss: 12.8361, Validation Regression Loss 0.2271 (baseline 0.3041), Validation Classification Loss: 0.6270 (baseline 0.8137), Validation Landmark Loss: 11.7548, Validation Landmark NME: 0.0376
+2026-07-23 12:14:18,837 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9166, Recall 0.8666, F1 0.8909
+2026-07-23 12:14:18,837 - root - INFO -            Landmark Acc@0.1: 0.9456  |  eyeL 0.957  eyeR 0.956  nose 0.930  mouthL 0.943  mouthR 0.942
+2026-07-23 12:14:18,907 - root - INFO - Saved last.pth (epoch 28) + best.pth (NME 0.0376)
+2026-07-23 12:15:18,962 - root - INFO - epoch 29: step 344/1912 (18%), avg loss 12.467, 91.7 img/s, ETA 4.6 min
+2026-07-23 12:16:18,998 - root - INFO - epoch 29: step 658/1912 (34%), avg loss 12.509, 87.7 img/s, ETA 3.8 min
+2026-07-23 12:17:19,032 - root - INFO - epoch 29: step 998/1912 (52%), avg loss 12.532, 88.7 img/s, ETA 2.7 min
+2026-07-23 12:18:19,054 - root - INFO - epoch 29: step 1330/1912 (70%), avg loss 12.564, 88.6 img/s, ETA 1.8 min
+2026-07-23 12:19:19,849 - root - INFO - epoch 29: step 1664/1912 (87%), avg loss 12.519, 88.5 img/s, ETA 0.7 min
+2026-07-23 12:19:59,971 - root - INFO - Epoch: 29 (stage 2) - 341.1s - Train Loss: 12.5225, Regression 0.2295, Classification 0.6257, Landmark 11.4378, Train Acc 0.9996, Landmark Acc 0.9471, NME 0.0378, Face Recall 0.8632 F1 0.8880, lr 9.28e-06
+2026-07-23 12:20:33,384 - root - INFO - Epoch: 29, Validation (33.4s) Loss: 12.6804, Validation Regression Loss 0.2247 (baseline 0.3041), Validation Classification Loss: 0.6225 (baseline 0.8137), Validation Landmark Loss: 11.6085, Validation Landmark NME: 0.0371
+2026-07-23 12:20:33,384 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9152, Recall 0.8696, F1 0.8918
+2026-07-23 12:20:33,384 - root - INFO -            Landmark Acc@0.1: 0.9472  |  eyeL 0.959  eyeR 0.957  nose 0.932  mouthL 0.945  mouthR 0.944
+2026-07-23 12:20:33,461 - root - INFO - Saved last.pth (epoch 29) + best.pth (NME 0.0371)
+2026-07-23 12:21:34,845 - root - INFO - epoch 30: step 364/1912 (19%), avg loss 12.535, 94.9 img/s, ETA 4.4 min
+2026-07-23 12:22:34,850 - root - INFO - epoch 30: step 706/1912 (37%), avg loss 12.362, 93.1 img/s, ETA 3.5 min
+2026-07-23 12:23:35,102 - root - INFO - epoch 30: step 1070/1912 (56%), avg loss 12.368, 94.3 img/s, ETA 2.4 min
+2026-07-23 12:24:35,323 - root - INFO - epoch 30: step 1427/1912 (75%), avg loss 12.368, 94.4 img/s, ETA 1.4 min
+2026-07-23 12:25:35,749 - root - INFO - epoch 30: step 1785/1912 (93%), avg loss 12.395, 94.5 img/s, ETA 0.4 min
+2026-07-23 12:25:55,334 - root - INFO - Epoch: 30 (stage 2) - 321.9s - Train Loss: 12.4214, Regression 0.2290, Classification 0.6234, Landmark 11.3400, Train Acc 0.9996, Landmark Acc 0.9479, NME 0.0375, Face Recall 0.8640 F1 0.8881, lr 9.23e-06
+2026-07-23 12:26:28,618 - root - INFO - Epoch: 30, Validation (33.3s) Loss: 12.6215, Validation Regression Loss 0.2244 (baseline 0.3041), Validation Classification Loss: 0.6214 (baseline 0.8137), Validation Landmark Loss: 11.5513, Validation Landmark NME: 0.0369
+2026-07-23 12:26:28,618 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9161, Recall 0.8683, F1 0.8916
+2026-07-23 12:26:28,618 - root - INFO -            Landmark Acc@0.1: 0.9482  |  eyeL 0.959  eyeR 0.957  nose 0.934  mouthL 0.946  mouthR 0.945
+2026-07-23 12:26:28,680 - root - INFO - Saved last.pth (epoch 30) + best.pth (NME 0.0369)
+2026-07-23 12:27:28,822 - root - INFO - epoch 31: step 352/1912 (18%), avg loss 12.455, 93.6 img/s, ETA 4.4 min
+2026-07-23 12:28:29,600 - root - INFO - epoch 31: step 730/1912 (38%), avg loss 12.395, 96.6 img/s, ETA 3.3 min
+2026-07-23 12:29:29,685 - root - INFO - epoch 31: step 1084/1912 (57%), avg loss 12.354, 95.8 img/s, ETA 2.3 min
+2026-07-23 12:30:29,999 - root - INFO - epoch 31: step 1461/1912 (76%), avg loss 12.300, 96.9 img/s, ETA 1.2 min
+2026-07-23 12:31:30,055 - root - INFO - epoch 31: step 1788/1912 (94%), avg loss 12.322, 94.9 img/s, ETA 0.3 min
+2026-07-23 12:31:48,884 - root - INFO - Epoch: 31 (stage 2) - 320.2s - Train Loss: 12.3131, Regression 0.2274, Classification 0.6218, Landmark 11.2364, Train Acc 0.9996, Landmark Acc 0.9489, NME 0.0371, Face Recall 0.8634 F1 0.8879, lr 9.17e-06
+2026-07-23 12:32:22,845 - root - INFO - Epoch: 31, Validation (34.0s) Loss: 12.4865, Validation Regression Loss 0.2242 (baseline 0.3041), Validation Classification Loss: 0.6215 (baseline 0.8137), Validation Landmark Loss: 11.4165, Validation Landmark NME: 0.0364
+2026-07-23 12:32:22,846 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9159, Recall 0.8678, F1 0.8912
+2026-07-23 12:32:22,846 - root - INFO -            Landmark Acc@0.1: 0.9491  |  eyeL 0.960  eyeR 0.958  nose 0.935  mouthL 0.946  mouthR 0.946
+2026-07-23 12:32:22,919 - root - INFO - Saved last.pth (epoch 31) + best.pth (NME 0.0364)
+2026-07-23 12:33:22,978 - root - INFO - epoch 32: step 358/1912 (19%), avg loss 12.319, 95.4 img/s, ETA 4.3 min
+2026-07-23 12:34:23,140 - root - INFO - epoch 32: step 726/1912 (38%), avg loss 12.229, 96.6 img/s, ETA 3.3 min
+2026-07-23 12:35:23,152 - root - INFO - epoch 32: step 1060/1912 (55%), avg loss 12.232, 94.1 img/s, ETA 2.4 min
+2026-07-23 12:36:23,216 - root - INFO - epoch 32: step 1431/1912 (75%), avg loss 12.232, 95.3 img/s, ETA 1.3 min
+2026-07-23 12:37:23,338 - root - INFO - epoch 32: step 1776/1912 (93%), avg loss 12.228, 94.6 img/s, ETA 0.4 min
+2026-07-23 12:37:47,678 - root - INFO - Epoch: 32 (stage 2) - 324.8s - Train Loss: 12.1977, Regression 0.2268, Classification 0.6193, Landmark 11.1247, Train Acc 0.9996, Landmark Acc 0.9502, NME 0.0368, Face Recall 0.8634 F1 0.8882, lr 9.11e-06
+2026-07-23 12:38:21,540 - root - INFO - Epoch: 32, Validation (33.9s) Loss: 12.4277, Validation Regression Loss 0.2227 (baseline 0.3041), Validation Classification Loss: 0.6185 (baseline 0.8137), Validation Landmark Loss: 11.3637, Validation Landmark NME: 0.0363
+2026-07-23 12:38:21,541 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9155, Recall 0.8691, F1 0.8917
+2026-07-23 12:38:21,541 - root - INFO -            Landmark Acc@0.1: 0.9503  |  eyeL 0.960  eyeR 0.960  nose 0.937  mouthL 0.948  mouthR 0.947
+2026-07-23 12:38:21,607 - root - INFO - Saved last.pth (epoch 32) + best.pth (NME 0.0363)
+2026-07-23 12:39:21,896 - root - INFO - epoch 33: step 404/1912 (21%), avg loss 12.170, 107.2 img/s, ETA 3.8 min
+2026-07-23 12:40:21,921 - root - INFO - epoch 33: step 784/1912 (41%), avg loss 12.147, 104.3 img/s, ETA 2.9 min
+2026-07-23 12:41:22,933 - root - INFO - epoch 33: step 1110/1912 (58%), avg loss 12.136, 97.9 img/s, ETA 2.2 min
+2026-07-23 12:42:23,465 - root - INFO - epoch 33: step 1457/1912 (76%), avg loss 12.121, 96.4 img/s, ETA 1.3 min
+2026-07-23 12:43:23,654 - root - INFO - epoch 33: step 1813/1912 (95%), avg loss 12.110, 96.0 img/s, ETA 0.3 min
+2026-07-23 12:43:40,821 - root - INFO - Epoch: 33 (stage 2) - 319.2s - Train Loss: 12.1007, Regression 0.2260, Classification 0.6173, Landmark 11.0314, Train Acc 0.9996, Landmark Acc 0.9511, NME 0.0364, Face Recall 0.8641 F1 0.8884, lr 9.05e-06
+2026-07-23 12:44:14,714 - root - INFO - Epoch: 33, Validation (33.9s) Loss: 12.2866, Validation Regression Loss 0.2227 (baseline 0.3041), Validation Classification Loss: 0.6161 (baseline 0.8137), Validation Landmark Loss: 11.2252, Validation Landmark NME: 0.0358
+2026-07-23 12:44:14,714 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9130, Recall 0.8731, F1 0.8926
+2026-07-23 12:44:14,715 - root - INFO -            Landmark Acc@0.1: 0.9515  |  eyeL 0.961  eyeR 0.960  nose 0.938  mouthL 0.949  mouthR 0.949
+2026-07-23 12:44:14,770 - root - INFO - Saved last.pth (epoch 33) + best.pth (NME 0.0358)
+2026-07-23 12:45:14,783 - root - INFO - epoch 34: step 370/1912 (19%), avg loss 12.129, 98.7 img/s, ETA 4.2 min
+2026-07-23 12:46:15,049 - root - INFO - epoch 34: step 713/1912 (37%), avg loss 12.043, 94.9 img/s, ETA 3.4 min
+2026-07-23 12:47:16,345 - root - INFO - epoch 34: step 1083/1912 (57%), avg loss 12.049, 95.4 img/s, ETA 2.3 min
+2026-07-23 12:48:16,442 - root - INFO - epoch 34: step 1475/1912 (77%), avg loss 12.079, 97.7 img/s, ETA 1.2 min
+2026-07-23 12:49:16,505 - root - INFO - epoch 34: step 1788/1912 (94%), avg loss 12.029, 94.8 img/s, ETA 0.3 min
+2026-07-23 12:49:37,864 - root - INFO - Epoch: 34 (stage 2) - 323.1s - Train Loss: 12.0139, Regression 0.2256, Classification 0.6162, Landmark 10.9465, Train Acc 0.9996, Landmark Acc 0.9519, NME 0.0361, Face Recall 0.8636 F1 0.8884, lr 8.98e-06
+2026-07-23 12:50:11,138 - root - INFO - Epoch: 34, Validation (33.3s) Loss: 12.1885, Validation Regression Loss 0.2223 (baseline 0.3041), Validation Classification Loss: 0.6158 (baseline 0.8137), Validation Landmark Loss: 11.1280, Validation Landmark NME: 0.0355
+2026-07-23 12:50:11,138 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9142, Recall 0.8705, F1 0.8918
+2026-07-23 12:50:11,138 - root - INFO -            Landmark Acc@0.1: 0.9523  |  eyeL 0.962  eyeR 0.961  nose 0.939  mouthL 0.950  mouthR 0.950
+2026-07-23 12:50:11,203 - root - INFO - Saved last.pth (epoch 34) + best.pth (NME 0.0355)
+2026-07-23 12:51:11,434 - root - INFO - epoch 35: step 351/1912 (18%), avg loss 12.066, 93.2 img/s, ETA 4.5 min
+2026-07-23 12:52:12,199 - root - INFO - epoch 35: step 730/1912 (38%), avg loss 11.918, 96.5 img/s, ETA 3.3 min
+2026-07-23 12:53:12,220 - root - INFO - epoch 35: step 1088/1912 (57%), avg loss 11.920, 96.2 img/s, ETA 2.3 min
+2026-07-23 12:54:12,344 - root - INFO - epoch 35: step 1438/1912 (75%), avg loss 11.895, 95.4 img/s, ETA 1.3 min
+2026-07-23 12:55:12,661 - root - INFO - epoch 35: step 1806/1912 (94%), avg loss 11.880, 95.9 img/s, ETA 0.3 min
+2026-07-23 12:55:28,945 - root - INFO - Epoch: 35 (stage 2) - 317.7s - Train Loss: 11.8923, Regression 0.2240, Classification 0.6136, Landmark 10.8307, Train Acc 0.9996, Landmark Acc 0.9528, NME 0.0357, Face Recall 0.8639 F1 0.8886, lr 8.91e-06
+2026-07-23 12:56:02,754 - root - INFO - Epoch: 35, Validation (33.8s) Loss: 12.1078, Validation Regression Loss 0.2212 (baseline 0.3041), Validation Classification Loss: 0.6135 (baseline 0.8137), Validation Landmark Loss: 11.0518, Validation Landmark NME: 0.0352
+2026-07-23 12:56:02,754 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9175, Recall 0.8672, F1 0.8916
+2026-07-23 12:56:02,754 - root - INFO -            Landmark Acc@0.1: 0.9529  |  eyeL 0.962  eyeR 0.961  nose 0.940  mouthL 0.951  mouthR 0.950
+2026-07-23 12:56:02,817 - root - INFO - Saved last.pth (epoch 35) + best.pth (NME 0.0352)
+2026-07-23 12:57:02,833 - root - INFO - epoch 36: step 371/1912 (19%), avg loss 11.898, 98.9 img/s, ETA 4.2 min
+2026-07-23 12:58:03,288 - root - INFO - epoch 36: step 746/1912 (39%), avg loss 11.894, 99.1 img/s, ETA 3.1 min
+2026-07-23 12:59:03,489 - root - INFO - epoch 36: step 1121/1912 (59%), avg loss 11.854, 99.3 img/s, ETA 2.1 min
+2026-07-23 13:00:03,944 - root - INFO - epoch 36: step 1461/1912 (76%), avg loss 11.835, 96.9 img/s, ETA 1.2 min
+2026-07-23 13:01:04,062 - root - INFO - epoch 36: step 1814/1912 (95%), avg loss 11.819, 96.3 img/s, ETA 0.3 min
+2026-07-23 13:01:20,540 - root - INFO - Epoch: 36 (stage 2) - 317.7s - Train Loss: 11.8123, Regression 0.2245, Classification 0.6130, Landmark 10.7503, Train Acc 0.9996, Landmark Acc 0.9540, NME 0.0354, Face Recall 0.8635 F1 0.8885, lr 8.85e-06
+2026-07-23 13:01:54,852 - root - INFO - Epoch: 36, Validation (34.3s) Loss: 12.0630, Validation Regression Loss 0.2215 (baseline 0.3041), Validation Classification Loss: 0.6137 (baseline 0.8137), Validation Landmark Loss: 11.0062, Validation Landmark NME: 0.0351
+2026-07-23 13:01:54,852 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9153, Recall 0.8692, F1 0.8917
+2026-07-23 13:01:54,852 - root - INFO -            Landmark Acc@0.1: 0.9538  |  eyeL 0.962  eyeR 0.962  nose 0.941  mouthL 0.952  mouthR 0.951
+2026-07-23 13:01:54,915 - root - INFO - Saved last.pth (epoch 36) + best.pth (NME 0.0351)
+2026-07-23 13:02:55,238 - root - INFO - epoch 37: step 358/1912 (19%), avg loss 11.830, 95.0 img/s, ETA 4.4 min
+2026-07-23 13:03:55,461 - root - INFO - epoch 37: step 718/1912 (38%), avg loss 11.771, 95.3 img/s, ETA 3.3 min
+2026-07-23 13:04:55,773 - root - INFO - epoch 37: step 1097/1912 (57%), avg loss 11.726, 97.0 img/s, ETA 2.2 min
+2026-07-23 13:05:56,298 - root - INFO - epoch 37: step 1450/1912 (76%), avg loss 11.707, 96.1 img/s, ETA 1.3 min
+2026-07-23 13:06:56,392 - root - INFO - epoch 37: step 1798/1912 (94%), avg loss 11.740, 95.4 img/s, ETA 0.3 min
+2026-07-23 13:07:16,134 - root - INFO - Epoch: 37 (stage 2) - 321.2s - Train Loss: 11.7268, Regression 0.2232, Classification 0.6102, Landmark 10.6701, Train Acc 0.9996, Landmark Acc 0.9545, NME 0.0352, Face Recall 0.8640 F1 0.8887, lr 8.78e-06
+2026-07-23 13:07:50,286 - root - INFO - Epoch: 37, Validation (34.2s) Loss: 11.8910, Validation Regression Loss 0.2191 (baseline 0.3041), Validation Classification Loss: 0.6096 (baseline 0.8137), Validation Landmark Loss: 10.8433, Validation Landmark NME: 0.0345
+2026-07-23 13:07:50,286 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9161, Recall 0.8693, F1 0.8921
+2026-07-23 13:07:50,287 - root - INFO -            Landmark Acc@0.1: 0.9546  |  eyeL 0.963  eyeR 0.963  nose 0.942  mouthL 0.953  mouthR 0.952
+2026-07-23 13:07:50,360 - root - INFO - Saved last.pth (epoch 37) + best.pth (NME 0.0345)
+2026-07-23 13:08:50,810 - root - INFO - epoch 38: step 340/1912 (18%), avg loss 11.743, 90.0 img/s, ETA 4.7 min
+2026-07-23 13:09:50,835 - root - INFO - epoch 38: step 731/1912 (38%), avg loss 11.765, 97.1 img/s, ETA 3.2 min
+2026-07-23 13:10:51,061 - root - INFO - epoch 38: step 1091/1912 (57%), avg loss 11.679, 96.6 img/s, ETA 2.3 min
+2026-07-23 13:11:51,363 - root - INFO - epoch 38: step 1439/1912 (75%), avg loss 11.698, 95.5 img/s, ETA 1.3 min
+2026-07-23 13:12:51,424 - root - INFO - epoch 38: step 1813/1912 (95%), avg loss 11.661, 96.4 img/s, ETA 0.3 min
+2026-07-23 13:13:08,432 - root - INFO - Epoch: 38 (stage 2) - 318.1s - Train Loss: 11.6470, Regression 0.2214, Classification 0.6093, Landmark 10.5950, Train Acc 0.9996, Landmark Acc 0.9551, NME 0.0349, Face Recall 0.8637 F1 0.8887, lr 8.70e-06
+2026-07-23 13:13:41,909 - root - INFO - Epoch: 38, Validation (33.5s) Loss: 11.8641, Validation Regression Loss 0.2205 (baseline 0.3041), Validation Classification Loss: 0.6093 (baseline 0.8137), Validation Landmark Loss: 10.8139, Validation Landmark NME: 0.0344
+2026-07-23 13:13:41,909 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9153, Recall 0.8702, F1 0.8922
+2026-07-23 13:13:41,909 - root - INFO -            Landmark Acc@0.1: 0.9550  |  eyeL 0.963  eyeR 0.963  nose 0.942  mouthL 0.954  mouthR 0.953
+2026-07-23 13:13:41,967 - root - INFO - Saved last.pth (epoch 38) + best.pth (NME 0.0344)
+2026-07-23 13:14:42,098 - root - INFO - epoch 39: step 342/1912 (18%), avg loss 11.610, 91.0 img/s, ETA 4.6 min
+2026-07-23 13:15:42,269 - root - INFO - epoch 39: step 691/1912 (36%), avg loss 11.641, 91.9 img/s, ETA 3.5 min
+2026-07-23 13:16:42,365 - root - INFO - epoch 39: step 1052/1912 (55%), avg loss 11.629, 93.3 img/s, ETA 2.5 min
+2026-07-23 13:17:42,516 - root - INFO - epoch 39: step 1443/1912 (75%), avg loss 11.598, 96.0 img/s, ETA 1.3 min
+2026-07-23 13:18:42,658 - root - INFO - epoch 39: step 1801/1912 (94%), avg loss 11.567, 95.8 img/s, ETA 0.3 min
+2026-07-23 13:19:03,500 - root - INFO - Epoch: 39 (stage 2) - 321.5s - Train Loss: 11.5543, Regression 0.2214, Classification 0.6080, Landmark 10.5036, Train Acc 0.9996, Landmark Acc 0.9561, NME 0.0346, Face Recall 0.8642 F1 0.8890, lr 8.63e-06
+2026-07-23 13:19:37,138 - root - INFO - Epoch: 39, Validation (33.6s) Loss: 11.7363, Validation Regression Loss 0.2190 (baseline 0.3041), Validation Classification Loss: 0.6078 (baseline 0.8137), Validation Landmark Loss: 10.6905, Validation Landmark NME: 0.0340
+2026-07-23 13:19:37,139 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9146, Recall 0.8705, F1 0.8920
+2026-07-23 13:19:37,139 - root - INFO -            Landmark Acc@0.1: 0.9557  |  eyeL 0.964  eyeR 0.964  nose 0.943  mouthL 0.954  mouthR 0.954
+2026-07-23 13:19:37,214 - root - INFO - Saved last.pth (epoch 39) + best.pth (NME 0.0340)
+2026-07-23 13:20:37,223 - root - INFO - epoch 40: step 356/1912 (19%), avg loss 11.468, 94.9 img/s, ETA 4.4 min
+2026-07-23 13:21:37,352 - root - INFO - epoch 40: step 729/1912 (38%), avg loss 11.460, 97.1 img/s, ETA 3.2 min
+2026-07-23 13:22:37,848 - root - INFO - epoch 40: step 1091/1912 (57%), avg loss 11.478, 96.6 img/s, ETA 2.3 min
+2026-07-23 13:23:38,149 - root - INFO - epoch 40: step 1456/1912 (76%), avg loss 11.497, 96.7 img/s, ETA 1.3 min
+2026-07-23 13:24:38,207 - root - INFO - epoch 40: step 1819/1912 (95%), avg loss 11.494, 96.7 img/s, ETA 0.3 min
+2026-07-23 13:24:54,340 - root - INFO - Epoch: 40 (stage 2) - 317.1s - Train Loss: 11.4972, Regression 0.2211, Classification 0.6064, Landmark 10.4487, Train Acc 0.9996, Landmark Acc 0.9565, NME 0.0344, Face Recall 0.8640 F1 0.8890, lr 8.55e-06
+2026-07-23 13:25:28,046 - root - INFO - Epoch: 40, Validation (33.7s) Loss: 11.7626, Validation Regression Loss 0.2187 (baseline 0.3041), Validation Classification Loss: 0.6077 (baseline 0.8137), Validation Landmark Loss: 10.7174, Validation Landmark NME: 0.0341
+2026-07-23 13:25:28,046 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9159, Recall 0.8692, F1 0.8919
+2026-07-23 13:25:28,047 - root - INFO -            Landmark Acc@0.1: 0.9561  |  eyeL 0.964  eyeR 0.964  nose 0.944  mouthL 0.954  mouthR 0.954
+2026-07-23 13:25:28,079 - root - INFO - Saved last.pth (epoch 40)
+2026-07-23 13:26:28,125 - root - INFO - epoch 41: step 361/1912 (19%), avg loss 11.508, 96.2 img/s, ETA 4.3 min
+2026-07-23 13:27:29,623 - root - INFO - epoch 41: step 715/1912 (37%), avg loss 11.469, 94.1 img/s, ETA 3.4 min
+2026-07-23 13:28:29,632 - root - INFO - epoch 41: step 1076/1912 (56%), avg loss 11.420, 94.8 img/s, ETA 2.4 min
+2026-07-23 13:29:30,640 - root - INFO - epoch 41: step 1443/1912 (75%), avg loss 11.434, 95.2 img/s, ETA 1.3 min
+2026-07-23 13:30:30,974 - root - INFO - epoch 41: step 1787/1912 (93%), avg loss 11.439, 94.4 img/s, ETA 0.4 min
+2026-07-23 13:30:49,315 - root - INFO - Epoch: 41 (stage 2) - 321.2s - Train Loss: 11.4299, Regression 0.2203, Classification 0.6053, Landmark 10.3839, Train Acc 0.9996, Landmark Acc 0.9572, NME 0.0341, Face Recall 0.8645 F1 0.8892, lr 8.48e-06
+2026-07-23 13:31:23,566 - root - INFO - Epoch: 41, Validation (34.3s) Loss: 11.5940, Validation Regression Loss 0.2179 (baseline 0.3041), Validation Classification Loss: 0.6053 (baseline 0.8137), Validation Landmark Loss: 10.5529, Validation Landmark NME: 0.0335
+2026-07-23 13:31:23,567 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9170, Recall 0.8682, F1 0.8919
+2026-07-23 13:31:23,567 - root - INFO -            Landmark Acc@0.1: 0.9569  |  eyeL 0.965  eyeR 0.965  nose 0.945  mouthL 0.956  mouthR 0.955
+2026-07-23 13:31:23,625 - root - INFO - Saved last.pth (epoch 41) + best.pth (NME 0.0335)
+2026-07-23 13:32:23,915 - root - INFO - epoch 42: step 357/1912 (19%), avg loss 11.372, 94.7 img/s, ETA 4.4 min
+2026-07-23 13:33:23,959 - root - INFO - epoch 42: step 752/1912 (39%), avg loss 11.413, 100.0 img/s, ETA 3.1 min
+2026-07-23 13:34:23,974 - root - INFO - epoch 42: step 1125/1912 (59%), avg loss 11.463, 99.8 img/s, ETA 2.1 min
+2026-07-23 13:35:24,008 - root - INFO - epoch 42: step 1449/1912 (76%), avg loss 11.432, 96.4 img/s, ETA 1.3 min
+2026-07-23 13:36:24,108 - root - INFO - epoch 42: step 1798/1912 (94%), avg loss 11.377, 95.7 img/s, ETA 0.3 min
+2026-07-23 13:36:42,962 - root - INFO - Epoch: 42 (stage 2) - 319.3s - Train Loss: 11.3713, Regression 0.2191, Classification 0.6021, Landmark 10.3310, Train Acc 0.9996, Landmark Acc 0.9578, NME 0.0340, Face Recall 0.8649 F1 0.8895, lr 8.40e-06
+2026-07-23 13:37:17,159 - root - INFO - Epoch: 42, Validation (34.2s) Loss: 11.5695, Validation Regression Loss 0.2183 (baseline 0.3041), Validation Classification Loss: 0.6046 (baseline 0.8137), Validation Landmark Loss: 10.5281, Validation Landmark NME: 0.0335
+2026-07-23 13:37:17,159 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9171, Recall 0.8681, F1 0.8920
+2026-07-23 13:37:17,160 - root - INFO -            Landmark Acc@0.1: 0.9574  |  eyeL 0.965  eyeR 0.965  nose 0.946  mouthL 0.956  mouthR 0.955
+2026-07-23 13:37:17,224 - root - INFO - Saved last.pth (epoch 42) + best.pth (NME 0.0335)
+2026-07-23 13:38:17,309 - root - INFO - epoch 43: step 363/1912 (19%), avg loss 11.283, 96.7 img/s, ETA 4.3 min
+2026-07-23 13:39:17,403 - root - INFO - epoch 43: step 726/1912 (38%), avg loss 11.292, 96.7 img/s, ETA 3.3 min
+2026-07-23 13:40:17,448 - root - INFO - epoch 43: step 1079/1912 (56%), avg loss 11.355, 95.8 img/s, ETA 2.3 min
+2026-07-23 13:41:17,577 - root - INFO - epoch 43: step 1456/1912 (76%), avg loss 11.320, 96.9 img/s, ETA 1.3 min
+2026-07-23 13:42:17,751 - root - INFO - epoch 43: step 1789/1912 (94%), avg loss 11.305, 95.2 img/s, ETA 0.3 min
+2026-07-23 13:42:36,604 - root - INFO - Epoch: 43 (stage 2) - 319.4s - Train Loss: 11.3015, Regression 0.2199, Classification 0.6026, Landmark 10.2591, Train Acc 0.9996, Landmark Acc 0.9584, NME 0.0337, Face Recall 0.8642 F1 0.8889, lr 8.32e-06
+2026-07-23 13:43:10,314 - root - INFO - Epoch: 43, Validation (33.7s) Loss: 11.4749, Validation Regression Loss 0.2158 (baseline 0.3041), Validation Classification Loss: 0.6023 (baseline 0.8137), Validation Landmark Loss: 10.4409, Validation Landmark NME: 0.0332
+2026-07-23 13:43:10,315 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9162, Recall 0.8701, F1 0.8926
+2026-07-23 13:43:10,315 - root - INFO -            Landmark Acc@0.1: 0.9580  |  eyeL 0.966  eyeR 0.966  nose 0.946  mouthL 0.957  mouthR 0.956
+2026-07-23 13:43:10,374 - root - INFO - Saved last.pth (epoch 43) + best.pth (NME 0.0332)
+2026-07-23 13:44:11,231 - root - INFO - epoch 44: step 358/1912 (19%), avg loss 11.236, 94.1 img/s, ETA 4.4 min
+2026-07-23 13:45:11,729 - root - INFO - epoch 44: step 706/1912 (37%), avg loss 11.246, 93.1 img/s, ETA 3.5 min
+2026-07-23 13:46:11,905 - root - INFO - epoch 44: step 1068/1912 (56%), avg loss 11.285, 94.1 img/s, ETA 2.4 min
+2026-07-23 13:47:12,149 - root - INFO - epoch 44: step 1417/1912 (74%), avg loss 11.289, 93.8 img/s, ETA 1.4 min
+2026-07-23 13:48:12,405 - root - INFO - epoch 44: step 1816/1912 (95%), avg loss 11.271, 96.2 img/s, ETA 0.3 min
+2026-07-23 13:48:28,463 - root - INFO - Epoch: 44 (stage 2) - 318.1s - Train Loss: 11.2544, Regression 0.2181, Classification 0.6009, Landmark 10.2175, Train Acc 0.9996, Landmark Acc 0.9588, NME 0.0336, Face Recall 0.8646 F1 0.8893, lr 8.24e-06
+2026-07-23 13:49:02,209 - root - INFO - Epoch: 44, Validation (33.7s) Loss: 11.4134, Validation Regression Loss 0.2159 (baseline 0.3041), Validation Classification Loss: 0.6003 (baseline 0.8137), Validation Landmark Loss: 10.3812, Validation Landmark NME: 0.0330
+2026-07-23 13:49:02,210 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9159, Recall 0.8716, F1 0.8932
+2026-07-23 13:49:02,210 - root - INFO -            Landmark Acc@0.1: 0.9587  |  eyeL 0.966  eyeR 0.966  nose 0.948  mouthL 0.957  mouthR 0.957
+2026-07-23 13:49:02,280 - root - INFO - Saved last.pth (epoch 44) + best.pth (NME 0.0330)
+2026-07-23 13:50:02,900 - root - INFO - epoch 45: step 369/1912 (19%), avg loss 11.333, 97.4 img/s, ETA 4.2 min
+2026-07-23 13:51:03,260 - root - INFO - epoch 45: step 690/1912 (36%), avg loss 11.258, 91.3 img/s, ETA 3.6 min
+2026-07-23 13:52:03,458 - root - INFO - epoch 45: step 1039/1912 (54%), avg loss 11.163, 91.8 img/s, ETA 2.5 min
+2026-07-23 13:53:03,630 - root - INFO - epoch 45: step 1390/1912 (73%), avg loss 11.164, 92.1 img/s, ETA 1.5 min
+2026-07-23 13:54:03,831 - root - INFO - epoch 45: step 1767/1912 (92%), avg loss 11.159, 93.8 img/s, ETA 0.4 min
+2026-07-23 13:54:29,195 - root - INFO - Epoch: 45 (stage 2) - 326.9s - Train Loss: 11.1704, Regression 0.2178, Classification 0.5988, Landmark 10.1360, Train Acc 0.9996, Landmark Acc 0.9595, NME 0.0333, Face Recall 0.8651 F1 0.8897, lr 8.15e-06
+2026-07-23 13:55:03,337 - root - INFO - Epoch: 45, Validation (34.1s) Loss: 11.3560, Validation Regression Loss 0.2155 (baseline 0.3041), Validation Classification Loss: 0.5994 (baseline 0.8137), Validation Landmark Loss: 10.3256, Validation Landmark NME: 0.0328
+2026-07-23 13:55:03,338 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9177, Recall 0.8684, F1 0.8924
+2026-07-23 13:55:03,338 - root - INFO -            Landmark Acc@0.1: 0.9590  |  eyeL 0.966  eyeR 0.966  nose 0.948  mouthL 0.958  mouthR 0.957
+2026-07-23 13:55:03,398 - root - INFO - Saved last.pth (epoch 45) + best.pth (NME 0.0328)
+2026-07-23 13:56:03,418 - root - INFO - epoch 46: step 377/1912 (20%), avg loss 10.948, 100.5 img/s, ETA 4.1 min
+2026-07-23 13:57:03,675 - root - INFO - epoch 46: step 730/1912 (38%), avg loss 10.990, 97.1 img/s, ETA 3.2 min
+2026-07-23 13:58:04,068 - root - INFO - epoch 46: step 1092/1912 (57%), avg loss 11.055, 96.7 img/s, ETA 2.3 min
+2026-07-23 13:59:04,595 - root - INFO - epoch 46: step 1386/1912 (72%), avg loss 11.085, 91.9 img/s, ETA 1.5 min
+2026-07-23 14:00:04,942 - root - INFO - epoch 46: step 1689/1912 (88%), avg loss 11.122, 89.6 img/s, ETA 0.7 min
+2026-07-23 14:00:52,400 - root - INFO - Epoch: 46 (stage 2) - 349.0s - Train Loss: 11.1160, Regression 0.2161, Classification 0.5966, Landmark 10.0872, Train Acc 0.9996, Landmark Acc 0.9597, NME 0.0331, Face Recall 0.8650 F1 0.8897, lr 8.07e-06
+2026-07-23 14:01:29,800 - root - INFO - Epoch: 46, Validation (37.4s) Loss: 11.3268, Validation Regression Loss 0.2143 (baseline 0.3041), Validation Classification Loss: 0.5972 (baseline 0.8137), Validation Landmark Loss: 10.3011, Validation Landmark NME: 0.0327
+2026-07-23 14:01:29,800 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9168, Recall 0.8711, F1 0.8934
+2026-07-23 14:01:29,800 - root - INFO -            Landmark Acc@0.1: 0.9597  |  eyeL 0.966  eyeR 0.967  nose 0.949  mouthL 0.958  mouthR 0.958
+2026-07-23 14:01:29,876 - root - INFO - Saved last.pth (epoch 46) + best.pth (NME 0.0327)
+2026-07-23 14:02:30,179 - root - INFO - epoch 47: step 319/1912 (17%), avg loss 10.903, 84.6 img/s, ETA 5.0 min
+2026-07-23 14:03:30,243 - root - INFO - epoch 47: step 613/1912 (32%), avg loss 10.947, 81.5 img/s, ETA 4.3 min
+2026-07-23 14:04:30,395 - root - INFO - epoch 47: step 920/1912 (48%), avg loss 10.995, 81.5 img/s, ETA 3.2 min
+2026-07-23 14:05:30,665 - root - INFO - epoch 47: step 1203/1912 (63%), avg loss 11.041, 79.9 img/s, ETA 2.4 min
+2026-07-23 14:06:30,876 - root - INFO - epoch 47: step 1492/1912 (78%), avg loss 11.031, 79.3 img/s, ETA 1.4 min
+2026-07-23 14:07:31,731 - root - INFO - epoch 47: step 1787/1912 (93%), avg loss 11.043, 79.0 img/s, ETA 0.4 min
+2026-07-23 14:07:54,709 - root - INFO - Epoch: 47 (stage 2) - 384.8s - Train Loss: 11.0680, Regression 0.2154, Classification 0.5950, Landmark 10.0423, Train Acc 0.9996, Landmark Acc 0.9601, NME 0.0329, Face Recall 0.8659 F1 0.8902, lr 7.98e-06
+2026-07-23 14:08:28,594 - root - INFO - Epoch: 47, Validation (33.9s) Loss: 11.3591, Validation Regression Loss 0.2150 (baseline 0.3041), Validation Classification Loss: 0.5997 (baseline 0.8137), Validation Landmark Loss: 10.3293, Validation Landmark NME: 0.0328
+2026-07-23 14:08:28,594 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9160, Recall 0.8710, F1 0.8929
+2026-07-23 14:08:28,595 - root - INFO -            Landmark Acc@0.1: 0.9598  |  eyeL 0.967  eyeR 0.967  nose 0.949  mouthL 0.959  mouthR 0.958
+2026-07-23 14:08:28,629 - root - INFO - Saved last.pth (epoch 47)
+2026-07-23 14:09:28,695 - root - INFO - epoch 48: step 378/1912 (20%), avg loss 10.996, 100.7 img/s, ETA 4.1 min
+2026-07-23 14:10:29,371 - root - INFO - epoch 48: step 748/1912 (39%), avg loss 10.895, 99.1 img/s, ETA 3.1 min
+2026-07-23 14:11:29,447 - root - INFO - epoch 48: step 1077/1912 (56%), avg loss 10.954, 95.3 img/s, ETA 2.3 min
+2026-07-23 14:12:29,462 - root - INFO - epoch 48: step 1420/1912 (74%), avg loss 11.011, 94.3 img/s, ETA 1.4 min
+2026-07-23 14:13:29,510 - root - INFO - epoch 48: step 1784/1912 (93%), avg loss 11.016, 94.9 img/s, ETA 0.4 min
+2026-07-23 14:13:51,016 - root - INFO - Epoch: 48 (stage 2) - 322.4s - Train Loss: 11.0121, Regression 0.2150, Classification 0.5947, Landmark 9.9874, Train Acc 0.9996, Landmark Acc 0.9602, NME 0.0328, Face Recall 0.8654 F1 0.8897, lr 7.89e-06
+2026-07-23 14:14:24,548 - root - INFO - Epoch: 48, Validation (33.5s) Loss: 11.2489, Validation Regression Loss 0.2130 (baseline 0.3041), Validation Classification Loss: 0.5958 (baseline 0.8137), Validation Landmark Loss: 10.2270, Validation Landmark NME: 0.0324
+2026-07-23 14:14:24,549 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9157, Recall 0.8721, F1 0.8934
+2026-07-23 14:14:24,549 - root - INFO -            Landmark Acc@0.1: 0.9605  |  eyeL 0.967  eyeR 0.967  nose 0.950  mouthL 0.959  mouthR 0.959
+2026-07-23 14:14:24,640 - root - INFO - Saved last.pth (epoch 48) + best.pth (NME 0.0324)
+2026-07-23 14:15:24,659 - root - INFO - epoch 49: step 367/1912 (19%), avg loss 11.090, 97.8 img/s, ETA 4.2 min
+2026-07-23 14:16:24,849 - root - INFO - epoch 49: step 708/1912 (37%), avg loss 11.039, 94.2 img/s, ETA 3.4 min
+2026-07-23 14:17:24,871 - root - INFO - epoch 49: step 1074/1912 (56%), avg loss 10.998, 95.3 img/s, ETA 2.3 min
+2026-07-23 14:18:25,117 - root - INFO - epoch 49: step 1424/1912 (74%), avg loss 10.978, 94.7 img/s, ETA 1.4 min
+2026-07-23 14:19:25,242 - root - INFO - epoch 49: step 1793/1912 (94%), avg loss 10.982, 95.4 img/s, ETA 0.3 min
+2026-07-23 14:19:44,638 - root - INFO - Epoch: 49 (stage 2) - 320.0s - Train Loss: 10.9729, Regression 0.2144, Classification 0.5948, Landmark 9.9493, Train Acc 0.9996, Landmark Acc 0.9610, NME 0.0326, Face Recall 0.8647 F1 0.8896, lr 7.81e-06
+2026-07-23 14:20:18,206 - root - INFO - Epoch: 49, Validation (33.6s) Loss: 11.2770, Validation Regression Loss 0.2142 (baseline 0.3041), Validation Classification Loss: 0.5954 (baseline 0.8137), Validation Landmark Loss: 10.2532, Validation Landmark NME: 0.0326
+2026-07-23 14:20:18,207 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9174, Recall 0.8696, F1 0.8929
+2026-07-23 14:20:18,207 - root - INFO -            Landmark Acc@0.1: 0.9605  |  eyeL 0.967  eyeR 0.967  nose 0.951  mouthL 0.959  mouthR 0.958
+2026-07-23 14:20:18,254 - root - INFO - Saved last.pth (epoch 49)
+2026-07-23 14:21:18,292 - root - INFO - epoch 50: step 358/1912 (19%), avg loss 10.818, 95.4 img/s, ETA 4.3 min
+2026-07-23 14:22:18,297 - root - INFO - epoch 50: step 735/1912 (38%), avg loss 10.913, 98.0 img/s, ETA 3.2 min
+2026-07-23 14:23:18,302 - root - INFO - epoch 50: step 1094/1912 (57%), avg loss 10.977, 97.2 img/s, ETA 2.2 min
+2026-07-23 14:24:18,354 - root - INFO - epoch 50: step 1441/1912 (75%), avg loss 10.915, 96.0 img/s, ETA 1.3 min
+2026-07-23 14:25:18,691 - root - INFO - epoch 50: step 1792/1912 (94%), avg loss 10.924, 95.4 img/s, ETA 0.3 min
+2026-07-23 14:25:37,566 - root - INFO - Epoch: 50 (stage 2) - 319.3s - Train Loss: 10.9195, Regression 0.2136, Classification 0.5917, Landmark 9.9006, Train Acc 0.9996, Landmark Acc 0.9613, NME 0.0325, Face Recall 0.8661 F1 0.8908, lr 7.72e-06
+2026-07-23 14:26:11,845 - root - INFO - Epoch: 50, Validation (34.3s) Loss: 11.1157, Validation Regression Loss 0.2122 (baseline 0.3041), Validation Classification Loss: 0.5927 (baseline 0.8137), Validation Landmark Loss: 10.0987, Validation Landmark NME: 0.0320
+2026-07-23 14:26:11,846 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9178, Recall 0.8703, F1 0.8934
+2026-07-23 14:26:11,846 - root - INFO -            Landmark Acc@0.1: 0.9609  |  eyeL 0.967  eyeR 0.967  nose 0.951  mouthL 0.959  mouthR 0.959
+2026-07-23 14:26:11,921 - root - INFO - Saved last.pth (epoch 50) + best.pth (NME 0.0320)
+2026-07-23 14:27:11,935 - root - INFO - epoch 51: step 362/1912 (19%), avg loss 10.836, 96.5 img/s, ETA 4.3 min
+2026-07-23 14:28:11,964 - root - INFO - epoch 51: step 693/1912 (36%), avg loss 10.834, 92.4 img/s, ETA 3.5 min
+2026-07-23 14:29:12,021 - root - INFO - epoch 51: step 1051/1912 (55%), avg loss 10.813, 93.4 img/s, ETA 2.5 min
+2026-07-23 14:30:12,464 - root - INFO - epoch 51: step 1395/1912 (73%), avg loss 10.828, 92.8 img/s, ETA 1.5 min
+2026-07-23 14:31:12,483 - root - INFO - epoch 51: step 1755/1912 (92%), avg loss 10.871, 93.4 img/s, ETA 0.4 min
+2026-07-23 14:31:35,551 - root - INFO - Epoch: 51 (stage 2) - 323.6s - Train Loss: 10.8781, Regression 0.2134, Classification 0.5906, Landmark 9.8607, Train Acc 0.9996, Landmark Acc 0.9616, NME 0.0323, Face Recall 0.8657 F1 0.8906, lr 7.62e-06
+2026-07-23 14:32:09,130 - root - INFO - Epoch: 51, Validation (33.6s) Loss: 11.0787, Validation Regression Loss 0.2126 (baseline 0.3041), Validation Classification Loss: 0.5933 (baseline 0.8137), Validation Landmark Loss: 10.0601, Validation Landmark NME: 0.0319
+2026-07-23 14:32:09,131 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9176, Recall 0.8695, F1 0.8929
+2026-07-23 14:32:09,131 - root - INFO -            Landmark Acc@0.1: 0.9617  |  eyeL 0.968  eyeR 0.968  nose 0.952  mouthL 0.961  mouthR 0.960
+2026-07-23 14:32:09,202 - root - INFO - Saved last.pth (epoch 51) + best.pth (NME 0.0319)
+2026-07-23 14:33:09,288 - root - INFO - epoch 52: step 346/1912 (18%), avg loss 10.884, 92.1 img/s, ETA 4.5 min
+2026-07-23 14:34:09,332 - root - INFO - epoch 52: step 713/1912 (37%), avg loss 10.810, 95.0 img/s, ETA 3.4 min
+2026-07-23 14:35:09,930 - root - INFO - epoch 52: step 1074/1912 (56%), avg loss 10.856, 95.1 img/s, ETA 2.4 min
+2026-07-23 14:36:10,002 - root - INFO - epoch 52: step 1432/1912 (75%), avg loss 10.829, 95.2 img/s, ETA 1.3 min
+2026-07-23 14:37:10,163 - root - INFO - epoch 52: step 1806/1912 (94%), avg loss 10.842, 96.0 img/s, ETA 0.3 min
+2026-07-23 14:37:27,371 - root - INFO - Epoch: 52 (stage 2) - 318.2s - Train Loss: 10.8450, Regression 0.2128, Classification 0.5903, Landmark 9.8291, Train Acc 0.9996, Landmark Acc 0.9620, NME 0.0322, Face Recall 0.8658 F1 0.8905, lr 7.53e-06
+2026-07-23 14:38:01,331 - root - INFO - Epoch: 52, Validation (34.0s) Loss: 11.0249, Validation Regression Loss 0.2113 (baseline 0.3041), Validation Classification Loss: 0.5920 (baseline 0.8137), Validation Landmark Loss: 10.0103, Validation Landmark NME: 0.0317
+2026-07-23 14:38:01,332 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9184, Recall 0.8695, F1 0.8933
+2026-07-23 14:38:01,332 - root - INFO -            Landmark Acc@0.1: 0.9618  |  eyeL 0.968  eyeR 0.968  nose 0.953  mouthL 0.960  mouthR 0.960
+2026-07-23 14:38:01,397 - root - INFO - Saved last.pth (epoch 52) + best.pth (NME 0.0317)
+2026-07-23 14:39:01,601 - root - INFO - epoch 53: step 356/1912 (19%), avg loss 10.748, 94.6 img/s, ETA 4.4 min
+2026-07-23 14:40:01,638 - root - INFO - epoch 53: step 687/1912 (36%), avg loss 10.796, 91.4 img/s, ETA 3.6 min
+2026-07-23 14:41:01,871 - root - INFO - epoch 53: step 1041/1912 (54%), avg loss 10.808, 92.3 img/s, ETA 2.5 min
+2026-07-23 14:42:02,102 - root - INFO - epoch 53: step 1413/1912 (74%), avg loss 10.804, 93.9 img/s, ETA 1.4 min
+2026-07-23 14:43:02,236 - root - INFO - epoch 53: step 1780/1912 (93%), avg loss 10.800, 94.7 img/s, ETA 0.4 min
+2026-07-23 14:43:22,192 - root - INFO - Epoch: 53 (stage 2) - 320.8s - Train Loss: 10.7842, Regression 0.2115, Classification 0.5891, Landmark 9.7722, Train Acc 0.9996, Landmark Acc 0.9622, NME 0.0320, Face Recall 0.8661 F1 0.8906, lr 7.44e-06
+2026-07-23 14:43:56,510 - root - INFO - Epoch: 53, Validation (34.3s) Loss: 10.9501, Validation Regression Loss 0.2111 (baseline 0.3041), Validation Classification Loss: 0.5908 (baseline 0.8137), Validation Landmark Loss: 9.9371, Validation Landmark NME: 0.0314
+2026-07-23 14:43:56,510 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9185, Recall 0.8700, F1 0.8936
+2026-07-23 14:43:56,510 - root - INFO -            Landmark Acc@0.1: 0.9619  |  eyeL 0.968  eyeR 0.968  nose 0.952  mouthL 0.961  mouthR 0.960
+2026-07-23 14:43:56,578 - root - INFO - Saved last.pth (epoch 53) + best.pth (NME 0.0314)
+2026-07-23 14:44:56,610 - root - INFO - epoch 54: step 324/1912 (17%), avg loss 10.852, 86.4 img/s, ETA 4.9 min
+2026-07-23 14:45:56,711 - root - INFO - epoch 54: step 686/1912 (36%), avg loss 10.724, 91.4 img/s, ETA 3.6 min
+2026-07-23 14:46:56,904 - root - INFO - epoch 54: step 1011/1912 (53%), avg loss 10.725, 89.7 img/s, ETA 2.7 min
+2026-07-23 14:47:56,905 - root - INFO - epoch 54: step 1388/1912 (73%), avg loss 10.729, 92.4 img/s, ETA 1.5 min
+2026-07-23 14:48:56,949 - root - INFO - epoch 54: step 1782/1912 (93%), avg loss 10.759, 94.9 img/s, ETA 0.4 min
+2026-07-23 14:49:21,370 - root - INFO - Epoch: 54 (stage 2) - 324.8s - Train Loss: 10.7373, Regression 0.2112, Classification 0.5881, Landmark 9.7269, Train Acc 0.9996, Landmark Acc 0.9628, NME 0.0318, Face Recall 0.8660 F1 0.8908, lr 7.34e-06
+2026-07-23 14:49:55,604 - root - INFO - Epoch: 54, Validation (34.2s) Loss: 10.9770, Validation Regression Loss 0.2106 (baseline 0.3041), Validation Classification Loss: 0.5897 (baseline 0.8137), Validation Landmark Loss: 9.9660, Validation Landmark NME: 0.0316
+2026-07-23 14:49:55,604 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9177, Recall 0.8711, F1 0.8938
+2026-07-23 14:49:55,604 - root - INFO -            Landmark Acc@0.1: 0.9626  |  eyeL 0.969  eyeR 0.969  nose 0.953  mouthL 0.961  mouthR 0.961
+2026-07-23 14:49:55,639 - root - INFO - Saved last.pth (epoch 54)
+2026-07-23 14:50:56,172 - root - INFO - epoch 55: step 339/1912 (18%), avg loss 10.718, 89.6 img/s, ETA 4.7 min
+2026-07-23 14:51:56,205 - root - INFO - epoch 55: step 685/1912 (36%), avg loss 10.734, 90.9 img/s, ETA 3.6 min
+2026-07-23 14:52:56,477 - root - INFO - epoch 55: step 1035/1912 (54%), avg loss 10.667, 91.6 img/s, ETA 2.6 min
+2026-07-23 14:53:56,720 - root - INFO - epoch 55: step 1400/1912 (73%), avg loss 10.694, 92.9 img/s, ETA 1.5 min
+2026-07-23 14:54:56,753 - root - INFO - epoch 55: step 1766/1912 (92%), avg loss 10.688, 93.8 img/s, ETA 0.4 min
+2026-07-23 14:55:19,803 - root - INFO - Epoch: 55 (stage 2) - 324.2s - Train Loss: 10.7152, Regression 0.2118, Classification 0.5875, Landmark 9.7041, Train Acc 0.9996, Landmark Acc 0.9629, NME 0.0317, Face Recall 0.8658 F1 0.8908, lr 7.25e-06
+2026-07-23 14:55:53,456 - root - INFO - Epoch: 55, Validation (33.7s) Loss: 10.9031, Validation Regression Loss 0.2104 (baseline 0.3041), Validation Classification Loss: 0.5899 (baseline 0.8137), Validation Landmark Loss: 9.8924, Validation Landmark NME: 0.0313
+2026-07-23 14:55:53,457 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9188, Recall 0.8694, F1 0.8934
+2026-07-23 14:55:53,457 - root - INFO -            Landmark Acc@0.1: 0.9627  |  eyeL 0.969  eyeR 0.968  nose 0.954  mouthL 0.962  mouthR 0.961
+2026-07-23 14:55:53,523 - root - INFO - Saved last.pth (epoch 55) + best.pth (NME 0.0313)
+2026-07-23 14:56:54,003 - root - INFO - epoch 56: step 340/1912 (18%), avg loss 10.709, 90.0 img/s, ETA 4.7 min
+2026-07-23 14:57:54,432 - root - INFO - epoch 56: step 704/1912 (37%), avg loss 10.650, 93.2 img/s, ETA 3.5 min
+2026-07-23 14:58:54,440 - root - INFO - epoch 56: step 1070/1912 (56%), avg loss 10.675, 94.6 img/s, ETA 2.4 min
+2026-07-23 14:59:54,619 - root - INFO - epoch 56: step 1440/1912 (75%), avg loss 10.676, 95.6 img/s, ETA 1.3 min
+2026-07-23 15:00:54,988 - root - INFO - epoch 56: step 1820/1912 (95%), avg loss 10.669, 96.6 img/s, ETA 0.3 min
+2026-07-23 15:01:12,390 - root - INFO - Epoch: 56 (stage 2) - 318.9s - Train Loss: 10.6636, Regression 0.2101, Classification 0.5858, Landmark 9.6575, Train Acc 0.9996, Landmark Acc 0.9632, NME 0.0316, Face Recall 0.8667 F1 0.8912, lr 7.15e-06
+2026-07-23 15:01:46,764 - root - INFO - Epoch: 56, Validation (34.4s) Loss: 10.9059, Validation Regression Loss 0.2102 (baseline 0.3041), Validation Classification Loss: 0.5892 (baseline 0.8137), Validation Landmark Loss: 9.8963, Validation Landmark NME: 0.0313
+2026-07-23 15:01:46,764 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9171, Recall 0.8720, F1 0.8940
+2026-07-23 15:01:46,764 - root - INFO -            Landmark Acc@0.1: 0.9630  |  eyeL 0.969  eyeR 0.969  nose 0.954  mouthL 0.962  mouthR 0.961
+2026-07-23 15:01:46,797 - root - INFO - Saved last.pth (epoch 56)
+2026-07-23 15:02:46,859 - root - INFO - epoch 57: step 337/1912 (18%), avg loss 10.697, 89.8 img/s, ETA 4.7 min
+2026-07-23 15:03:47,095 - root - INFO - epoch 57: step 692/1912 (36%), avg loss 10.680, 92.0 img/s, ETA 3.5 min
+2026-07-23 15:04:47,653 - root - INFO - epoch 57: step 1060/1912 (55%), avg loss 10.664, 93.8 img/s, ETA 2.4 min
+2026-07-23 15:05:48,021 - root - INFO - epoch 57: step 1435/1912 (75%), avg loss 10.627, 95.2 img/s, ETA 1.3 min
+2026-07-23 15:06:48,057 - root - INFO - epoch 57: step 1791/1912 (94%), avg loss 10.635, 95.1 img/s, ETA 0.3 min
+2026-07-23 15:07:08,386 - root - INFO - Epoch: 57 (stage 2) - 321.6s - Train Loss: 10.6188, Regression 0.2098, Classification 0.5844, Landmark 9.6147, Train Acc 0.9996, Landmark Acc 0.9636, NME 0.0314, Face Recall 0.8659 F1 0.8909, lr 7.05e-06
+2026-07-23 15:07:42,899 - root - INFO - Epoch: 57, Validation (34.5s) Loss: 10.8367, Validation Regression Loss 0.2090 (baseline 0.3041), Validation Classification Loss: 0.5868 (baseline 0.8137), Validation Landmark Loss: 9.8318, Validation Landmark NME: 0.0311
+2026-07-23 15:07:42,899 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9180, Recall 0.8724, F1 0.8946
+2026-07-23 15:07:42,899 - root - INFO -            Landmark Acc@0.1: 0.9630  |  eyeL 0.969  eyeR 0.969  nose 0.954  mouthL 0.962  mouthR 0.961
+2026-07-23 15:07:42,977 - root - INFO - Saved last.pth (epoch 57) + best.pth (NME 0.0311)
+2026-07-23 15:08:43,323 - root - INFO - epoch 58: step 345/1912 (18%), avg loss 10.691, 91.5 img/s, ETA 4.6 min
+2026-07-23 15:09:43,335 - root - INFO - epoch 58: step 680/1912 (36%), avg loss 10.582, 90.4 img/s, ETA 3.6 min
+2026-07-23 15:10:43,758 - root - INFO - epoch 58: step 1029/1912 (54%), avg loss 10.593, 91.1 img/s, ETA 2.6 min
+2026-07-23 15:11:43,759 - root - INFO - epoch 58: step 1361/1912 (71%), avg loss 10.599, 90.4 img/s, ETA 1.6 min
+2026-07-23 15:12:43,800 - root - INFO - epoch 58: step 1695/1912 (89%), avg loss 10.594, 90.2 img/s, ETA 0.6 min
+2026-07-23 15:13:21,686 - root - INFO - Epoch: 58 (stage 2) - 338.7s - Train Loss: 10.5799, Regression 0.2094, Classification 0.5832, Landmark 9.5778, Train Acc 0.9996, Landmark Acc 0.9639, NME 0.0313, Face Recall 0.8666 F1 0.8916, lr 6.95e-06
+2026-07-23 15:13:57,962 - root - INFO - Epoch: 58, Validation (36.3s) Loss: 10.7950, Validation Regression Loss 0.2087 (baseline 0.3041), Validation Classification Loss: 0.5860 (baseline 0.8137), Validation Landmark Loss: 9.7916, Validation Landmark NME: 0.0309
+2026-07-23 15:13:57,963 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9168, Recall 0.8735, F1 0.8946
+2026-07-23 15:13:57,963 - root - INFO -            Landmark Acc@0.1: 0.9634  |  eyeL 0.969  eyeR 0.969  nose 0.955  mouthL 0.962  mouthR 0.961
+2026-07-23 15:13:58,034 - root - INFO - Saved last.pth (epoch 58) + best.pth (NME 0.0309)
+2026-07-23 15:14:58,260 - root - INFO - epoch 59: step 343/1912 (18%), avg loss 10.547, 91.1 img/s, ETA 4.6 min
+2026-07-23 15:15:58,345 - root - INFO - epoch 59: step 678/1912 (35%), avg loss 10.538, 90.2 img/s, ETA 3.6 min
+2026-07-23 15:16:58,999 - root - INFO - epoch 59: step 1029/1912 (54%), avg loss 10.549, 91.0 img/s, ETA 2.6 min
+2026-07-23 15:17:59,361 - root - INFO - epoch 59: step 1383/1912 (72%), avg loss 10.548, 91.7 img/s, ETA 1.5 min
+2026-07-23 15:19:01,304 - root - INFO - epoch 59: step 1716/1912 (90%), avg loss 10.560, 90.5 img/s, ETA 0.6 min
+2026-07-23 15:19:39,442 - root - INFO - Epoch: 59 (stage 2) - 341.4s - Train Loss: 10.5632, Regression 0.2087, Classification 0.5833, Landmark 9.5624, Train Acc 0.9996, Landmark Acc 0.9643, NME 0.0313, Face Recall 0.8665 F1 0.8913, lr 6.85e-06
+2026-07-23 15:20:13,078 - root - INFO - Epoch: 59, Validation (33.6s) Loss: 10.8095, Validation Regression Loss 0.2084 (baseline 0.3041), Validation Classification Loss: 0.5831 (baseline 0.8137), Validation Landmark Loss: 9.8096, Validation Landmark NME: 0.0310
+2026-07-23 15:20:13,078 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9196, Recall 0.8700, F1 0.8941
+2026-07-23 15:20:13,078 - root - INFO -            Landmark Acc@0.1: 0.9638  |  eyeL 0.969  eyeR 0.969  nose 0.956  mouthL 0.963  mouthR 0.962
+2026-07-23 15:20:13,114 - root - INFO - Saved last.pth (epoch 59)
+2026-07-23 15:21:13,464 - root - INFO - epoch 60: step 360/1912 (19%), avg loss 10.459, 95.4 img/s, ETA 4.3 min
+2026-07-23 15:22:13,490 - root - INFO - epoch 60: step 726/1912 (38%), avg loss 10.459, 96.5 img/s, ETA 3.3 min
+2026-07-23 15:23:13,863 - root - INFO - epoch 60: step 1089/1912 (57%), avg loss 10.468, 96.4 img/s, ETA 2.3 min
+2026-07-23 15:24:13,937 - root - INFO - epoch 60: step 1450/1912 (76%), avg loss 10.495, 96.3 img/s, ETA 1.3 min
+2026-07-23 15:25:14,370 - root - INFO - epoch 60: step 1808/1912 (95%), avg loss 10.518, 96.0 img/s, ETA 0.3 min
+2026-07-23 15:25:30,589 - root - INFO - Epoch: 60 (stage 2) - 317.5s - Train Loss: 10.5222, Regression 0.2083, Classification 0.5819, Landmark 9.5238, Train Acc 0.9996, Landmark Acc 0.9642, NME 0.0311, Face Recall 0.8674 F1 0.8919, lr 6.75e-06
+2026-07-23 15:26:04,506 - root - INFO - Epoch: 60, Validation (33.9s) Loss: 10.7120, Validation Regression Loss 0.2075 (baseline 0.3041), Validation Classification Loss: 0.5838 (baseline 0.8137), Validation Landmark Loss: 9.7131, Validation Landmark NME: 0.0307
+2026-07-23 15:26:04,506 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9167, Recall 0.8745, F1 0.8951
+2026-07-23 15:26:04,506 - root - INFO -            Landmark Acc@0.1: 0.9641  |  eyeL 0.970  eyeR 0.969  nose 0.956  mouthL 0.963  mouthR 0.962
+2026-07-23 15:26:04,581 - root - INFO - Saved last.pth (epoch 60) + best.pth (NME 0.0307)
+2026-07-23 15:27:04,720 - root - INFO - epoch 61: step 359/1912 (19%), avg loss 10.557, 95.5 img/s, ETA 4.3 min
+2026-07-23 15:28:04,752 - root - INFO - epoch 61: step 744/1912 (39%), avg loss 10.476, 99.1 img/s, ETA 3.1 min
+2026-07-23 15:29:04,758 - root - INFO - epoch 61: step 1092/1912 (57%), avg loss 10.469, 97.0 img/s, ETA 2.3 min
+2026-07-23 15:30:04,791 - root - INFO - epoch 61: step 1442/1912 (75%), avg loss 10.478, 96.1 img/s, ETA 1.3 min
+2026-07-23 15:31:04,978 - root - INFO - epoch 61: step 1748/1912 (91%), avg loss 10.491, 93.1 img/s, ETA 0.5 min
+2026-07-23 15:31:33,769 - root - INFO - Epoch: 61 (stage 2) - 329.2s - Train Loss: 10.4815, Regression 0.2074, Classification 0.5805, Landmark 9.4862, Train Acc 0.9996, Landmark Acc 0.9644, NME 0.0310, Face Recall 0.8675 F1 0.8919, lr 6.65e-06
+2026-07-23 15:32:07,759 - root - INFO - Epoch: 61, Validation (34.0s) Loss: 10.7009, Validation Regression Loss 0.2068 (baseline 0.3041), Validation Classification Loss: 0.5818 (baseline 0.8137), Validation Landmark Loss: 9.7055, Validation Landmark NME: 0.0307
+2026-07-23 15:32:07,760 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9200, Recall 0.8697, F1 0.8942
+2026-07-23 15:32:07,760 - root - INFO -            Landmark Acc@0.1: 0.9642  |  eyeL 0.970  eyeR 0.970  nose 0.956  mouthL 0.963  mouthR 0.962
+2026-07-23 15:32:07,794 - root - INFO - Saved last.pth (epoch 61)
+2026-07-23 15:33:07,934 - root - INFO - epoch 62: step 362/1912 (19%), avg loss 10.639, 96.3 img/s, ETA 4.3 min
+2026-07-23 15:34:07,958 - root - INFO - epoch 62: step 656/1912 (34%), avg loss 10.619, 87.3 img/s, ETA 3.8 min
+2026-07-23 15:35:08,107 - root - INFO - epoch 62: step 993/1912 (52%), avg loss 10.575, 88.1 img/s, ETA 2.8 min
+2026-07-23 15:36:08,342 - root - INFO - epoch 62: step 1369/1912 (72%), avg loss 10.546, 91.1 img/s, ETA 1.6 min
+2026-07-23 15:37:08,419 - root - INFO - epoch 62: step 1708/1912 (89%), avg loss 10.485, 90.9 img/s, ETA 0.6 min
+2026-07-23 15:37:40,931 - root - INFO - Epoch: 62 (stage 2) - 333.1s - Train Loss: 10.4641, Regression 0.2078, Classification 0.5800, Landmark 9.4685, Train Acc 0.9996, Landmark Acc 0.9650, NME 0.0309, Face Recall 0.8676 F1 0.8918, lr 6.55e-06
+2026-07-23 15:38:14,963 - root - INFO - Epoch: 62, Validation (34.0s) Loss: 10.6754, Validation Regression Loss 0.2079 (baseline 0.3041), Validation Classification Loss: 0.5833 (baseline 0.8137), Validation Landmark Loss: 9.6762, Validation Landmark NME: 0.0306
+2026-07-23 15:38:14,964 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9169, Recall 0.8735, F1 0.8947
+2026-07-23 15:38:14,964 - root - INFO -            Landmark Acc@0.1: 0.9647  |  eyeL 0.970  eyeR 0.970  nose 0.957  mouthL 0.963  mouthR 0.962
+2026-07-23 15:38:15,045 - root - INFO - Saved last.pth (epoch 62) + best.pth (NME 0.0306)
+2026-07-23 15:39:15,135 - root - INFO - epoch 63: step 366/1912 (19%), avg loss 10.444, 97.5 img/s, ETA 4.2 min
+2026-07-23 15:40:15,164 - root - INFO - epoch 63: step 731/1912 (38%), avg loss 10.432, 97.4 img/s, ETA 3.2 min
+2026-07-23 15:41:15,482 - root - INFO - epoch 63: step 1074/1912 (56%), avg loss 10.377, 95.2 img/s, ETA 2.3 min
+2026-07-23 15:42:15,510 - root - INFO - epoch 63: step 1414/1912 (74%), avg loss 10.379, 94.1 img/s, ETA 1.4 min
+2026-07-23 15:43:15,671 - root - INFO - epoch 63: step 1754/1912 (92%), avg loss 10.400, 93.4 img/s, ETA 0.5 min
+2026-07-23 15:43:41,124 - root - INFO - Epoch: 63 (stage 2) - 326.1s - Train Loss: 10.4120, Regression 0.2064, Classification 0.5790, Landmark 9.4203, Train Acc 0.9996, Landmark Acc 0.9653, NME 0.0308, Face Recall 0.8674 F1 0.8918, lr 6.44e-06
+2026-07-23 15:44:15,088 - root - INFO - Epoch: 63, Validation (34.0s) Loss: 10.7285, Validation Regression Loss 0.2065 (baseline 0.3041), Validation Classification Loss: 0.5814 (baseline 0.8137), Validation Landmark Loss: 9.7342, Validation Landmark NME: 0.0308
+2026-07-23 15:44:15,088 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9175, Recall 0.8733, F1 0.8948
+2026-07-23 15:44:15,089 - root - INFO -            Landmark Acc@0.1: 0.9645  |  eyeL 0.970  eyeR 0.970  nose 0.957  mouthL 0.963  mouthR 0.962
+2026-07-23 15:44:15,128 - root - INFO - Saved last.pth (epoch 63)
+2026-07-23 15:45:15,276 - root - INFO - epoch 64: step 359/1912 (19%), avg loss 10.259, 95.5 img/s, ETA 4.3 min
+2026-07-23 15:46:15,285 - root - INFO - epoch 64: step 704/1912 (37%), avg loss 10.378, 93.7 img/s, ETA 3.4 min
+2026-07-23 15:47:15,427 - root - INFO - epoch 64: step 1077/1912 (56%), avg loss 10.367, 95.6 img/s, ETA 2.3 min
+2026-07-23 15:48:17,068 - root - INFO - epoch 64: step 1449/1912 (76%), avg loss 10.382, 95.8 img/s, ETA 1.3 min
+2026-07-23 15:49:18,468 - root - INFO - epoch 64: step 1804/1912 (94%), avg loss 10.393, 95.2 img/s, ETA 0.3 min
+2026-07-23 15:49:37,993 - root - INFO - Epoch: 64 (stage 2) - 322.9s - Train Loss: 10.3884, Regression 0.2063, Classification 0.5787, Landmark 9.3971, Train Acc 0.9996, Landmark Acc 0.9654, NME 0.0307, Face Recall 0.8668 F1 0.8917, lr 6.34e-06
+2026-07-23 15:50:11,702 - root - INFO - Epoch: 64, Validation (33.7s) Loss: 10.5789, Validation Regression Loss 0.2059 (baseline 0.3041), Validation Classification Loss: 0.5797 (baseline 0.8137), Validation Landmark Loss: 9.5874, Validation Landmark NME: 0.0302
+2026-07-23 15:50:11,703 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9173, Recall 0.8744, F1 0.8953
+2026-07-23 15:50:11,703 - root - INFO -            Landmark Acc@0.1: 0.9650  |  eyeL 0.971  eyeR 0.970  nose 0.958  mouthL 0.963  mouthR 0.963
+2026-07-23 15:50:11,770 - root - INFO - Saved last.pth (epoch 64) + best.pth (NME 0.0302)
+2026-07-23 15:51:11,854 - root - INFO - epoch 65: step 338/1912 (18%), avg loss 10.380, 90.0 img/s, ETA 4.7 min
+2026-07-23 15:52:11,856 - root - INFO - epoch 65: step 687/1912 (36%), avg loss 10.430, 91.5 img/s, ETA 3.6 min
+2026-07-23 15:53:12,005 - root - INFO - epoch 65: step 1045/1912 (55%), avg loss 10.389, 92.8 img/s, ETA 2.5 min
+2026-07-23 15:54:12,417 - root - INFO - epoch 65: step 1420/1912 (74%), avg loss 10.356, 94.4 img/s, ETA 1.4 min
+2026-07-23 15:55:12,546 - root - INFO - epoch 65: step 1784/1912 (93%), avg loss 10.349, 94.9 img/s, ETA 0.4 min
+2026-07-23 15:55:33,789 - root - INFO - Epoch: 65 (stage 2) - 322.0s - Train Loss: 10.3460, Regression 0.2062, Classification 0.5769, Landmark 9.3568, Train Acc 0.9996, Landmark Acc 0.9655, NME 0.0305, Face Recall 0.8681 F1 0.8923, lr 6.23e-06
+2026-07-23 15:56:07,990 - root - INFO - Epoch: 65, Validation (34.2s) Loss: 10.5848, Validation Regression Loss 0.2054 (baseline 0.3041), Validation Classification Loss: 0.5801 (baseline 0.8137), Validation Landmark Loss: 9.5939, Validation Landmark NME: 0.0303
+2026-07-23 15:56:07,990 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9206, Recall 0.8701, F1 0.8947
+2026-07-23 15:56:07,990 - root - INFO -            Landmark Acc@0.1: 0.9651  |  eyeL 0.971  eyeR 0.970  nose 0.957  mouthL 0.964  mouthR 0.963
+2026-07-23 15:56:08,030 - root - INFO - Saved last.pth (epoch 65)
+2026-07-23 15:57:09,071 - root - INFO - epoch 66: step 367/1912 (19%), avg loss 10.444, 96.2 img/s, ETA 4.3 min
+2026-07-23 15:58:09,076 - root - INFO - epoch 66: step 755/1912 (39%), avg loss 10.431, 99.8 img/s, ETA 3.1 min
+2026-07-23 15:59:09,268 - root - INFO - epoch 66: step 1093/1912 (57%), avg loss 10.400, 96.5 img/s, ETA 2.3 min
+2026-07-23 16:00:09,274 - root - INFO - epoch 66: step 1446/1912 (76%), avg loss 10.369, 95.9 img/s, ETA 1.3 min
+2026-07-23 16:01:10,146 - root - INFO - epoch 66: step 1804/1912 (94%), avg loss 10.336, 95.5 img/s, ETA 0.3 min
+2026-07-23 16:01:26,591 - root - INFO - Epoch: 66 (stage 2) - 318.6s - Train Loss: 10.3200, Regression 0.2058, Classification 0.5765, Landmark 9.3320, Train Acc 0.9996, Landmark Acc 0.9660, NME 0.0304, Face Recall 0.8686 F1 0.8928, lr 6.13e-06
+2026-07-23 16:02:00,650 - root - INFO - Epoch: 66, Validation (34.1s) Loss: 10.5319, Validation Regression Loss 0.2050 (baseline 0.3041), Validation Classification Loss: 0.5777 (baseline 0.8137), Validation Landmark Loss: 9.5442, Validation Landmark NME: 0.0301
+2026-07-23 16:02:00,650 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9179, Recall 0.8742, F1 0.8955
+2026-07-23 16:02:00,651 - root - INFO -            Landmark Acc@0.1: 0.9652  |  eyeL 0.971  eyeR 0.970  nose 0.958  mouthL 0.964  mouthR 0.964
+2026-07-23 16:02:00,747 - root - INFO - Saved last.pth (epoch 66) + best.pth (NME 0.0301)
+2026-07-23 16:03:02,247 - root - INFO - epoch 67: step 349/1912 (18%), avg loss 10.431, 90.8 img/s, ETA 4.6 min
+2026-07-23 16:04:02,940 - root - INFO - epoch 67: step 727/1912 (38%), avg loss 10.304, 95.2 img/s, ETA 3.3 min
+2026-07-23 16:05:02,992 - root - INFO - epoch 67: step 1069/1912 (56%), avg loss 10.298, 93.9 img/s, ETA 2.4 min
+2026-07-23 16:06:03,156 - root - INFO - epoch 67: step 1363/1912 (71%), avg loss 10.296, 90.0 img/s, ETA 1.6 min
+2026-07-23 16:07:03,506 - root - INFO - epoch 67: step 1710/1912 (89%), avg loss 10.285, 90.4 img/s, ETA 0.6 min
+2026-07-23 16:07:47,399 - root - INFO - Epoch: 67 (stage 2) - 346.7s - Train Loss: 10.2846, Regression 0.2049, Classification 0.5752, Landmark 9.2997, Train Acc 0.9996, Landmark Acc 0.9659, NME 0.0304, Face Recall 0.8681 F1 0.8925, lr 6.02e-06
+2026-07-23 16:08:24,021 - root - INFO - Epoch: 67, Validation (36.6s) Loss: 10.4989, Validation Regression Loss 0.2052 (baseline 0.3041), Validation Classification Loss: 0.5788 (baseline 0.8137), Validation Landmark Loss: 9.5097, Validation Landmark NME: 0.0300
+2026-07-23 16:08:24,022 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9183, Recall 0.8729, F1 0.8950
+2026-07-23 16:08:24,022 - root - INFO -            Landmark Acc@0.1: 0.9657  |  eyeL 0.971  eyeR 0.970  nose 0.959  mouthL 0.965  mouthR 0.963
+2026-07-23 16:08:24,078 - root - INFO - Saved last.pth (epoch 67) + best.pth (NME 0.0300)
+2026-07-23 16:09:25,167 - root - INFO - epoch 68: step 307/1912 (16%), avg loss 10.317, 80.4 img/s, ETA 5.3 min
+2026-07-23 16:10:25,752 - root - INFO - epoch 68: step 654/1912 (34%), avg loss 10.277, 86.0 img/s, ETA 3.9 min
+2026-07-23 16:11:27,080 - root - INFO - epoch 68: step 990/1912 (52%), avg loss 10.285, 86.6 img/s, ETA 2.8 min
+2026-07-23 16:12:27,153 - root - INFO - epoch 68: step 1333/1912 (70%), avg loss 10.227, 87.7 img/s, ETA 1.8 min
+2026-07-23 16:13:27,811 - root - INFO - epoch 68: step 1692/1912 (88%), avg loss 10.254, 89.1 img/s, ETA 0.7 min
+2026-07-23 16:14:03,055 - root - INFO - Epoch: 68 (stage 2) - 339.0s - Train Loss: 10.2628, Regression 0.2043, Classification 0.5744, Landmark 9.2799, Train Acc 0.9996, Landmark Acc 0.9663, NME 0.0303, Face Recall 0.8679 F1 0.8926, lr 5.92e-06
+2026-07-23 16:14:37,468 - root - INFO - Epoch: 68, Validation (34.4s) Loss: 10.5279, Validation Regression Loss 0.2045 (baseline 0.3041), Validation Classification Loss: 0.5760 (baseline 0.8137), Validation Landmark Loss: 9.5429, Validation Landmark NME: 0.0301
+2026-07-23 16:14:37,469 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9175, Recall 0.8751, F1 0.8958
+2026-07-23 16:14:37,469 - root - INFO -            Landmark Acc@0.1: 0.9656  |  eyeL 0.971  eyeR 0.971  nose 0.959  mouthL 0.964  mouthR 0.964
+2026-07-23 16:14:37,522 - root - INFO - Saved last.pth (epoch 68)
+2026-07-23 16:15:38,099 - root - INFO - epoch 69: step 358/1912 (19%), avg loss 10.160, 94.6 img/s, ETA 4.4 min
+2026-07-23 16:16:38,155 - root - INFO - epoch 69: step 710/1912 (37%), avg loss 10.228, 94.2 img/s, ETA 3.4 min
+2026-07-23 16:17:38,391 - root - INFO - epoch 69: step 1091/1912 (57%), avg loss 10.254, 96.5 img/s, ETA 2.3 min
+2026-07-23 16:18:38,439 - root - INFO - epoch 69: step 1446/1912 (76%), avg loss 10.222, 96.0 img/s, ETA 1.3 min
+2026-07-23 16:19:38,489 - root - INFO - epoch 69: step 1801/1912 (94%), avg loss 10.242, 95.7 img/s, ETA 0.3 min
+2026-07-23 16:19:58,421 - root - INFO - Epoch: 69 (stage 2) - 320.9s - Train Loss: 10.2367, Regression 0.2044, Classification 0.5736, Landmark 9.2543, Train Acc 0.9996, Landmark Acc 0.9663, NME 0.0302, Face Recall 0.8677 F1 0.8923, lr 5.81e-06
+2026-07-23 16:20:32,792 - root - INFO - Epoch: 69, Validation (34.4s) Loss: 10.4439, Validation Regression Loss 0.2039 (baseline 0.3041), Validation Classification Loss: 0.5765 (baseline 0.8137), Validation Landmark Loss: 9.4596, Validation Landmark NME: 0.0298
+2026-07-23 16:20:32,792 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9180, Recall 0.8744, F1 0.8957
+2026-07-23 16:20:32,792 - root - INFO -            Landmark Acc@0.1: 0.9659  |  eyeL 0.971  eyeR 0.971  nose 0.959  mouthL 0.965  mouthR 0.964
+2026-07-23 16:20:32,859 - root - INFO - Saved last.pth (epoch 69) + best.pth (NME 0.0298)
+2026-07-23 16:21:33,233 - root - INFO - epoch 70: step 326/1912 (17%), avg loss 10.003, 86.4 img/s, ETA 4.9 min
+2026-07-23 16:22:33,283 - root - INFO - epoch 70: step 685/1912 (36%), avg loss 10.164, 91.0 img/s, ETA 3.6 min
+2026-07-23 16:23:33,889 - root - INFO - epoch 70: step 1028/1912 (54%), avg loss 10.219, 90.9 img/s, ETA 2.6 min
+2026-07-23 16:24:34,079 - root - INFO - epoch 70: step 1365/1912 (71%), avg loss 10.268, 90.5 img/s, ETA 1.6 min
+2026-07-23 16:25:34,134 - root - INFO - epoch 70: step 1721/1912 (90%), avg loss 10.240, 91.4 img/s, ETA 0.6 min
+2026-07-23 16:26:06,187 - root - INFO - Epoch: 70 (stage 2) - 333.3s - Train Loss: 10.2068, Regression 0.2042, Classification 0.5724, Landmark 9.2259, Train Acc 0.9996, Landmark Acc 0.9668, NME 0.0301, Face Recall 0.8690 F1 0.8932, lr 5.70e-06
+2026-07-23 16:26:40,387 - root - INFO - Epoch: 70, Validation (34.2s) Loss: 10.5268, Validation Regression Loss 0.2033 (baseline 0.3041), Validation Classification Loss: 0.5759 (baseline 0.8137), Validation Landmark Loss: 9.5443, Validation Landmark NME: 0.0302
+2026-07-23 16:26:40,388 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9183, Recall 0.8738, F1 0.8955
+2026-07-23 16:26:40,388 - root - INFO -            Landmark Acc@0.1: 0.9658  |  eyeL 0.971  eyeR 0.971  nose 0.959  mouthL 0.964  mouthR 0.964
+2026-07-23 16:26:40,451 - root - INFO - Saved last.pth (epoch 70)
+2026-07-23 16:27:40,560 - root - INFO - epoch 71: step 336/1912 (18%), avg loss 10.194, 89.4 img/s, ETA 4.7 min
+2026-07-23 16:28:40,740 - root - INFO - epoch 71: step 690/1912 (36%), avg loss 10.256, 91.8 img/s, ETA 3.6 min
+2026-07-23 16:29:40,999 - root - INFO - epoch 71: step 1045/1912 (55%), avg loss 10.238, 92.6 img/s, ETA 2.5 min
+2026-07-23 16:30:41,029 - root - INFO - epoch 71: step 1363/1912 (71%), avg loss 10.230, 90.6 img/s, ETA 1.6 min
+2026-07-23 16:31:41,132 - root - INFO - epoch 71: step 1702/1912 (89%), avg loss 10.182, 90.6 img/s, ETA 0.6 min
+2026-07-23 16:32:15,272 - root - INFO - Epoch: 71 (stage 2) - 334.8s - Train Loss: 10.1768, Regression 0.2033, Classification 0.5717, Landmark 9.1986, Train Acc 0.9996, Landmark Acc 0.9667, NME 0.0300, Face Recall 0.8689 F1 0.8928, lr 5.59e-06
+2026-07-23 16:32:50,492 - root - INFO - Epoch: 71, Validation (35.2s) Loss: 10.3899, Validation Regression Loss 0.2041 (baseline 0.3041), Validation Classification Loss: 0.5761 (baseline 0.8137), Validation Landmark Loss: 9.4055, Validation Landmark NME: 0.0296
+2026-07-23 16:32:50,493 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9200, Recall 0.8713, F1 0.8950
+2026-07-23 16:32:50,493 - root - INFO -            Landmark Acc@0.1: 0.9663  |  eyeL 0.971  eyeR 0.971  nose 0.960  mouthL 0.965  mouthR 0.964
+2026-07-23 16:32:50,559 - root - INFO - Saved last.pth (epoch 71) + best.pth (NME 0.0296)
+2026-07-23 16:33:50,715 - root - INFO - epoch 72: step 330/1912 (17%), avg loss 10.190, 87.8 img/s, ETA 4.8 min
+2026-07-23 16:34:52,671 - root - INFO - epoch 72: step 669/1912 (35%), avg loss 10.171, 87.7 img/s, ETA 3.8 min
+2026-07-23 16:35:52,913 - root - INFO - epoch 72: step 1038/1912 (54%), avg loss 10.172, 91.1 img/s, ETA 2.6 min
+2026-07-23 16:36:52,975 - root - INFO - epoch 72: step 1378/1912 (72%), avg loss 10.164, 91.0 img/s, ETA 1.6 min
+2026-07-23 16:37:53,275 - root - INFO - epoch 72: step 1740/1912 (91%), avg loss 10.184, 92.0 img/s, ETA 0.5 min
+2026-07-23 16:38:21,307 - root - INFO - Epoch: 72 (stage 2) - 330.7s - Train Loss: 10.1533, Regression 0.2027, Classification 0.5701, Landmark 9.1778, Train Acc 0.9996, Landmark Acc 0.9670, NME 0.0299, Face Recall 0.8687 F1 0.8932, lr 5.49e-06
+2026-07-23 16:38:55,186 - root - INFO - Epoch: 72, Validation (33.9s) Loss: 10.3962, Validation Regression Loss 0.2026 (baseline 0.3041), Validation Classification Loss: 0.5736 (baseline 0.8137), Validation Landmark Loss: 9.4174, Validation Landmark NME: 0.0297
+2026-07-23 16:38:55,187 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9198, Recall 0.8721, F1 0.8953
+2026-07-23 16:38:55,187 - root - INFO -            Landmark Acc@0.1: 0.9664  |  eyeL 0.972  eyeR 0.971  nose 0.960  mouthL 0.965  mouthR 0.965
+2026-07-23 16:38:55,219 - root - INFO - Saved last.pth (epoch 72)
+2026-07-23 16:39:55,452 - root - INFO - epoch 73: step 338/1912 (18%), avg loss 10.223, 89.8 img/s, ETA 4.7 min
+2026-07-23 16:40:55,533 - root - INFO - epoch 73: step 725/1912 (38%), avg loss 10.251, 96.4 img/s, ETA 3.3 min
+2026-07-23 16:41:55,536 - root - INFO - epoch 73: step 1076/1912 (56%), avg loss 10.226, 95.5 img/s, ETA 2.3 min
+2026-07-23 16:42:55,600 - root - INFO - epoch 73: step 1435/1912 (75%), avg loss 10.176, 95.5 img/s, ETA 1.3 min
+2026-07-23 16:43:55,750 - root - INFO - epoch 73: step 1785/1912 (93%), avg loss 10.147, 95.0 img/s, ETA 0.4 min
+2026-07-23 16:44:15,992 - root - INFO - Epoch: 73 (stage 2) - 320.8s - Train Loss: 10.1406, Regression 0.2027, Classification 0.5704, Landmark 9.1648, Train Acc 0.9996, Landmark Acc 0.9672, NME 0.0299, Face Recall 0.8689 F1 0.8931, lr 5.38e-06
+2026-07-23 16:44:50,378 - root - INFO - Epoch: 73, Validation (34.4s) Loss: 10.3834, Validation Regression Loss 0.2030 (baseline 0.3041), Validation Classification Loss: 0.5724 (baseline 0.8137), Validation Landmark Loss: 9.4050, Validation Landmark NME: 0.0296
+2026-07-23 16:44:50,379 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9163, Recall 0.8782, F1 0.8969
+2026-07-23 16:44:50,379 - root - INFO -            Landmark Acc@0.1: 0.9666  |  eyeL 0.972  eyeR 0.971  nose 0.960  mouthL 0.965  mouthR 0.965
+2026-07-23 16:44:50,439 - root - INFO - Saved last.pth (epoch 73) + best.pth (NME 0.0296)
+2026-07-23 16:45:50,458 - root - INFO - epoch 74: step 356/1912 (19%), avg loss 10.158, 94.9 img/s, ETA 4.4 min
+2026-07-23 16:46:50,468 - root - INFO - epoch 74: step 731/1912 (38%), avg loss 10.058, 97.4 img/s, ETA 3.2 min
+2026-07-23 16:47:50,469 - root - INFO - epoch 74: step 1076/1912 (56%), avg loss 10.080, 95.6 img/s, ETA 2.3 min
+2026-07-23 16:48:50,502 - root - INFO - epoch 74: step 1437/1912 (75%), avg loss 10.077, 95.8 img/s, ETA 1.3 min
+2026-07-23 16:49:50,705 - root - INFO - epoch 74: step 1775/1912 (93%), avg loss 10.089, 94.6 img/s, ETA 0.4 min
+2026-07-23 16:50:12,993 - root - INFO - Epoch: 74 (stage 2) - 322.6s - Train Loss: 10.1083, Regression 0.2016, Classification 0.5703, Landmark 9.1348, Train Acc 0.9996, Landmark Acc 0.9672, NME 0.0298, Face Recall 0.8687 F1 0.8930, lr 5.27e-06
+2026-07-23 16:50:46,823 - root - INFO - Epoch: 74, Validation (33.8s) Loss: 10.3214, Validation Regression Loss 0.2016 (baseline 0.3041), Validation Classification Loss: 0.5730 (baseline 0.8137), Validation Landmark Loss: 9.3453, Validation Landmark NME: 0.0294
+2026-07-23 16:50:46,824 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9221, Recall 0.8702, F1 0.8954
+2026-07-23 16:50:46,824 - root - INFO -            Landmark Acc@0.1: 0.9666  |  eyeL 0.972  eyeR 0.971  nose 0.960  mouthL 0.965  mouthR 0.965
+2026-07-23 16:50:46,879 - root - INFO - Saved last.pth (epoch 74) + best.pth (NME 0.0294)
+2026-07-23 16:51:46,906 - root - INFO - epoch 75: step 357/1912 (19%), avg loss 10.092, 95.2 img/s, ETA 4.4 min
+2026-07-23 16:52:47,167 - root - INFO - epoch 75: step 707/1912 (37%), avg loss 10.095, 94.0 img/s, ETA 3.4 min
+2026-07-23 16:53:47,381 - root - INFO - epoch 75: step 1087/1912 (57%), avg loss 10.094, 96.4 img/s, ETA 2.3 min
+2026-07-23 16:54:47,917 - root - INFO - epoch 75: step 1444/1912 (76%), avg loss 10.120, 95.9 img/s, ETA 1.3 min
+2026-07-23 16:55:47,979 - root - INFO - epoch 75: step 1816/1912 (95%), avg loss 10.097, 96.5 img/s, ETA 0.3 min
+2026-07-23 16:56:06,179 - root - INFO - Epoch: 75 (stage 2) - 319.3s - Train Loss: 10.0933, Regression 0.2018, Classification 0.5687, Landmark 9.1210, Train Acc 0.9996, Landmark Acc 0.9672, NME 0.0297, Face Recall 0.8687 F1 0.8931, lr 5.16e-06
+2026-07-23 16:56:39,455 - root - INFO - Epoch: 75, Validation (33.3s) Loss: 10.3153, Validation Regression Loss 0.2024 (baseline 0.3041), Validation Classification Loss: 0.5722 (baseline 0.8137), Validation Landmark Loss: 9.3383, Validation Landmark NME: 0.0294
+2026-07-23 16:56:39,455 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9205, Recall 0.8720, F1 0.8956
+2026-07-23 16:56:39,456 - root - INFO -            Landmark Acc@0.1: 0.9667  |  eyeL 0.972  eyeR 0.971  nose 0.960  mouthL 0.966  mouthR 0.965
+2026-07-23 16:56:39,525 - root - INFO - Saved last.pth (epoch 75) + best.pth (NME 0.0294)
+2026-07-23 16:57:39,628 - root - INFO - epoch 76: step 315/1912 (16%), avg loss 10.102, 83.9 img/s, ETA 5.1 min
+2026-07-23 16:58:39,902 - root - INFO - epoch 76: step 637/1912 (33%), avg loss 10.142, 84.7 img/s, ETA 4.0 min
+2026-07-23 16:59:40,051 - root - INFO - epoch 76: step 980/1912 (51%), avg loss 10.107, 86.9 img/s, ETA 2.9 min
+2026-07-23 17:00:40,228 - root - INFO - epoch 76: step 1333/1912 (70%), avg loss 10.088, 88.6 img/s, ETA 1.7 min
+2026-07-23 17:01:40,445 - root - INFO - epoch 76: step 1714/1912 (90%), avg loss 10.080, 91.1 img/s, ETA 0.6 min
+2026-07-23 17:02:15,196 - root - INFO - Epoch: 76 (stage 2) - 335.7s - Train Loss: 10.0646, Regression 0.2009, Classification 0.5689, Landmark 9.0938, Train Acc 0.9996, Landmark Acc 0.9675, NME 0.0296, Face Recall 0.8690 F1 0.8934, lr 5.05e-06
+2026-07-23 17:02:51,712 - root - INFO - Epoch: 76, Validation (36.5s) Loss: 10.2762, Validation Regression Loss 0.2006 (baseline 0.3041), Validation Classification Loss: 0.5712 (baseline 0.8137), Validation Landmark Loss: 9.3037, Validation Landmark NME: 0.0293
+2026-07-23 17:02:51,713 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9196, Recall 0.8741, F1 0.8963
+2026-07-23 17:02:51,713 - root - INFO -            Landmark Acc@0.1: 0.9669  |  eyeL 0.972  eyeR 0.972  nose 0.961  mouthL 0.965  mouthR 0.965
+2026-07-23 17:02:51,784 - root - INFO - Saved last.pth (epoch 76) + best.pth (NME 0.0293)
+2026-07-23 17:03:51,983 - root - INFO - epoch 77: step 352/1912 (18%), avg loss 10.102, 93.6 img/s, ETA 4.4 min
+2026-07-23 17:04:52,034 - root - INFO - epoch 77: step 679/1912 (36%), avg loss 10.101, 90.3 img/s, ETA 3.6 min
+2026-07-23 17:05:52,973 - root - INFO - epoch 77: step 1041/1912 (54%), avg loss 10.067, 91.9 img/s, ETA 2.5 min
+2026-07-23 17:06:53,236 - root - INFO - epoch 77: step 1384/1912 (72%), avg loss 10.023, 91.7 img/s, ETA 1.5 min
+2026-07-23 17:07:53,498 - root - INFO - epoch 77: step 1733/1912 (91%), avg loss 10.017, 91.9 img/s, ETA 0.5 min
+2026-07-23 17:08:31,422 - root - INFO - Epoch: 77 (stage 2) - 339.6s - Train Loss: 10.0340, Regression 0.2010, Classification 0.5676, Landmark 9.0644, Train Acc 0.9996, Landmark Acc 0.9678, NME 0.0295, Face Recall 0.8694 F1 0.8938, lr 4.95e-06
+2026-07-23 17:09:06,263 - root - INFO - Epoch: 77, Validation (34.8s) Loss: 10.2678, Validation Regression Loss 0.2014 (baseline 0.3041), Validation Classification Loss: 0.5714 (baseline 0.8137), Validation Landmark Loss: 9.2936, Validation Landmark NME: 0.0293
+2026-07-23 17:09:06,263 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9197, Recall 0.8734, F1 0.8959
+2026-07-23 17:09:06,263 - root - INFO -            Landmark Acc@0.1: 0.9672  |  eyeL 0.972  eyeR 0.972  nose 0.961  mouthL 0.966  mouthR 0.965
+2026-07-23 17:09:06,332 - root - INFO - Saved last.pth (epoch 77) + best.pth (NME 0.0293)
+2026-07-23 17:10:06,531 - root - INFO - epoch 78: step 364/1912 (19%), avg loss 9.931, 96.7 img/s, ETA 4.3 min
+2026-07-23 17:11:06,537 - root - INFO - epoch 78: step 682/1912 (36%), avg loss 9.968, 90.8 img/s, ETA 3.6 min
+2026-07-23 17:12:06,633 - root - INFO - epoch 78: step 1040/1912 (54%), avg loss 9.966, 92.3 img/s, ETA 2.5 min
+2026-07-23 17:13:06,870 - root - INFO - epoch 78: step 1423/1912 (74%), avg loss 9.998, 94.7 img/s, ETA 1.4 min
+2026-07-23 17:14:07,086 - root - INFO - epoch 78: step 1785/1912 (93%), avg loss 10.011, 95.0 img/s, ETA 0.4 min
+2026-07-23 17:14:27,747 - root - INFO - Epoch: 78 (stage 2) - 321.4s - Train Loss: 10.0252, Regression 0.2003, Classification 0.5670, Landmark 9.0576, Train Acc 0.9996, Landmark Acc 0.9677, NME 0.0295, Face Recall 0.8696 F1 0.8939, lr 4.84e-06
+2026-07-23 17:15:01,593 - root - INFO - Epoch: 78, Validation (33.8s) Loss: 10.2147, Validation Regression Loss 0.2005 (baseline 0.3041), Validation Classification Loss: 0.5699 (baseline 0.8137), Validation Landmark Loss: 9.2438, Validation Landmark NME: 0.0291
+2026-07-23 17:15:01,593 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9202, Recall 0.8727, F1 0.8959
+2026-07-23 17:15:01,593 - root - INFO -            Landmark Acc@0.1: 0.9674  |  eyeL 0.972  eyeR 0.972  nose 0.961  mouthL 0.966  mouthR 0.966
+2026-07-23 17:15:01,665 - root - INFO - Saved last.pth (epoch 78) + best.pth (NME 0.0291)
+2026-07-23 17:16:01,668 - root - INFO - epoch 79: step 336/1912 (18%), avg loss 9.962, 89.6 img/s, ETA 4.7 min
+2026-07-23 17:17:01,737 - root - INFO - epoch 79: step 708/1912 (37%), avg loss 9.991, 94.3 img/s, ETA 3.4 min
+2026-07-23 17:18:01,759 - root - INFO - epoch 79: step 1062/1912 (56%), avg loss 9.987, 94.4 img/s, ETA 2.4 min
+2026-07-23 17:19:03,393 - root - INFO - epoch 79: step 1427/1912 (75%), avg loss 9.970, 94.5 img/s, ETA 1.4 min
+2026-07-23 17:20:03,452 - root - INFO - epoch 79: step 1797/1912 (94%), avg loss 9.992, 95.3 img/s, ETA 0.3 min
+2026-07-23 17:20:22,978 - root - INFO - Epoch: 79 (stage 2) - 321.3s - Train Loss: 9.9923, Regression 0.2006, Classification 0.5665, Landmark 9.0247, Train Acc 0.9996, Landmark Acc 0.9681, NME 0.0294, Face Recall 0.8695 F1 0.8937, lr 4.73e-06
+2026-07-23 17:20:57,060 - root - INFO - Epoch: 79, Validation (34.1s) Loss: 10.2753, Validation Regression Loss 0.2004 (baseline 0.3041), Validation Classification Loss: 0.5700 (baseline 0.8137), Validation Landmark Loss: 9.3046, Validation Landmark NME: 0.0293
+2026-07-23 17:20:57,060 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9181, Recall 0.8759, F1 0.8965
+2026-07-23 17:20:57,061 - root - INFO -            Landmark Acc@0.1: 0.9673  |  eyeL 0.972  eyeR 0.972  nose 0.961  mouthL 0.966  mouthR 0.965
+2026-07-23 17:20:57,104 - root - INFO - Saved last.pth (epoch 79)
+2026-07-23 17:21:57,535 - root - INFO - epoch 80: step 366/1912 (19%), avg loss 9.959, 96.9 img/s, ETA 4.3 min
+2026-07-23 17:22:57,754 - root - INFO - epoch 80: step 727/1912 (38%), avg loss 9.945, 96.4 img/s, ETA 3.3 min
+2026-07-23 17:23:57,835 - root - INFO - epoch 80: step 1053/1912 (55%), avg loss 9.947, 93.2 img/s, ETA 2.5 min
+2026-07-23 17:24:58,129 - root - INFO - epoch 80: step 1412/1912 (74%), avg loss 9.987, 93.7 img/s, ETA 1.4 min
+2026-07-23 17:25:58,162 - root - INFO - epoch 80: step 1764/1912 (92%), avg loss 9.999, 93.7 img/s, ETA 0.4 min
+2026-07-23 17:26:22,100 - root - INFO - Epoch: 80 (stage 2) - 325.0s - Train Loss: 9.9874, Regression 0.2006, Classification 0.5670, Landmark 9.0192, Train Acc 0.9996, Landmark Acc 0.9681, NME 0.0294, Face Recall 0.8690 F1 0.8935, lr 4.62e-06
+2026-07-23 17:26:55,854 - root - INFO - Epoch: 80, Validation (33.8s) Loss: 10.2012, Validation Regression Loss 0.2002 (baseline 0.3041), Validation Classification Loss: 0.5685 (baseline 0.8137), Validation Landmark Loss: 9.2322, Validation Landmark NME: 0.0290
+2026-07-23 17:26:55,854 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9188, Recall 0.8757, F1 0.8967
+2026-07-23 17:26:55,854 - root - INFO -            Landmark Acc@0.1: 0.9676  |  eyeL 0.972  eyeR 0.972  nose 0.961  mouthL 0.966  mouthR 0.966
+2026-07-23 17:26:55,917 - root - INFO - Saved last.pth (epoch 80) + best.pth (NME 0.0290)
+2026-07-23 17:27:56,436 - root - INFO - epoch 81: step 350/1912 (18%), avg loss 9.999, 92.5 img/s, ETA 4.5 min
+2026-07-23 17:28:56,628 - root - INFO - epoch 81: step 743/1912 (39%), avg loss 9.912, 98.5 img/s, ETA 3.2 min
+2026-07-23 17:29:57,137 - root - INFO - epoch 81: step 1104/1912 (58%), avg loss 9.967, 97.5 img/s, ETA 2.2 min
+2026-07-23 17:30:57,429 - root - INFO - epoch 81: step 1469/1912 (77%), avg loss 9.934, 97.3 img/s, ETA 1.2 min
+2026-07-23 17:31:57,479 - root - INFO - epoch 81: step 1763/1912 (92%), avg loss 9.932, 93.5 img/s, ETA 0.4 min
+2026-07-23 17:32:26,528 - root - INFO - Epoch: 81 (stage 2) - 330.6s - Train Loss: 9.9612, Regression 0.2000, Classification 0.5658, Landmark 8.9955, Train Acc 0.9996, Landmark Acc 0.9682, NME 0.0293, Face Recall 0.8698 F1 0.8938, lr 4.51e-06
+2026-07-23 17:33:00,710 - root - INFO - Epoch: 81, Validation (34.2s) Loss: 10.1796, Validation Regression Loss 0.2001 (baseline 0.3041), Validation Classification Loss: 0.5691 (baseline 0.8137), Validation Landmark Loss: 9.2103, Validation Landmark NME: 0.0290
+2026-07-23 17:33:00,711 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9201, Recall 0.8736, F1 0.8962
+2026-07-23 17:33:00,711 - root - INFO -            Landmark Acc@0.1: 0.9677  |  eyeL 0.972  eyeR 0.972  nose 0.962  mouthL 0.966  mouthR 0.966
+2026-07-23 17:33:00,789 - root - INFO - Saved last.pth (epoch 81) + best.pth (NME 0.0290)
+2026-07-23 17:34:00,880 - root - INFO - epoch 82: step 368/1912 (19%), avg loss 9.980, 98.0 img/s, ETA 4.2 min
+2026-07-23 17:35:01,045 - root - INFO - epoch 82: step 706/1912 (37%), avg loss 9.991, 93.9 img/s, ETA 3.4 min
+2026-07-23 17:36:01,115 - root - INFO - epoch 82: step 1048/1912 (55%), avg loss 9.972, 93.0 img/s, ETA 2.5 min
+2026-07-23 17:37:01,982 - root - INFO - epoch 82: step 1416/1912 (74%), avg loss 9.969, 93.9 img/s, ETA 1.4 min
+2026-07-23 17:38:02,033 - root - INFO - epoch 82: step 1767/1912 (92%), avg loss 9.945, 93.9 img/s, ETA 0.4 min
+2026-07-23 17:38:24,264 - root - INFO - Epoch: 82 (stage 2) - 323.5s - Train Loss: 9.9341, Regression 0.1995, Classification 0.5648, Landmark 8.9702, Train Acc 0.9996, Landmark Acc 0.9686, NME 0.0292, Face Recall 0.8698 F1 0.8939, lr 4.41e-06
+2026-07-23 17:38:58,311 - root - INFO - Epoch: 82, Validation (34.0s) Loss: 10.1685, Validation Regression Loss 0.1996 (baseline 0.3041), Validation Classification Loss: 0.5697 (baseline 0.8137), Validation Landmark Loss: 9.1995, Validation Landmark NME: 0.0290
+2026-07-23 17:38:58,312 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9213, Recall 0.8724, F1 0.8961
+2026-07-23 17:38:58,312 - root - INFO -            Landmark Acc@0.1: 0.9677  |  eyeL 0.972  eyeR 0.972  nose 0.962  mouthL 0.966  mouthR 0.966
+2026-07-23 17:38:58,375 - root - INFO - Saved last.pth (epoch 82) + best.pth (NME 0.0290)
+2026-07-23 17:39:58,477 - root - INFO - epoch 83: step 311/1912 (16%), avg loss 9.972, 82.8 img/s, ETA 5.2 min
+2026-07-23 17:40:58,532 - root - INFO - epoch 83: step 669/1912 (35%), avg loss 9.991, 89.1 img/s, ETA 3.7 min
+2026-07-23 17:41:58,594 - root - INFO - epoch 83: step 1036/1912 (54%), avg loss 9.941, 92.0 img/s, ETA 2.5 min
+2026-07-23 17:42:59,157 - root - INFO - epoch 83: step 1407/1912 (74%), avg loss 9.943, 93.5 img/s, ETA 1.4 min
+2026-07-23 17:43:59,171 - root - INFO - epoch 83: step 1768/1912 (92%), avg loss 9.922, 94.0 img/s, ETA 0.4 min
+2026-07-23 17:44:24,158 - root - INFO - Epoch: 83 (stage 2) - 325.8s - Train Loss: 9.9213, Regression 0.1991, Classification 0.5636, Landmark 8.9595, Train Acc 0.9996, Landmark Acc 0.9687, NME 0.0291, Face Recall 0.8704 F1 0.8943, lr 4.30e-06
+2026-07-23 17:44:58,312 - root - INFO - Epoch: 83, Validation (34.2s) Loss: 10.2195, Validation Regression Loss 0.1995 (baseline 0.3041), Validation Classification Loss: 0.5692 (baseline 0.8137), Validation Landmark Loss: 9.2513, Validation Landmark NME: 0.0292
+2026-07-23 17:44:58,313 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9197, Recall 0.8745, F1 0.8966
+2026-07-23 17:44:58,313 - root - INFO -            Landmark Acc@0.1: 0.9678  |  eyeL 0.973  eyeR 0.972  nose 0.962  mouthL 0.967  mouthR 0.966
+2026-07-23 17:44:58,355 - root - INFO - Saved last.pth (epoch 83)
+2026-07-23 17:45:58,415 - root - INFO - epoch 84: step 354/1912 (19%), avg loss 9.930, 94.3 img/s, ETA 4.4 min
+2026-07-23 17:46:58,432 - root - INFO - epoch 84: step 711/1912 (37%), avg loss 9.901, 94.7 img/s, ETA 3.4 min
+2026-07-23 17:47:58,670 - root - INFO - epoch 84: step 1088/1912 (57%), avg loss 9.895, 96.5 img/s, ETA 2.3 min
+2026-07-23 17:48:58,699 - root - INFO - epoch 84: step 1436/1912 (75%), avg loss 9.916, 95.6 img/s, ETA 1.3 min
+2026-07-23 17:49:58,899 - root - INFO - epoch 84: step 1797/1912 (94%), avg loss 9.886, 95.7 img/s, ETA 0.3 min
+2026-07-23 17:50:18,501 - root - INFO - Epoch: 84 (stage 2) - 320.1s - Train Loss: 9.8935, Regression 0.1989, Classification 0.5639, Landmark 8.9318, Train Acc 0.9996, Landmark Acc 0.9687, NME 0.0291, Face Recall 0.8702 F1 0.8941, lr 4.19e-06
+2026-07-23 17:50:52,287 - root - INFO - Epoch: 84, Validation (33.8s) Loss: 10.1344, Validation Regression Loss 0.1986 (baseline 0.3041), Validation Classification Loss: 0.5682 (baseline 0.8137), Validation Landmark Loss: 9.1689, Validation Landmark NME: 0.0288
+2026-07-23 17:50:52,287 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9205, Recall 0.8731, F1 0.8962
+2026-07-23 17:50:52,287 - root - INFO -            Landmark Acc@0.1: 0.9680  |  eyeL 0.973  eyeR 0.972  nose 0.962  mouthL 0.967  mouthR 0.966
+2026-07-23 17:50:52,353 - root - INFO - Saved last.pth (epoch 84) + best.pth (NME 0.0288)
+2026-07-23 17:51:52,555 - root - INFO - epoch 85: step 356/1912 (19%), avg loss 9.894, 94.6 img/s, ETA 4.4 min
+2026-07-23 17:52:52,707 - root - INFO - epoch 85: step 730/1912 (38%), avg loss 9.925, 97.0 img/s, ETA 3.2 min
+2026-07-23 17:53:53,306 - root - INFO - epoch 85: step 1086/1912 (57%), avg loss 9.898, 96.0 img/s, ETA 2.3 min
+2026-07-23 17:54:53,876 - root - INFO - epoch 85: step 1448/1912 (76%), avg loss 9.896, 95.9 img/s, ETA 1.3 min
+2026-07-23 17:55:54,255 - root - INFO - epoch 85: step 1811/1912 (95%), avg loss 9.881, 96.0 img/s, ETA 0.3 min
+2026-07-23 17:56:11,591 - root - INFO - Epoch: 85 (stage 2) - 319.2s - Train Loss: 9.8821, Regression 0.1984, Classification 0.5636, Landmark 8.9217, Train Acc 0.9996, Landmark Acc 0.9687, NME 0.0290, Face Recall 0.8705 F1 0.8944, lr 4.08e-06
+2026-07-23 17:56:45,747 - root - INFO - Epoch: 85, Validation (34.2s) Loss: 10.0968, Validation Regression Loss 0.1988 (baseline 0.3041), Validation Classification Loss: 0.5674 (baseline 0.8137), Validation Landmark Loss: 9.1317, Validation Landmark NME: 0.0287
+2026-07-23 17:56:45,748 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9197, Recall 0.8744, F1 0.8965
+2026-07-23 17:56:45,748 - root - INFO -            Landmark Acc@0.1: 0.9683  |  eyeL 0.973  eyeR 0.973  nose 0.963  mouthL 0.967  mouthR 0.967
+2026-07-23 17:56:45,804 - root - INFO - Saved last.pth (epoch 85) + best.pth (NME 0.0287)
+2026-07-23 17:57:45,819 - root - INFO - epoch 86: step 353/1912 (18%), avg loss 9.912, 94.1 img/s, ETA 4.4 min
+2026-07-23 17:58:45,928 - root - INFO - epoch 86: step 724/1912 (38%), avg loss 9.897, 96.4 img/s, ETA 3.3 min
+2026-07-23 17:59:46,511 - root - INFO - epoch 86: step 1074/1912 (56%), avg loss 9.898, 95.1 img/s, ETA 2.3 min
+2026-07-23 18:00:46,527 - root - INFO - epoch 86: step 1425/1912 (75%), avg loss 9.905, 94.7 img/s, ETA 1.4 min
+2026-07-23 18:01:46,572 - root - INFO - epoch 86: step 1772/1912 (93%), avg loss 9.881, 94.3 img/s, ETA 0.4 min
+2026-07-23 18:02:09,897 - root - INFO - Epoch: 86 (stage 2) - 324.1s - Train Loss: 9.8684, Regression 0.1982, Classification 0.5635, Landmark 8.9085, Train Acc 0.9996, Landmark Acc 0.9689, NME 0.0290, Face Recall 0.8699 F1 0.8939, lr 3.98e-06
+2026-07-23 18:02:43,530 - root - INFO - Epoch: 86, Validation (33.6s) Loss: 10.0841, Validation Regression Loss 0.1984 (baseline 0.3041), Validation Classification Loss: 0.5653 (baseline 0.8137), Validation Landmark Loss: 9.1221, Validation Landmark NME: 0.0287
+2026-07-23 18:02:43,531 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9189, Recall 0.8762, F1 0.8970
+2026-07-23 18:02:43,531 - root - INFO -            Landmark Acc@0.1: 0.9683  |  eyeL 0.973  eyeR 0.973  nose 0.963  mouthL 0.967  mouthR 0.966
+2026-07-23 18:02:43,614 - root - INFO - Saved last.pth (epoch 86) + best.pth (NME 0.0287)
+2026-07-23 18:03:44,158 - root - INFO - epoch 87: step 308/1912 (16%), avg loss 9.851, 81.4 img/s, ETA 5.3 min
+2026-07-23 18:04:44,193 - root - INFO - epoch 87: step 662/1912 (35%), avg loss 9.875, 87.8 img/s, ETA 3.8 min
+2026-07-23 18:05:44,377 - root - INFO - epoch 87: step 1011/1912 (53%), avg loss 9.884, 89.5 img/s, ETA 2.7 min
+2026-07-23 18:06:44,405 - root - INFO - epoch 87: step 1372/1912 (72%), avg loss 9.869, 91.2 img/s, ETA 1.6 min
+2026-07-23 18:07:44,436 - root - INFO - epoch 87: step 1729/1912 (90%), avg loss 9.849, 92.0 img/s, ETA 0.5 min
+2026-07-23 18:08:14,829 - root - INFO - Epoch: 87 (stage 2) - 331.2s - Train Loss: 9.8462, Regression 0.1981, Classification 0.5616, Landmark 8.8885, Train Acc 0.9996, Landmark Acc 0.9690, NME 0.0289, Face Recall 0.8707 F1 0.8946, lr 3.87e-06
+2026-07-23 18:08:50,529 - root - INFO - Epoch: 87, Validation (35.7s) Loss: 10.0666, Validation Regression Loss 0.1981 (baseline 0.3041), Validation Classification Loss: 0.5660 (baseline 0.8137), Validation Landmark Loss: 9.1045, Validation Landmark NME: 0.0286
+2026-07-23 18:08:50,529 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9208, Recall 0.8743, F1 0.8969
+2026-07-23 18:08:50,529 - root - INFO -            Landmark Acc@0.1: 0.9684  |  eyeL 0.973  eyeR 0.973  nose 0.963  mouthL 0.967  mouthR 0.967
+2026-07-23 18:08:50,599 - root - INFO - Saved last.pth (epoch 87) + best.pth (NME 0.0286)
+2026-07-23 18:09:51,527 - root - INFO - epoch 88: step 310/1912 (16%), avg loss 9.841, 81.4 img/s, ETA 5.2 min
+2026-07-23 18:10:51,595 - root - INFO - epoch 88: step 615/1912 (32%), avg loss 9.896, 81.3 img/s, ETA 4.3 min
+2026-07-23 18:11:51,601 - root - INFO - epoch 88: step 932/1912 (49%), avg loss 9.913, 82.4 img/s, ETA 3.2 min
+2026-07-23 18:12:51,657 - root - INFO - epoch 88: step 1262/1912 (66%), avg loss 9.880, 83.8 img/s, ETA 2.1 min
+2026-07-23 18:13:51,699 - root - INFO - epoch 88: step 1584/1912 (83%), avg loss 9.857, 84.2 img/s, ETA 1.0 min
+2026-07-23 18:14:51,712 - root - INFO - epoch 88: step 1902/1912 (99%), avg loss 9.848, 84.3 img/s, ETA 0.0 min
+2026-07-23 18:14:52,916 - root - INFO - Epoch: 88 (stage 2) - 362.3s - Train Loss: 9.8507, Regression 0.1985, Classification 0.5621, Landmark 8.8917, Train Acc 0.9996, Landmark Acc 0.9688, NME 0.0289, Face Recall 0.8705 F1 0.8944, lr 3.77e-06
+2026-07-23 18:15:26,830 - root - INFO - Epoch: 88, Validation (33.9s) Loss: 10.1025, Validation Regression Loss 0.1982 (baseline 0.3041), Validation Classification Loss: 0.5662 (baseline 0.8137), Validation Landmark Loss: 9.1399, Validation Landmark NME: 0.0288
+2026-07-23 18:15:26,831 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9202, Recall 0.8742, F1 0.8966
+2026-07-23 18:15:26,831 - root - INFO -            Landmark Acc@0.1: 0.9687  |  eyeL 0.973  eyeR 0.973  nose 0.963  mouthL 0.968  mouthR 0.967
+2026-07-23 18:15:26,867 - root - INFO - Saved last.pth (epoch 88)
+2026-07-23 18:16:26,873 - root - INFO - epoch 89: step 365/1912 (19%), avg loss 9.850, 97.3 img/s, ETA 4.2 min
+2026-07-23 18:17:27,056 - root - INFO - epoch 89: step 719/1912 (38%), avg loss 9.854, 95.7 img/s, ETA 3.3 min
+2026-07-23 18:18:27,941 - root - INFO - epoch 89: step 1059/1912 (55%), avg loss 9.855, 93.6 img/s, ETA 2.4 min
+2026-07-23 18:19:27,976 - root - INFO - epoch 89: step 1418/1912 (74%), avg loss 9.817, 94.1 img/s, ETA 1.4 min
+2026-07-23 18:20:28,167 - root - INFO - epoch 89: step 1785/1912 (93%), avg loss 9.814, 94.8 img/s, ETA 0.4 min
+2026-07-23 18:20:50,082 - root - INFO - Epoch: 89 (stage 2) - 323.2s - Train Loss: 9.8261, Regression 0.1971, Classification 0.5616, Landmark 8.8703, Train Acc 0.9996, Landmark Acc 0.9690, NME 0.0289, Face Recall 0.8704 F1 0.8943, lr 3.66e-06
+2026-07-23 18:21:24,277 - root - INFO - Epoch: 89, Validation (34.2s) Loss: 10.0444, Validation Regression Loss 0.1977 (baseline 0.3041), Validation Classification Loss: 0.5651 (baseline 0.8137), Validation Landmark Loss: 9.0838, Validation Landmark NME: 0.0286
+2026-07-23 18:21:24,277 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9182, Recall 0.8780, F1 0.8976
+2026-07-23 18:21:24,278 - root - INFO -            Landmark Acc@0.1: 0.9686  |  eyeL 0.973  eyeR 0.973  nose 0.963  mouthL 0.967  mouthR 0.967
+2026-07-23 18:21:24,340 - root - INFO - Saved last.pth (epoch 89) + best.pth (NME 0.0286)
+2026-07-23 18:22:24,503 - root - INFO - epoch 90: step 374/1912 (20%), avg loss 9.863, 99.5 img/s, ETA 4.1 min
+2026-07-23 18:23:25,038 - root - INFO - epoch 90: step 714/1912 (37%), avg loss 9.877, 94.7 img/s, ETA 3.4 min
+2026-07-23 18:24:25,395 - root - INFO - epoch 90: step 1069/1912 (56%), avg loss 9.833, 94.5 img/s, ETA 2.4 min
+2026-07-23 18:25:25,408 - root - INFO - epoch 90: step 1427/1912 (75%), avg loss 9.840, 94.7 img/s, ETA 1.4 min
+2026-07-23 18:26:25,578 - root - INFO - epoch 90: step 1769/1912 (93%), avg loss 9.786, 94.0 img/s, ETA 0.4 min
+2026-07-23 18:26:48,738 - root - INFO - Epoch: 90 (stage 2) - 324.4s - Train Loss: 9.7924, Regression 0.1969, Classification 0.5604, Landmark 8.8383, Train Acc 0.9996, Landmark Acc 0.9694, NME 0.0288, Face Recall 0.8710 F1 0.8948, lr 3.56e-06
+2026-07-23 18:27:22,519 - root - INFO - Epoch: 90, Validation (33.8s) Loss: 10.0580, Validation Regression Loss 0.1976 (baseline 0.3041), Validation Classification Loss: 0.5655 (baseline 0.8137), Validation Landmark Loss: 9.0973, Validation Landmark NME: 0.0286
+2026-07-23 18:27:22,520 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9207, Recall 0.8738, F1 0.8966
+2026-07-23 18:27:22,520 - root - INFO -            Landmark Acc@0.1: 0.9688  |  eyeL 0.973  eyeR 0.973  nose 0.963  mouthL 0.968  mouthR 0.967
+2026-07-23 18:27:22,556 - root - INFO - Saved last.pth (epoch 90)
+2026-07-23 18:28:22,561 - root - INFO - epoch 91: step 367/1912 (19%), avg loss 9.814, 97.9 img/s, ETA 4.2 min
+2026-07-23 18:29:22,746 - root - INFO - epoch 91: step 735/1912 (38%), avg loss 9.744, 97.8 img/s, ETA 3.2 min
+2026-07-23 18:30:22,780 - root - INFO - epoch 91: step 1089/1912 (57%), avg loss 9.737, 96.7 img/s, ETA 2.3 min
+2026-07-23 18:31:22,832 - root - INFO - epoch 91: step 1456/1912 (76%), avg loss 9.786, 97.0 img/s, ETA 1.3 min
+2026-07-23 18:32:22,886 - root - INFO - epoch 91: step 1806/1912 (94%), avg loss 9.778, 96.2 img/s, ETA 0.3 min
+2026-07-23 18:32:41,278 - root - INFO - Epoch: 91 (stage 2) - 318.7s - Train Loss: 9.7898, Regression 0.1963, Classification 0.5605, Landmark 8.8367, Train Acc 0.9996, Landmark Acc 0.9693, NME 0.0287, Face Recall 0.8708 F1 0.8946, lr 3.45e-06
+2026-07-23 18:33:15,365 - root - INFO - Epoch: 91, Validation (34.1s) Loss: 10.0746, Validation Regression Loss 0.1975 (baseline 0.3041), Validation Classification Loss: 0.5653 (baseline 0.8137), Validation Landmark Loss: 9.1143, Validation Landmark NME: 0.0287
+2026-07-23 18:33:15,365 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9202, Recall 0.8745, F1 0.8968
+2026-07-23 18:33:15,365 - root - INFO -            Landmark Acc@0.1: 0.9688  |  eyeL 0.973  eyeR 0.973  nose 0.963  mouthL 0.967  mouthR 0.967
+2026-07-23 18:33:15,400 - root - INFO - Saved last.pth (epoch 91)
+2026-07-23 18:34:15,443 - root - INFO - epoch 92: step 367/1912 (19%), avg loss 9.832, 97.8 img/s, ETA 4.2 min
+2026-07-23 18:35:15,815 - root - INFO - epoch 92: step 709/1912 (37%), avg loss 9.826, 94.2 img/s, ETA 3.4 min
+2026-07-23 18:36:16,158 - root - INFO - epoch 92: step 1056/1912 (55%), avg loss 9.860, 93.5 img/s, ETA 2.4 min
+2026-07-23 18:37:16,170 - root - INFO - epoch 92: step 1408/1912 (74%), avg loss 9.832, 93.6 img/s, ETA 1.4 min
+2026-07-23 18:38:16,313 - root - INFO - epoch 92: step 1799/1912 (94%), avg loss 9.818, 95.7 img/s, ETA 0.3 min
+2026-07-23 18:38:35,907 - root - INFO - Epoch: 92 (stage 2) - 320.5s - Train Loss: 9.7918, Regression 0.1969, Classification 0.5613, Landmark 8.8368, Train Acc 0.9996, Landmark Acc 0.9692, NME 0.0287, Face Recall 0.8710 F1 0.8946, lr 3.35e-06
+2026-07-23 18:39:09,490 - root - INFO - Epoch: 92, Validation (33.6s) Loss: 10.0488, Validation Regression Loss 0.1977 (baseline 0.3041), Validation Classification Loss: 0.5633 (baseline 0.8137), Validation Landmark Loss: 9.0900, Validation Landmark NME: 0.0286
+2026-07-23 18:39:09,490 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9205, Recall 0.8745, F1 0.8969
+2026-07-23 18:39:09,490 - root - INFO -            Landmark Acc@0.1: 0.9689  |  eyeL 0.973  eyeR 0.973  nose 0.963  mouthL 0.968  mouthR 0.967
+2026-07-23 18:39:09,531 - root - INFO - Saved last.pth (epoch 92)
+2026-07-23 18:40:09,598 - root - INFO - epoch 93: step 336/1912 (18%), avg loss 9.864, 89.5 img/s, ETA 4.7 min
+2026-07-23 18:41:09,643 - root - INFO - epoch 93: step 697/1912 (36%), avg loss 9.842, 92.8 img/s, ETA 3.5 min
+2026-07-23 18:42:09,867 - root - INFO - epoch 93: step 1071/1912 (56%), avg loss 9.791, 95.0 img/s, ETA 2.4 min
+2026-07-23 18:43:10,671 - root - INFO - epoch 93: step 1437/1912 (75%), avg loss 9.794, 95.3 img/s, ETA 1.3 min
+2026-07-23 18:44:11,006 - root - INFO - epoch 93: step 1778/1912 (93%), avg loss 9.779, 94.4 img/s, ETA 0.4 min
+2026-07-23 18:44:33,003 - root - INFO - Epoch: 93 (stage 2) - 323.5s - Train Loss: 9.7667, Regression 0.1960, Classification 0.5599, Landmark 8.8149, Train Acc 0.9996, Landmark Acc 0.9693, NME 0.0287, Face Recall 0.8714 F1 0.8949, lr 3.25e-06
+2026-07-23 18:45:07,257 - root - INFO - Epoch: 93, Validation (34.3s) Loss: 9.9928, Validation Regression Loss 0.1969 (baseline 0.3041), Validation Classification Loss: 0.5619 (baseline 0.8137), Validation Landmark Loss: 9.0371, Validation Landmark NME: 0.0284
+2026-07-23 18:45:07,258 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9196, Recall 0.8766, F1 0.8976
+2026-07-23 18:45:07,258 - root - INFO -            Landmark Acc@0.1: 0.9690  |  eyeL 0.973  eyeR 0.973  nose 0.964  mouthL 0.968  mouthR 0.967
+2026-07-23 18:45:07,343 - root - INFO - Saved last.pth (epoch 93) + best.pth (NME 0.0284)
+2026-07-23 18:46:07,388 - root - INFO - epoch 94: step 338/1912 (18%), avg loss 9.606, 90.1 img/s, ETA 4.7 min
+2026-07-23 18:47:07,545 - root - INFO - epoch 94: step 673/1912 (35%), avg loss 9.710, 89.6 img/s, ETA 3.7 min
+2026-07-23 18:48:07,877 - root - INFO - epoch 94: step 1032/1912 (54%), avg loss 9.772, 91.5 img/s, ETA 2.6 min
+2026-07-23 18:49:08,108 - root - INFO - epoch 94: step 1407/1912 (74%), avg loss 9.727, 93.5 img/s, ETA 1.4 min
+2026-07-23 18:50:08,143 - root - INFO - epoch 94: step 1769/1912 (93%), avg loss 9.727, 94.1 img/s, ETA 0.4 min
+2026-07-23 18:50:30,836 - root - INFO - Epoch: 94 (stage 2) - 323.5s - Train Loss: 9.7494, Regression 0.1959, Classification 0.5591, Landmark 8.7986, Train Acc 0.9996, Landmark Acc 0.9696, NME 0.0286, Face Recall 0.8708 F1 0.8948, lr 3.15e-06
+2026-07-23 18:51:04,592 - root - INFO - Epoch: 94, Validation (33.8s) Loss: 10.0039, Validation Regression Loss 0.1965 (baseline 0.3041), Validation Classification Loss: 0.5615 (baseline 0.8137), Validation Landmark Loss: 9.0495, Validation Landmark NME: 0.0284
+2026-07-23 18:51:04,592 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9193, Recall 0.8772, F1 0.8978
+2026-07-23 18:51:04,592 - root - INFO -            Landmark Acc@0.1: 0.9691  |  eyeL 0.974  eyeR 0.973  nose 0.964  mouthL 0.967  mouthR 0.967
+2026-07-23 18:51:04,626 - root - INFO - Saved last.pth (epoch 94)
+2026-07-23 18:52:04,744 - root - INFO - epoch 95: step 351/1912 (18%), avg loss 9.678, 93.4 img/s, ETA 4.5 min
+2026-07-23 18:53:05,694 - root - INFO - epoch 95: step 714/1912 (37%), avg loss 9.663, 94.4 img/s, ETA 3.4 min
+2026-07-23 18:54:05,731 - root - INFO - epoch 95: step 1074/1912 (56%), avg loss 9.697, 94.9 img/s, ETA 2.4 min
+2026-07-23 18:55:06,818 - root - INFO - epoch 95: step 1444/1912 (76%), avg loss 9.702, 95.4 img/s, ETA 1.3 min
+2026-07-23 18:56:06,999 - root - INFO - epoch 95: step 1811/1912 (95%), avg loss 9.735, 95.8 img/s, ETA 0.3 min
+2026-07-23 18:56:27,625 - root - INFO - Epoch: 95 (stage 2) - 323.0s - Train Loss: 9.7301, Regression 0.1959, Classification 0.5580, Landmark 8.7803, Train Acc 0.9996, Landmark Acc 0.9696, NME 0.0286, Face Recall 0.8710 F1 0.8951, lr 3.05e-06
+2026-07-23 18:57:01,605 - root - INFO - Epoch: 95, Validation (34.0s) Loss: 9.9603, Validation Regression Loss 0.1964 (baseline 0.3041), Validation Classification Loss: 0.5620 (baseline 0.8137), Validation Landmark Loss: 9.0055, Validation Landmark NME: 0.0283
+2026-07-23 18:57:01,605 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9198, Recall 0.8755, F1 0.8971
+2026-07-23 18:57:01,605 - root - INFO -            Landmark Acc@0.1: 0.9692  |  eyeL 0.974  eyeR 0.973  nose 0.964  mouthL 0.968  mouthR 0.967
+2026-07-23 18:57:01,674 - root - INFO - Saved last.pth (epoch 95) + best.pth (NME 0.0283)
+2026-07-23 18:58:03,111 - root - INFO - epoch 96: step 364/1912 (19%), avg loss 9.685, 94.8 img/s, ETA 4.4 min
+2026-07-23 18:59:03,922 - root - INFO - epoch 96: step 721/1912 (38%), avg loss 9.678, 94.4 img/s, ETA 3.4 min
+2026-07-23 19:00:03,957 - root - INFO - epoch 96: step 1083/1912 (57%), avg loss 9.687, 95.1 img/s, ETA 2.3 min
+2026-07-23 19:01:03,966 - root - INFO - epoch 96: step 1437/1912 (75%), avg loss 9.705, 94.9 img/s, ETA 1.3 min
+2026-07-23 19:02:04,000 - root - INFO - epoch 96: step 1801/1912 (94%), avg loss 9.717, 95.3 img/s, ETA 0.3 min
+2026-07-23 19:02:26,064 - root - INFO - Epoch: 96 (stage 2) - 324.4s - Train Loss: 9.7077, Regression 0.1961, Classification 0.5599, Landmark 8.7556, Train Acc 0.9996, Landmark Acc 0.9699, NME 0.0285, Face Recall 0.8710 F1 0.8946, lr 2.95e-06
+2026-07-23 19:03:02,528 - root - INFO - Epoch: 96, Validation (36.5s) Loss: 9.9961, Validation Regression Loss 0.1963 (baseline 0.3041), Validation Classification Loss: 0.5614 (baseline 0.8137), Validation Landmark Loss: 9.0421, Validation Landmark NME: 0.0284
+2026-07-23 19:03:02,528 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9208, Recall 0.8749, F1 0.8972
+2026-07-23 19:03:02,528 - root - INFO -            Landmark Acc@0.1: 0.9694  |  eyeL 0.974  eyeR 0.973  nose 0.965  mouthL 0.968  mouthR 0.968
+2026-07-23 19:03:02,569 - root - INFO - Saved last.pth (epoch 96)
+2026-07-23 19:04:02,740 - root - INFO - epoch 97: step 385/1912 (20%), avg loss 9.756, 102.4 img/s, ETA 4.0 min
+2026-07-23 19:05:02,792 - root - INFO - epoch 97: step 779/1912 (41%), avg loss 9.711, 103.7 img/s, ETA 2.9 min
+2026-07-23 19:06:03,058 - root - INFO - epoch 97: step 1092/1912 (57%), avg loss 9.718, 96.8 img/s, ETA 2.3 min
+2026-07-23 19:07:03,377 - root - INFO - epoch 97: step 1416/1912 (74%), avg loss 9.715, 94.1 img/s, ETA 1.4 min
+2026-07-23 19:08:03,415 - root - INFO - epoch 97: step 1742/1912 (91%), avg loss 9.722, 92.6 img/s, ETA 0.5 min
+2026-07-23 19:08:31,267 - root - INFO - Epoch: 97 (stage 2) - 328.7s - Train Loss: 9.7166, Regression 0.1960, Classification 0.5581, Landmark 8.7665, Train Acc 0.9996, Landmark Acc 0.9696, NME 0.0285, Face Recall 0.8707 F1 0.8947, lr 2.85e-06
+2026-07-23 19:09:05,187 - root - INFO - Epoch: 97, Validation (33.9s) Loss: 9.9506, Validation Regression Loss 0.1962 (baseline 0.3041), Validation Classification Loss: 0.5626 (baseline 0.8137), Validation Landmark Loss: 8.9957, Validation Landmark NME: 0.0283
+2026-07-23 19:09:05,188 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9197, Recall 0.8758, F1 0.8972
+2026-07-23 19:09:05,188 - root - INFO -            Landmark Acc@0.1: 0.9694  |  eyeL 0.974  eyeR 0.973  nose 0.964  mouthL 0.968  mouthR 0.968
+2026-07-23 19:09:05,252 - root - INFO - Saved last.pth (epoch 97) + best.pth (NME 0.0283)
+2026-07-23 19:10:05,261 - root - INFO - epoch 98: step 361/1912 (19%), avg loss 9.576, 96.3 img/s, ETA 4.3 min
+2026-07-23 19:11:05,307 - root - INFO - epoch 98: step 713/1912 (37%), avg loss 9.567, 95.0 img/s, ETA 3.4 min
+2026-07-23 19:12:05,350 - root - INFO - epoch 98: step 1070/1912 (56%), avg loss 9.626, 95.1 img/s, ETA 2.4 min
+2026-07-23 19:13:05,382 - root - INFO - epoch 98: step 1420/1912 (74%), avg loss 9.674, 94.6 img/s, ETA 1.4 min
+2026-07-23 19:14:05,439 - root - INFO - epoch 98: step 1794/1912 (94%), avg loss 9.713, 95.6 img/s, ETA 0.3 min
+2026-07-23 19:14:24,943 - root - INFO - Epoch: 98 (stage 2) - 319.7s - Train Loss: 9.7089, Regression 0.1958, Classification 0.5583, Landmark 8.7590, Train Acc 0.9996, Landmark Acc 0.9697, NME 0.0285, Face Recall 0.8709 F1 0.8948, lr 2.75e-06
+2026-07-23 19:14:58,612 - root - INFO - Epoch: 98, Validation (33.7s) Loss: 9.9288, Validation Regression Loss 0.1961 (baseline 0.3041), Validation Classification Loss: 0.5618 (baseline 0.8137), Validation Landmark Loss: 8.9748, Validation Landmark NME: 0.0282
+2026-07-23 19:14:58,613 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9206, Recall 0.8752, F1 0.8973
+2026-07-23 19:14:58,613 - root - INFO -            Landmark Acc@0.1: 0.9695  |  eyeL 0.974  eyeR 0.973  nose 0.964  mouthL 0.968  mouthR 0.968
+2026-07-23 19:14:58,693 - root - INFO - Saved last.pth (epoch 98) + best.pth (NME 0.0282)
+2026-07-23 19:15:58,722 - root - INFO - epoch 99: step 342/1912 (18%), avg loss 9.781, 91.2 img/s, ETA 4.6 min
+2026-07-23 19:16:58,830 - root - INFO - epoch 99: step 703/1912 (37%), avg loss 9.806, 93.6 img/s, ETA 3.4 min
+2026-07-23 19:17:59,116 - root - INFO - epoch 99: step 1035/1912 (54%), avg loss 9.756, 91.8 img/s, ETA 2.5 min
+2026-07-23 19:18:59,267 - root - INFO - epoch 99: step 1364/1912 (71%), avg loss 9.759, 90.7 img/s, ETA 1.6 min
+2026-07-23 19:19:59,273 - root - INFO - epoch 99: step 1729/1912 (90%), avg loss 9.709, 92.0 img/s, ETA 0.5 min
+2026-07-23 19:20:33,653 - root - INFO - Epoch: 99 (stage 2) - 335.0s - Train Loss: 9.6977, Regression 0.1948, Classification 0.5582, Landmark 8.7500, Train Acc 0.9996, Landmark Acc 0.9699, NME 0.0284, Face Recall 0.8711 F1 0.8949, lr 2.66e-06
+2026-07-23 19:21:07,852 - root - INFO - Epoch: 99, Validation (34.2s) Loss: 9.9335, Validation Regression Loss 0.1964 (baseline 0.3041), Validation Classification Loss: 0.5621 (baseline 0.8137), Validation Landmark Loss: 8.9786, Validation Landmark NME: 0.0282
+2026-07-23 19:21:07,852 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9202, Recall 0.8754, F1 0.8972
+2026-07-23 19:21:07,852 - root - INFO -            Landmark Acc@0.1: 0.9695  |  eyeL 0.974  eyeR 0.973  nose 0.964  mouthL 0.968  mouthR 0.968
+2026-07-23 19:21:07,896 - root - INFO - Saved last.pth (epoch 99)
+2026-07-23 19:22:08,013 - root - INFO - epoch 100: step 322/1912 (17%), avg loss 9.696, 85.7 img/s, ETA 4.9 min
+2026-07-23 19:23:08,056 - root - INFO - epoch 100: step 678/1912 (35%), avg loss 9.709, 90.3 img/s, ETA 3.6 min
+2026-07-23 19:24:08,319 - root - INFO - epoch 100: step 1067/1912 (56%), avg loss 9.723, 94.6 img/s, ETA 2.4 min
+2026-07-23 19:25:08,403 - root - INFO - epoch 100: step 1426/1912 (75%), avg loss 9.705, 94.9 img/s, ETA 1.4 min
+2026-07-23 19:26:08,622 - root - INFO - epoch 100: step 1761/1912 (92%), avg loss 9.682, 93.7 img/s, ETA 0.4 min
+2026-07-23 19:26:31,797 - root - INFO - Epoch: 100 (stage 2) - 323.9s - Train Loss: 9.6874, Regression 0.1958, Classification 0.5583, Landmark 8.7374, Train Acc 0.9996, Landmark Acc 0.9699, NME 0.0284, Face Recall 0.8713 F1 0.8949, lr 2.56e-06
+2026-07-23 19:27:05,452 - root - INFO - Epoch: 100, Validation (33.7s) Loss: 9.9107, Validation Regression Loss 0.1960 (baseline 0.3041), Validation Classification Loss: 0.5625 (baseline 0.8137), Validation Landmark Loss: 8.9561, Validation Landmark NME: 0.0281
+2026-07-23 19:27:05,453 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9205, Recall 0.8746, F1 0.8970
+2026-07-23 19:27:05,453 - root - INFO -            Landmark Acc@0.1: 0.9695  |  eyeL 0.974  eyeR 0.974  nose 0.964  mouthL 0.968  mouthR 0.968
+2026-07-23 19:27:05,550 - root - INFO - Saved last.pth (epoch 100) + best.pth (NME 0.0281)
+2026-07-23 19:28:05,558 - root - INFO - epoch 101: step 344/1912 (18%), avg loss 9.698, 91.7 img/s, ETA 4.6 min
+2026-07-23 19:29:05,688 - root - INFO - epoch 101: step 713/1912 (37%), avg loss 9.713, 95.0 img/s, ETA 3.4 min
+2026-07-23 19:30:06,034 - root - INFO - epoch 101: step 1069/1912 (56%), avg loss 9.673, 94.8 img/s, ETA 2.4 min
+2026-07-23 19:31:06,089 - root - INFO - epoch 101: step 1424/1912 (74%), avg loss 9.691, 94.7 img/s, ETA 1.4 min
+2026-07-23 19:32:06,213 - root - INFO - epoch 101: step 1775/1912 (93%), avg loss 9.682, 94.5 img/s, ETA 0.4 min
+2026-07-23 19:32:28,024 - root - INFO - Epoch: 101 (stage 2) - 322.5s - Train Loss: 9.6847, Regression 0.1951, Classification 0.5573, Landmark 8.7372, Train Acc 0.9996, Landmark Acc 0.9701, NME 0.0284, Face Recall 0.8716 F1 0.8953, lr 2.47e-06
+2026-07-23 19:33:02,156 - root - INFO - Epoch: 101, Validation (34.1s) Loss: 9.8973, Validation Regression Loss 0.1950 (baseline 0.3041), Validation Classification Loss: 0.5600 (baseline 0.8137), Validation Landmark Loss: 8.9472, Validation Landmark NME: 0.0281
+2026-07-23 19:33:02,156 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9209, Recall 0.8752, F1 0.8975
+2026-07-23 19:33:02,156 - root - INFO -            Landmark Acc@0.1: 0.9698  |  eyeL 0.974  eyeR 0.974  nose 0.965  mouthL 0.969  mouthR 0.968
+2026-07-23 19:33:02,237 - root - INFO - Saved last.pth (epoch 101) + best.pth (NME 0.0281)
+2026-07-23 19:34:02,313 - root - INFO - epoch 102: step 357/1912 (19%), avg loss 9.641, 95.1 img/s, ETA 4.4 min
+2026-07-23 19:35:02,358 - root - INFO - epoch 102: step 711/1912 (37%), avg loss 9.694, 94.7 img/s, ETA 3.4 min
+2026-07-23 19:36:02,373 - root - INFO - epoch 102: step 1064/1912 (56%), avg loss 9.695, 94.5 img/s, ETA 2.4 min
+2026-07-23 19:37:02,887 - root - INFO - epoch 102: step 1429/1912 (75%), avg loss 9.715, 95.0 img/s, ETA 1.4 min
+2026-07-23 19:38:03,044 - root - INFO - epoch 102: step 1784/1912 (93%), avg loss 9.675, 94.9 img/s, ETA 0.4 min
+2026-07-23 19:38:25,860 - root - INFO - Epoch: 102 (stage 2) - 323.6s - Train Loss: 9.6718, Regression 0.1951, Classification 0.5578, Landmark 8.7238, Train Acc 0.9996, Landmark Acc 0.9701, NME 0.0283, Face Recall 0.8710 F1 0.8947, lr 2.38e-06
+2026-07-23 19:38:59,541 - root - INFO - Epoch: 102, Validation (33.7s) Loss: 9.8874, Validation Regression Loss 0.1954 (baseline 0.3041), Validation Classification Loss: 0.5608 (baseline 0.8137), Validation Landmark Loss: 8.9358, Validation Landmark NME: 0.0280
+2026-07-23 19:38:59,541 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9195, Recall 0.8768, F1 0.8977
+2026-07-23 19:38:59,541 - root - INFO -            Landmark Acc@0.1: 0.9697  |  eyeL 0.974  eyeR 0.973  nose 0.965  mouthL 0.968  mouthR 0.968
+2026-07-23 19:38:59,608 - root - INFO - Saved last.pth (epoch 102) + best.pth (NME 0.0280)
+2026-07-23 19:39:59,843 - root - INFO - epoch 103: step 354/1912 (19%), avg loss 9.583, 94.0 img/s, ETA 4.4 min
+2026-07-23 19:41:00,077 - root - INFO - epoch 103: step 719/1912 (38%), avg loss 9.649, 95.5 img/s, ETA 3.3 min
+2026-07-23 19:42:00,167 - root - INFO - epoch 103: step 1097/1912 (57%), avg loss 9.615, 97.2 img/s, ETA 2.2 min
+2026-07-23 19:43:00,593 - root - INFO - epoch 103: step 1452/1912 (76%), avg loss 9.636, 96.4 img/s, ETA 1.3 min
+2026-07-23 19:44:01,158 - root - INFO - epoch 103: step 1820/1912 (95%), avg loss 9.674, 96.6 img/s, ETA 0.3 min
+2026-07-23 19:44:17,860 - root - INFO - Epoch: 103 (stage 2) - 318.3s - Train Loss: 9.6613, Regression 0.1950, Classification 0.5569, Landmark 8.7145, Train Acc 0.9996, Landmark Acc 0.9701, NME 0.0283, Face Recall 0.8714 F1 0.8950, lr 2.28e-06
+2026-07-23 19:44:51,912 - root - INFO - Epoch: 103, Validation (34.1s) Loss: 9.8922, Validation Regression Loss 0.1953 (baseline 0.3041), Validation Classification Loss: 0.5616 (baseline 0.8137), Validation Landmark Loss: 8.9399, Validation Landmark NME: 0.0281
+2026-07-23 19:44:51,912 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9202, Recall 0.8760, F1 0.8976
+2026-07-23 19:44:51,912 - root - INFO -            Landmark Acc@0.1: 0.9697  |  eyeL 0.974  eyeR 0.974  nose 0.965  mouthL 0.968  mouthR 0.968
+2026-07-23 19:44:51,948 - root - INFO - Saved last.pth (epoch 103)
+2026-07-23 19:45:52,148 - root - INFO - epoch 104: step 349/1912 (18%), avg loss 9.571, 92.8 img/s, ETA 4.5 min
+2026-07-23 19:46:52,516 - root - INFO - epoch 104: step 699/1912 (37%), avg loss 9.573, 92.8 img/s, ETA 3.5 min
+2026-07-23 19:47:52,719 - root - INFO - epoch 104: step 1079/1912 (56%), avg loss 9.609, 95.5 img/s, ETA 2.3 min
+2026-07-23 19:48:52,776 - root - INFO - epoch 104: step 1454/1912 (76%), avg loss 9.649, 96.6 img/s, ETA 1.3 min
+2026-07-23 19:49:52,999 - root - INFO - epoch 104: step 1805/1912 (94%), avg loss 9.636, 95.9 img/s, ETA 0.3 min
+2026-07-23 19:50:12,180 - root - INFO - Epoch: 104 (stage 2) - 320.2s - Train Loss: 9.6501, Regression 0.1953, Classification 0.5565, Landmark 8.7031, Train Acc 0.9996, Landmark Acc 0.9700, NME 0.0283, Face Recall 0.8710 F1 0.8951, lr 2.19e-06
+2026-07-23 19:50:46,007 - root - INFO - Epoch: 104, Validation (33.8s) Loss: 9.8703, Validation Regression Loss 0.1951 (baseline 0.3041), Validation Classification Loss: 0.5603 (baseline 0.8137), Validation Landmark Loss: 8.9197, Validation Landmark NME: 0.0280
+2026-07-23 19:50:46,007 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9206, Recall 0.8752, F1 0.8973
+2026-07-23 19:50:46,007 - root - INFO -            Landmark Acc@0.1: 0.9698  |  eyeL 0.974  eyeR 0.974  nose 0.965  mouthL 0.969  mouthR 0.968
+2026-07-23 19:50:46,070 - root - INFO - Saved last.pth (epoch 104) + best.pth (NME 0.0280)
+2026-07-23 19:51:46,155 - root - INFO - epoch 105: step 374/1912 (20%), avg loss 9.552, 99.6 img/s, ETA 4.1 min
+2026-07-23 19:52:46,963 - root - INFO - epoch 105: step 734/1912 (38%), avg loss 9.598, 97.1 img/s, ETA 3.2 min
+2026-07-23 19:53:47,883 - root - INFO - epoch 105: step 1082/1912 (57%), avg loss 9.623, 95.2 img/s, ETA 2.3 min
+2026-07-23 19:54:47,911 - root - INFO - epoch 105: step 1453/1912 (76%), avg loss 9.625, 96.1 img/s, ETA 1.3 min
+2026-07-23 19:55:47,994 - root - INFO - epoch 105: step 1802/1912 (94%), avg loss 9.652, 95.5 img/s, ETA 0.3 min
+2026-07-23 19:56:07,403 - root - INFO - Epoch: 105 (stage 2) - 321.3s - Train Loss: 9.6413, Regression 0.1950, Classification 0.5567, Landmark 8.6946, Train Acc 0.9996, Landmark Acc 0.9702, NME 0.0282, Face Recall 0.8711 F1 0.8949, lr 2.11e-06
+2026-07-23 19:56:41,119 - root - INFO - Epoch: 105, Validation (33.7s) Loss: 9.8700, Validation Regression Loss 0.1951 (baseline 0.3041), Validation Classification Loss: 0.5590 (baseline 0.8137), Validation Landmark Loss: 8.9208, Validation Landmark NME: 0.0280
+2026-07-23 19:56:41,120 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9216, Recall 0.8753, F1 0.8979
+2026-07-23 19:56:41,120 - root - INFO -            Landmark Acc@0.1: 0.9699  |  eyeL 0.974  eyeR 0.974  nose 0.965  mouthL 0.969  mouthR 0.968
+2026-07-23 19:56:41,190 - root - INFO - Saved last.pth (epoch 105) + best.pth (NME 0.0280)
+2026-07-23 19:57:41,784 - root - INFO - epoch 106: step 367/1912 (19%), avg loss 9.609, 96.9 img/s, ETA 4.3 min
+2026-07-23 19:58:42,258 - root - INFO - epoch 106: step 735/1912 (38%), avg loss 9.564, 97.1 img/s, ETA 3.2 min
+2026-07-23 19:59:45,206 - root - INFO - epoch 106: step 1071/1912 (56%), avg loss 9.588, 93.1 img/s, ETA 2.4 min
+2026-07-23 20:00:45,318 - root - INFO - epoch 106: step 1434/1912 (75%), avg loss 9.630, 94.0 img/s, ETA 1.4 min
+2026-07-23 20:01:45,650 - root - INFO - epoch 106: step 1797/1912 (94%), avg loss 9.640, 94.4 img/s, ETA 0.3 min
+2026-07-23 20:02:04,638 - root - INFO - Epoch: 106 (stage 2) - 323.4s - Train Loss: 9.6300, Regression 0.1937, Classification 0.5562, Landmark 8.6863, Train Acc 0.9996, Landmark Acc 0.9702, NME 0.0282, Face Recall 0.8709 F1 0.8946, lr 2.02e-06
+2026-07-23 20:02:38,162 - root - INFO - Epoch: 106, Validation (33.5s) Loss: 9.8905, Validation Regression Loss 0.1951 (baseline 0.3041), Validation Classification Loss: 0.5600 (baseline 0.8137), Validation Landmark Loss: 8.9404, Validation Landmark NME: 0.0281
+2026-07-23 20:02:38,163 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9204, Recall 0.8764, F1 0.8979
+2026-07-23 20:02:38,163 - root - INFO -            Landmark Acc@0.1: 0.9695  |  eyeL 0.974  eyeR 0.974  nose 0.964  mouthL 0.968  mouthR 0.968
+2026-07-23 20:02:38,194 - root - INFO - Saved last.pth (epoch 106)
+2026-07-23 20:03:38,237 - root - INFO - epoch 107: step 350/1912 (18%), avg loss 9.551, 93.3 img/s, ETA 4.5 min
+2026-07-23 20:04:38,695 - root - INFO - epoch 107: step 711/1912 (37%), avg loss 9.602, 94.4 img/s, ETA 3.4 min
+2026-07-23 20:05:39,457 - root - INFO - epoch 107: step 1095/1912 (57%), avg loss 9.608, 96.7 img/s, ETA 2.3 min
+2026-07-23 20:06:39,458 - root - INFO - epoch 107: step 1456/1912 (76%), avg loss 9.618, 96.6 img/s, ETA 1.3 min
+2026-07-23 20:07:39,491 - root - INFO - epoch 107: step 1814/1912 (95%), avg loss 9.639, 96.3 img/s, ETA 0.3 min
+2026-07-23 20:07:57,873 - root - INFO - Epoch: 107 (stage 2) - 319.7s - Train Loss: 9.6164, Regression 0.1939, Classification 0.5559, Landmark 8.6727, Train Acc 0.9996, Landmark Acc 0.9705, NME 0.0282, Face Recall 0.8711 F1 0.8950, lr 1.93e-06
+2026-07-23 20:08:31,456 - root - INFO - Epoch: 107, Validation (33.6s) Loss: 9.8459, Validation Regression Loss 0.1951 (baseline 0.3041), Validation Classification Loss: 0.5601 (baseline 0.8137), Validation Landmark Loss: 8.8956, Validation Landmark NME: 0.0279
+2026-07-23 20:08:31,456 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9219, Recall 0.8740, F1 0.8973
+2026-07-23 20:08:31,456 - root - INFO -            Landmark Acc@0.1: 0.9698  |  eyeL 0.974  eyeR 0.974  nose 0.965  mouthL 0.968  mouthR 0.968
+2026-07-23 20:08:31,532 - root - INFO - Saved last.pth (epoch 107) + best.pth (NME 0.0279)
+2026-07-23 20:09:31,620 - root - INFO - epoch 108: step 339/1912 (18%), avg loss 9.648, 90.3 img/s, ETA 4.6 min
+2026-07-23 20:10:31,642 - root - INFO - epoch 108: step 700/1912 (37%), avg loss 9.611, 93.2 img/s, ETA 3.5 min
+2026-07-23 20:11:31,776 - root - INFO - epoch 108: step 1064/1912 (56%), avg loss 9.621, 94.5 img/s, ETA 2.4 min
+2026-07-23 20:12:32,349 - root - INFO - epoch 108: step 1424/1912 (74%), avg loss 9.612, 94.6 img/s, ETA 1.4 min
+2026-07-23 20:13:32,372 - root - INFO - epoch 108: step 1801/1912 (94%), avg loss 9.607, 95.8 img/s, ETA 0.3 min
+2026-07-23 20:13:52,341 - root - INFO - Epoch: 108 (stage 2) - 320.8s - Train Loss: 9.6220, Regression 0.1940, Classification 0.5558, Landmark 8.6782, Train Acc 0.9996, Landmark Acc 0.9702, NME 0.0282, Face Recall 0.8716 F1 0.8953, lr 1.85e-06
+2026-07-23 20:14:26,150 - root - INFO - Epoch: 108, Validation (33.8s) Loss: 9.8535, Validation Regression Loss 0.1950 (baseline 0.3041), Validation Classification Loss: 0.5598 (baseline 0.8137), Validation Landmark Loss: 8.9037, Validation Landmark NME: 0.0279
+2026-07-23 20:14:26,151 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9225, Recall 0.8734, F1 0.8973
+2026-07-23 20:14:26,151 - root - INFO -            Landmark Acc@0.1: 0.9698  |  eyeL 0.974  eyeR 0.974  nose 0.965  mouthL 0.969  mouthR 0.968
+2026-07-23 20:14:26,197 - root - INFO - Saved last.pth (epoch 108)
+2026-07-23 20:15:26,795 - root - INFO - epoch 109: step 362/1912 (19%), avg loss 9.616, 95.6 img/s, ETA 4.3 min
+2026-07-23 20:16:26,818 - root - INFO - epoch 109: step 704/1912 (37%), avg loss 9.580, 93.4 img/s, ETA 3.4 min
+2026-07-23 20:17:26,828 - root - INFO - epoch 109: step 1059/1912 (55%), avg loss 9.620, 93.8 img/s, ETA 2.4 min
+2026-07-23 20:18:27,010 - root - INFO - epoch 109: step 1418/1912 (74%), avg loss 9.626, 94.2 img/s, ETA 1.4 min
+2026-07-23 20:19:27,059 - root - INFO - epoch 109: step 1774/1912 (93%), avg loss 9.613, 94.3 img/s, ETA 0.4 min
+2026-07-23 20:19:51,132 - root - INFO - Epoch: 109 (stage 2) - 324.9s - Train Loss: 9.6239, Regression 0.1942, Classification 0.5551, Landmark 8.6803, Train Acc 0.9996, Landmark Acc 0.9702, NME 0.0282, Face Recall 0.8714 F1 0.8952, lr 1.76e-06
+2026-07-23 20:20:26,176 - root - INFO - Epoch: 109, Validation (35.0s) Loss: 9.8400, Validation Regression Loss 0.1948 (baseline 0.3041), Validation Classification Loss: 0.5595 (baseline 0.8137), Validation Landmark Loss: 8.8910, Validation Landmark NME: 0.0279
+2026-07-23 20:20:26,176 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9208, Recall 0.8752, F1 0.8974
+2026-07-23 20:20:26,176 - root - INFO -            Landmark Acc@0.1: 0.9699  |  eyeL 0.974  eyeR 0.974  nose 0.965  mouthL 0.969  mouthR 0.968
+2026-07-23 20:20:26,249 - root - INFO - Saved last.pth (epoch 109) + best.pth (NME 0.0279)
+2026-07-23 20:21:26,417 - root - INFO - epoch 110: step 312/1912 (16%), avg loss 9.536, 83.0 img/s, ETA 5.1 min
+2026-07-23 20:22:27,005 - root - INFO - epoch 110: step 650/1912 (34%), avg loss 9.586, 86.1 img/s, ETA 3.9 min
+2026-07-23 20:23:27,011 - root - INFO - epoch 110: step 1004/1912 (53%), avg loss 9.618, 88.9 img/s, ETA 2.7 min
+2026-07-23 20:24:27,025 - root - INFO - epoch 110: step 1358/1912 (71%), avg loss 9.611, 90.2 img/s, ETA 1.6 min
+2026-07-23 20:25:27,247 - root - INFO - epoch 110: step 1726/1912 (90%), avg loss 9.607, 91.7 img/s, ETA 0.5 min
+2026-07-23 20:25:58,462 - root - INFO - Epoch: 110 (stage 2) - 332.2s - Train Loss: 9.6052, Regression 0.1942, Classification 0.5555, Landmark 8.6613, Train Acc 0.9996, Landmark Acc 0.9705, NME 0.0281, Face Recall 0.8714 F1 0.8951, lr 1.68e-06
+2026-07-23 20:26:32,806 - root - INFO - Epoch: 110, Validation (34.3s) Loss: 9.8357, Validation Regression Loss 0.1948 (baseline 0.3041), Validation Classification Loss: 0.5598 (baseline 0.8137), Validation Landmark Loss: 8.8863, Validation Landmark NME: 0.0279
+2026-07-23 20:26:32,807 - root - INFO -            Val Acc 0.9996  |  Face - Precision 0.9193, Recall 0.8774, F1 0.8979
+2026-07-23 20:26:32,807 - root - INFO -            Landmark Acc@0.1: 0.9701  |  eyeL 0.974  eyeR 0.974  nose 0.965  mouthL 0.969  mouthR 0.968
+2026-07-23 20:26:32,879 - root - INFO - Saved last.pth (epoch 110) + best.pth (NME 0.0279)

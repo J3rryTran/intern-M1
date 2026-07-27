@@ -1,0 +1,341 @@
+_wandb:
+    value:
+        cli_version: 0.28.1
+        e:
+            7c7a5n8ckvtiq54cletxqtiiypmz3oxu:
+                args:
+                    - --datasets
+                    - /mnt/d/DOC/Face_identity_detection_system/experiment/data/exp/filtered2_recall/dataset_cus
+                    - --train_split
+                    - train
+                    - --val_split
+                    - val
+                    - --test_split
+                    - ""
+                    - --img_size
+                    - "320"
+                    - --num_epochs
+                    - "30"
+                    - --freeze_epochs
+                    - "5"
+                    - --batch_size
+                    - "16"
+                    - --num_workers
+                    - "4"
+                    - --scheduler
+                    - cosine
+                    - --map_period
+                    - "5"
+                    - --pck_threshold
+                    - "0.1"
+                    - --checkpoint_folder
+                    - models/rfb_landmark_20260723_092141
+                    - --wandb
+                    - --wandb_project
+                    - rfb640-landmark
+                    - --wandb_run_name
+                    - rfb_landmark_20260723_092141
+                    - --num_epochs
+                    - "150"
+                    - --map_period
+                    - "0"
+                codePath: Ultra-Lightweight-Face-Detector/train.py
+                codePathLocal: train.py
+                cpu_count: 10
+                cpu_count_logical: 20
+                cudaVersion: "12.8"
+                disk:
+                    /:
+                        total: "1081101176832"
+                        used: "110747762688"
+                email: trantrung20023@gmail.com
+                executable: /home/j3rry/micromamba/envs/ultraweight_new/bin/python
+                git:
+                    commit: 63e6fad302ef19e25a607fa1c387b931cf6572d0
+                    remote: https://github.com/J3rryTran/intern-M1.git
+                gpu: NVIDIA GeForce RTX 3060
+                gpu_count: 1
+                gpu_nvidia:
+                    - architecture: Ampere
+                      memoryTotal: "12884901888"
+                      name: NVIDIA GeForce RTX 3060
+                      uuid: GPU-7badebd4-5fc1-eae3-384a-b8f141ff98c1
+                host: j3rrytr
+                memory:
+                    total: "16633724928"
+                os: Linux-6.6.87.2-microsoft-standard-WSL2-x86_64-with-glibc2.31
+                program: /mnt/d/DOC/Face_identity_detection_system/experiment/intern-M1/Ultra-Lightweight-Face-Detector/train.py
+                python: CPython 3.12.13
+                root: models/rfb_landmark_20260723_092141
+                startedAt: "2026-07-23T02:22:07.899855Z"
+                writerId: 7c7a5n8ckvtiq54cletxqtiiypmz3oxu
+        m:
+            - "1": val/pos_f1
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7":
+                - 2
+            - "1": epoch
+              "6":
+                - 3
+              "7": []
+            - "1": val/landm_acc
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7":
+                - 2
+            - "1": train/landm_acc
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7":
+                - 2
+            - "1": lr
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": val/loss
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7":
+                - 1
+            - "1": train/nme
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7":
+                - 1
+            - "1": train/loss
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7":
+                - 1
+            - "1": stage
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": val/pos_recall
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7":
+                - 2
+            - "1": val/map50
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7":
+                - 2
+            - "1": val/map
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7":
+                - 2
+            - "1": global_step
+              "6":
+                - 3
+              "7": []
+            - "1": landm_weight
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": val/nme
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7":
+                - 1
+            - "2": step/*
+              "5": 13
+              "6":
+                - 1
+              "7": []
+            - "2": train/*
+              "5": 2
+              "6":
+                - 1
+              "7": []
+            - "2": val/*
+              "5": 2
+              "6":
+                - 1
+              "7": []
+            - "2": time/*
+              "5": 2
+              "6":
+                - 1
+              "7": []
+        python_version: 3.12.13
+        t:
+            "1":
+                - 1
+            "2":
+                - 1
+            "3":
+                - 2
+                - 7
+                - 13
+                - 16
+                - 61
+                - 62
+                - 63
+            "4": 3.12.13
+            "5": 0.28.1
+            "12": 0.28.1
+            "13": linux-x86_64
+backbone_lr_factor:
+    value: 0.1
+batch:
+    value: 16
+clip_grad_norm:
+    value: 10
+data:
+    value:
+        - /mnt/d/DOC/Face_identity_detection_system/experiment/data/exp/filtered2_recall/dataset_cus
+device:
+    value: cuda:0
+epochs:
+    value: 150
+exist_ok:
+    value: true
+freeze_epochs:
+    value: 5
+image_size:
+    value:
+        - 320
+        - 320
+img_size:
+    value: 320
+landm_guard:
+    value: true
+landm_guard_factor:
+    value: 0.7
+landm_guard_margin:
+    value: 1.1
+landm_guard_min:
+    value: 0.1
+landm_loss:
+    value: wing
+landm_weight:
+    value: 1
+loc_weight:
+    value: 2
+log_interval_s:
+    value: 60
+map_conf:
+    value: 0.02
+map_max_det:
+    value: 200
+map_nms_iou:
+    value: 0.5
+map_period:
+    value: 0
+milestones:
+    value: 30,45
+momentum:
+    value: 0.9
+name:
+    value: rfb_landmark_20260723_092141
+neg_pos_ratio:
+    value: 3
+optimizer:
+    value: SGD
+overlap_threshold:
+    value: 0.35
+parameters:
+    value: 359592
+pck_threshold:
+    value: 0.1
+plateau_factor:
+    value: 0.5
+plateau_min_lr:
+    value: 1e-06
+plateau_patience:
+    value: 5
+priors:
+    value: 5875
+project:
+    value: models
+resume:
+    value: null
+save_dir:
+    value: models/rfb_landmark_20260723_092141
+scheduler:
+    value: cosine
+seed:
+    value: 0
+stage1_lr:
+    value: 0.001
+stage2_lr:
+    value: 0.0001
+t_max:
+    value: -1
+test_data:
+    value: null
+test_split:
+    value: ""
+train_batches:
+    value: 1912
+train_split:
+    value: train
+val_batches:
+    value: 478
+val_data:
+    value: null
+val_period:
+    value: 1
+val_split:
+    value: val
+verbose:
+    value: true
+wandb:
+    value: true
+wandb_entity:
+    value: null
+wandb_log_steps:
+    value: false
+wandb_mode:
+    value: online
+wandb_notes:
+    value: ""
+wandb_project:
+    value: rfb640-landmark
+wandb_run_name:
+    value: rfb_landmark_20260723_092141
+wandb_save_model:
+    value: true
+wandb_tags:
+    value: null
+warmup_epochs:
+    value: 1
+weight_decay:
+    value: 0.0005
+weights:
+    value: models/pretrained/version-RFB-640.pth
+wing_epsilon:
+    value: 2
+wing_w:
+    value: 10
+workers:
+    value: 4

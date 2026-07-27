@@ -1,0 +1,129 @@
+2026-07-23 09:22:07,999 INFO    MainThread:4826 [wandb_setup.py:_flush():81] Current SDK version is 0.28.1
+2026-07-23 09:22:07,999 INFO    MainThread:4826 [wandb_setup.py:_flush():81] Configure stats pid to 4826
+2026-07-23 09:22:07,999 INFO    MainThread:4826 [wandb_setup.py:_flush():81] Loading settings from environment variables
+2026-07-23 09:22:07,999 INFO    MainThread:4826 [wandb_init.py:setup_run_log_directory():729] Logging user logs to models/rfb_landmark_20260723_092141/wandb/run-20260723_092207-1nran1ks/logs/debug.log
+2026-07-23 09:22:08,000 INFO    MainThread:4826 [wandb_init.py:setup_run_log_directory():730] Logging internal logs to models/rfb_landmark_20260723_092141/wandb/run-20260723_092207-1nran1ks/logs/debug-internal.log
+2026-07-23 09:22:08,000 INFO    MainThread:4826 [wandb_init.py:init():772] calling init triggers
+2026-07-23 09:22:08,000 INFO    MainThread:4826 [wandb_init.py:init():777] wandb.init called with sweep_config: {}
+config: {'data': ['/mnt/d/DOC/Face_identity_detection_system/experiment/data/exp/filtered2_recall/dataset_cus'], 'val_data': None, 'test_data': None, 'train_split': 'train', 'val_split': 'val', 'test_split': '', 'img_size': 320, 'epochs': 150, 'freeze_epochs': 5, 'batch': 16, 'workers': 4, 'stage1_lr': 0.001, 'stage2_lr': 0.0001, 'backbone_lr_factor': 0.1, 'momentum': 0.9, 'weight_decay': 0.0005, 'optimizer': 'SGD', 'scheduler': 'cosine', 'milestones': '30,45', 't_max': -1, 'plateau_factor': 0.5, 'plateau_patience': 5, 'plateau_min_lr': 1e-06, 'loc_weight': 2.0, 'landm_weight': 1.0, 'landm_loss': 'wing', 'wing_w': 10.0, 'wing_epsilon': 2.0, 'neg_pos_ratio': 3, 'overlap_threshold': 0.35, 'pck_threshold': 0.1, 'warmup_epochs': 1.0, 'clip_grad_norm': 10.0, 'landm_guard': True, 'landm_guard_margin': 1.1, 'landm_guard_factor': 0.7, 'landm_guard_min': 0.1, 'project': 'models', 'name': 'rfb_landmark_20260723_092141', 'exist_ok': True, 'val_period': 1, 'verbose': True, 'log_interval_s': 60.0, 'map_period': 0, 'map_conf': 0.02, 'map_nms_iou': 0.5, 'map_max_det': 200, 'wandb': True, 'wandb_project': 'rfb640-landmark', 'wandb_entity': None, 'wandb_run_name': 'rfb_landmark_20260723_092141', 'wandb_tags': None, 'wandb_notes': '', 'wandb_mode': 'online', 'wandb_log_steps': False, 'wandb_save_model': True, 'seed': 0, 'resume': None, 'save_dir': 'models/rfb_landmark_20260723_092141', 'device': 'cuda:0', 'weights': 'models/pretrained/version-RFB-640.pth', 'parameters': 359592, 'priors': 5875, 'image_size': [320, 320], 'train_batches': 1912, 'val_batches': 478, '_wandb': {}}
+2026-07-23 09:22:08,000 INFO    MainThread:4826 [wandb_init.py:init():820] starting backend
+2026-07-23 09:22:08,000 INFO    MainThread:4826 [wandb_init.py:init():835] sending inform_init request
+2026-07-23 09:22:08,213 INFO    MainThread:4826 [wandb_init.py:init():840] backend started and connected
+2026-07-23 09:22:08,228 INFO    MainThread:4826 [wandb_init.py:init():910] updated telemetry
+2026-07-23 09:22:08,268 INFO    MainThread:4826 [wandb_init.py:init():933] communicating run to backend with 90.0 second timeout
+2026-07-23 09:22:09,303 INFO    MainThread:4826 [wandb_init.py:init():978] starting run threads in backend
+2026-07-23 09:22:09,361 INFO    MainThread:4826 [wandb_run.py:_console_start():2621] atexit reg
+2026-07-23 09:22:09,362 INFO    MainThread:4826 [wandb_run.py:_redirect():2471] redirect: wrap_raw
+2026-07-23 09:22:09,363 INFO    MainThread:4826 [wandb_run.py:_redirect():2540] Wrapping output streams.
+2026-07-23 09:22:09,364 INFO    MainThread:4826 [wandb_run.py:_redirect():2563] Redirects installed.
+2026-07-23 09:22:09,369 INFO    MainThread:4826 [wandb_init.py:init():1016] run started, returning control to user process
+2026-07-23 20:26:52,762 INFO    MainThread:4826 [wandb_run.py:_finish():2383] finishing run trantrung20023-lmao/rfb640-landmark/1nran1ks
+2026-07-23 20:26:52,762 INFO    MainThread:4826 [wandb_run.py:_atexit_cleanup():2588] got exitcode: 0
+2026-07-23 20:26:52,763 INFO    MainThread:4826 [wandb_run.py:_restore():2570] restore
+2026-07-23 20:26:52,763 INFO    MainThread:4826 [wandb_run.py:_restore():2576] restore done
+2026-07-23 20:29:11,387 INFO    MainThread:4826 [wandb_run.py:_restore():2570] restore
+2026-07-23 20:29:11,388 INFO    MainThread:4826 [wandb_run.py:_restore():2576] restore done
+2026-07-23 20:29:11,389 ERROR   MainThread:4826 [wandb_run.py:_atexit_cleanup():2608] Problem finishing run
+Traceback (most recent call last):
+  File "/mnt/d/DOC/Face_identity_detection_system/experiment/intern-M1/Ultra-Lightweight-Face-Detector/vision/trainer.py", line 789, in train
+    train_metrics, train_time = self._train_epoch(
+                                ^^^^^^^^^^^^^^^^^^
+  File "/mnt/d/DOC/Face_identity_detection_system/experiment/intern-M1/Ultra-Lightweight-Face-Detector/vision/trainer.py", line 453, in _train_epoch
+    for i, (images, boxes, labels, landms, landm_mask) in enumerate(loader):
+                                                          ^^^^^^^^^^^^^^^^^
+  File "/home/j3rry/micromamba/envs/ultraweight_new/lib/python3.12/site-packages/torch/utils/data/dataloader.py", line 741, in __next__
+    data = self._next_data()
+           ^^^^^^^^^^^^^^^^^
+  File "/home/j3rry/micromamba/envs/ultraweight_new/lib/python3.12/site-packages/torch/utils/data/dataloader.py", line 1524, in _next_data
+    idx, data = self._get_data()
+                ^^^^^^^^^^^^^^^^
+  File "/home/j3rry/micromamba/envs/ultraweight_new/lib/python3.12/site-packages/torch/utils/data/dataloader.py", line 1483, in _get_data
+    success, data = self._try_get_data()
+                    ^^^^^^^^^^^^^^^^^^^^
+  File "/home/j3rry/micromamba/envs/ultraweight_new/lib/python3.12/site-packages/torch/utils/data/dataloader.py", line 1310, in _try_get_data
+    data = self._data_queue.get(timeout=timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/j3rry/micromamba/envs/ultraweight_new/lib/python3.12/multiprocessing/queues.py", line 113, in get
+    if not self._poll(timeout):
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/j3rry/micromamba/envs/ultraweight_new/lib/python3.12/multiprocessing/connection.py", line 257, in poll
+    return self._poll(timeout)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/j3rry/micromamba/envs/ultraweight_new/lib/python3.12/multiprocessing/connection.py", line 440, in _poll
+    r = wait([self], timeout)
+        ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/j3rry/micromamba/envs/ultraweight_new/lib/python3.12/multiprocessing/connection.py", line 1136, in wait
+    ready = selector.select(timeout)
+            ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/j3rry/micromamba/envs/ultraweight_new/lib/python3.12/selectors.py", line 415, in select
+    fd_event_list = self._selector.poll(timeout)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyboardInterrupt
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/j3rry/micromamba/envs/ultraweight_new/lib/python3.12/site-packages/wandb/sdk/wandb_run.py", line 2599, in _atexit_cleanup
+    self._on_finish()
+  File "/home/j3rry/micromamba/envs/ultraweight_new/lib/python3.12/site-packages/wandb/sdk/wandb_run.py", line 2856, in _on_finish
+    result = wait_with_progress(
+             ^^^^^^^^^^^^^^^^^^^
+  File "/home/j3rry/micromamba/envs/ultraweight_new/lib/python3.12/site-packages/wandb/sdk/mailbox/wait_with_progress.py", line 24, in wait_with_progress
+    return wait_all_with_progress(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/j3rry/micromamba/envs/ultraweight_new/lib/python3.12/site-packages/wandb/sdk/mailbox/wait_with_progress.py", line 78, in wait_all_with_progress
+    return asyncer.run(progress_loop_with_timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/j3rry/micromamba/envs/ultraweight_new/lib/python3.12/site-packages/wandb/sdk/lib/asyncio_manager.py", line 145, in run
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/home/j3rry/micromamba/envs/ultraweight_new/lib/python3.12/concurrent/futures/_base.py", line 456, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/j3rry/micromamba/envs/ultraweight_new/lib/python3.12/concurrent/futures/_base.py", line 401, in __get_result
+    raise self._exception
+  File "/home/j3rry/micromamba/envs/ultraweight_new/lib/python3.12/site-packages/wandb/sdk/lib/asyncio_manager.py", line 238, in _wrap
+    return await fn()
+           ^^^^^^^^^^
+  File "/home/j3rry/micromamba/envs/ultraweight_new/lib/python3.12/site-packages/wandb/sdk/mailbox/wait_with_progress.py", line 66, in progress_loop_with_timeout
+    async with asyncio_compat.cancel_on_exit(display_progress()):
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/j3rry/micromamba/envs/ultraweight_new/lib/python3.12/contextlib.py", line 217, in __aexit__
+    await anext(self.gen)
+  File "/home/j3rry/micromamba/envs/ultraweight_new/lib/python3.12/site-packages/wandb/sdk/lib/asyncio_compat.py", line 260, in cancel_on_exit
+    async with open_task_group(race=True) as group:
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/j3rry/micromamba/envs/ultraweight_new/lib/python3.12/contextlib.py", line 217, in __aexit__
+    await anext(self.gen)
+  File "/home/j3rry/micromamba/envs/ultraweight_new/lib/python3.12/site-packages/wandb/sdk/lib/asyncio_compat.py", line 241, in open_task_group
+    await task_group._wait_all(race=race, timeout=exit_timeout)
+  File "/home/j3rry/micromamba/envs/ultraweight_new/lib/python3.12/site-packages/wandb/sdk/lib/asyncio_compat.py", line 181, in _wait_all
+    raise exc
+  File "/home/j3rry/micromamba/envs/ultraweight_new/lib/python3.12/site-packages/wandb/sdk/lib/progress.py", line 65, in loop_printing_operation_stats
+    async with asyncio_compat.open_task_group() as task_group:
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/j3rry/micromamba/envs/ultraweight_new/lib/python3.12/contextlib.py", line 217, in __aexit__
+    await anext(self.gen)
+  File "/home/j3rry/micromamba/envs/ultraweight_new/lib/python3.12/site-packages/wandb/sdk/lib/asyncio_compat.py", line 241, in open_task_group
+    await task_group._wait_all(race=race, timeout=exit_timeout)
+  File "/home/j3rry/micromamba/envs/ultraweight_new/lib/python3.12/site-packages/wandb/sdk/lib/asyncio_compat.py", line 181, in _wait_all
+    raise exc
+  File "/home/j3rry/micromamba/envs/ultraweight_new/lib/python3.12/site-packages/wandb/sdk/lib/progress.py", line 45, in loop_update_screen
+    progress.update(stats)
+  File "/home/j3rry/micromamba/envs/ultraweight_new/lib/python3.12/site-packages/wandb/sdk/lib/progress.py", line 122, in update
+    self._printer.display(line)
+  File "/home/j3rry/micromamba/envs/ultraweight_new/lib/python3.12/site-packages/wandb/sdk/lib/printer.py", line 314, in display
+    self._display_fn_mapping(level)(text)
+  File "/home/j3rry/micromamba/envs/ultraweight_new/lib/python3.12/site-packages/wandb/errors/term.py", line 217, in termlog
+    _log(
+  File "/home/j3rry/micromamba/envs/ultraweight_new/lib/python3.12/site-packages/wandb/errors/term.py", line 520, in _log
+    click.echo(string, file=sys.stderr, nl=newline)
+  File "/home/j3rry/micromamba/envs/ultraweight_new/lib/python3.12/site-packages/click/utils.py", line 345, in echo
+    file.write(out)  # type: ignore
+    ^^^^^^^^^^^^^^^
+  File "/home/j3rry/micromamba/envs/ultraweight_new/lib/python3.12/site-packages/wandb/sdk/lib/console_capture.py", line 184, in write_with_callbacks
+    n = orig_write(s)
+        ^^^^^^^^^^^^^
+BrokenPipeError: [Errno 32] Broken pipe
+2026-07-23 20:29:11,417 INFO    wandb-AsyncioManager-main:4826 [service_client.py:_forward_responses():122] [no run ID] Reached EOF.
+2026-07-23 20:29:11,418 INFO    wandb-AsyncioManager-main:4826 [mailbox.py:close():154] [no run ID] Closing mailbox, abandoning 1 handles.

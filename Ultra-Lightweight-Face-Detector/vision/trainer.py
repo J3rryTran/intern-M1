@@ -2,6 +2,7 @@ import csv
 import itertools
 import logging
 import os
+import sys
 import time
 from dataclasses import dataclass, field, fields, asdict
 from typing import List, Optional, Union
@@ -13,7 +14,7 @@ from torch.utils.data import ConcatDataset, DataLoader
 
 from vision.ssd.config.fd_config import define_img_size
 
-define_img_size()  # hardcoded 320x320; idempotent, must run before priors are read
+define_img_size()  # default 320x320; train(img_size=...) can rebuild for another size
 
 from vision.datasets.yolo_pose_dataset import YoloPoseDataset
 from vision.nn.multibox_loss import MultiboxLoss
@@ -41,6 +42,7 @@ class TrainConfig:
     train_split: str = "train"              # "" for a flat images/ layout
     val_split: str = "val"
     test_split: str = ""                    # "" disables the final test evaluation
+    img_size: Optional[int] = None          # square input (320/480/640...); None = current config
 
     # schedule
     epochs: int = 50
@@ -86,6 +88,7 @@ class TrainConfig:
     exist_ok: bool = False                  # False -> auto-suffix name2, name3...
     val_period: int = 1
     verbose: bool = True
+    log_interval_s: float = 60.0            # mid-epoch progress heartbeat (0 = off)
 
     # COCO-style detection mAP (expensive: decode + NMS + box matching per image)
     map_period: int = 0                     # 0 = never; N = compute mAP every N epochs (+ last)
@@ -268,6 +271,14 @@ def _on_colab():
         return False
 
 
+def _ensure_logging():
+    """Notebooks (Colab/Jupyter) have no logging handler -> INFO is silently
+    dropped. Attach one so epoch logs are always visible."""
+    if not logging.getLogger().handlers:
+        logging.basicConfig(stream=sys.stdout, level=logging.INFO,
+                            format="%(asctime)s - %(levelname)s - %(message)s")
+
+
 class RFBLandmark:
     """RFB-640 face detector + 5-point landmark head, with a YOLO-like API."""
 
@@ -284,6 +295,7 @@ class RFBLandmark:
                 False -> allow CPU; None (default) -> require a GPU when running
                 on Colab, allow CPU elsewhere.
         """
+        _ensure_logging()
         cuda_ok = torch.cuda.is_available()
         dev = torch.device(device) if device is not None else torch.device(
             "cuda:0" if cuda_ok else "cpu")
@@ -305,9 +317,12 @@ class RFBLandmark:
         if dev.type == "cuda":
             logging.info(f"Using GPU: {torch.cuda.get_device_name(dev)}")
         else:
+            cu = getattr(torch.version, "cuda", None)
+            hint = (f"torch built for CUDA {cu} but no usable GPU/driver - "
+                    f"check nvidia-smi; the driver may be older than CUDA {cu}."
+                    if cu else "a '+cpu' torch build has no CUDA; reinstall a +cu wheel.")
             logging.warning(
-                f"Training on CPU (torch {torch.__version__}). Expected a GPU? A '+cpu' "
-                f"torch build has no CUDA; reinstall a +cu wheel.")
+                f"Training on CPU (torch {torch.__version__}). Expected a GPU? {hint}")
         self.num_classes = num_classes
         self.weights = weights
         self.net = create_Mb_Tiny_RFB_fd(num_classes, device=self.device)
@@ -429,10 +444,12 @@ class RFBLandmark:
         totals = {"loss": 0.0, "reg": 0.0, "cls": 0.0, "landm": 0.0}
         tp = fp = fn = tn = 0  # prior-level confusion, for train accuracy
         pck_c, pck_n = [0] * 5, [0] * 5
+        nme_sum, nme_count = 0.0, 0
         priors = fd_config.priors.to(self.device)
         trainable = [p for p in self.net.parameters() if p.requires_grad]
         steps = 0
         start = time.perf_counter()
+        last_beat = start
         for i, (images, boxes, labels, landms, landm_mask) in enumerate(loader):
             images = images.to(self.device)
             boxes = boxes.to(self.device)
@@ -467,9 +484,11 @@ class RFBLandmark:
                 fp += int((pred_pos & ~gt_pos).sum().item())
                 fn += int((~pred_pos & gt_pos).sum().item())
                 tn += int((~pred_pos & ~gt_pos).sum().item())
-                _, _, ck, nk = landmark_stats(pred_landms, landms, boxes, labels, landm_mask,
+                s, c, ck, nk = landmark_stats(pred_landms, landms, boxes, labels, landm_mask,
                                               priors, fd_config.center_variance,
                                               fd_config.size_variance, cfg.pck_threshold)
+                nme_sum += s
+                nme_count += c
                 for k in range(5):
                     pck_c[k] += ck[k]
                     pck_n[k] += nk[k]
@@ -485,17 +504,31 @@ class RFBLandmark:
                                    **{k: round(v, 6) for k, v in row.items()}})
             if wb is not None and wb.enabled:
                 wb.log_step({**row, "lr": lr}, global_step=epoch * steps_per_epoch + i)
+
+            now = time.perf_counter()
+            if cfg.log_interval_s and now - last_beat >= cfg.log_interval_s:
+                # mid-epoch heartbeat: progress + ETA, so long epochs never look hung
+                eta_min = (steps_per_epoch - steps) * (now - start) / steps / 60
+                logging.info(f"epoch {epoch}: step {steps}/{steps_per_epoch} "
+                             f"({100 * steps / steps_per_epoch:.0f}%), "
+                             f"avg loss {totals['loss'] / steps:.3f}, "
+                             f"{steps * images.size(0) / (now - start):.1f} img/s, "
+                             f"ETA {eta_min:.1f} min")
+                last_beat = now
         if step_logger is not None:
             step_logger.flush()  # one flush per epoch: crash loses at most 1 epoch of rows
         elapsed = time.perf_counter() - start
         metrics = {k: v / max(steps, 1) for k, v in totals.items()}
         metrics.update(prior_metrics(tp, fp, fn, tn))
+        metrics["nme"] = nme_sum / nme_count if nme_count else float("nan")
         total_c, total_n = sum(pck_c), sum(pck_n)
         metrics["landm_acc"] = total_c / total_n if total_n else float("nan")
+        metrics["landm_acc_points"] = [c / n if n else float("nan")
+                                       for c, n in zip(pck_c, pck_n)]
         return metrics, elapsed
 
     @torch.no_grad()
-    def validate(self, loader, criterion, pck_thr=0.1) -> dict:
+    def validate(self, loader, criterion, pck_thr=0.1, log_interval_s=0) -> dict:
         """Loss components + face P/R (prior-level) + landmark NME + landmark
         accuracy (PCK@pck_thr, overall and per point)."""
         self.net.eval()
@@ -504,6 +537,7 @@ class RFBLandmark:
         tp = fp = fn = tn = 0
         pck_c, pck_n = [0] * 5, [0] * 5
         priors = fd_config.priors.to(self.device)
+        start = last_beat = time.perf_counter()
         for images, boxes, labels, landms, landm_mask in loader:
             images = images.to(self.device)
             boxes = boxes.to(self.device)
@@ -537,6 +571,13 @@ class RFBLandmark:
             for k in range(5):
                 pck_c[k] += ck[k]
                 pck_n[k] += nk[k]
+
+            now = time.perf_counter()
+            if log_interval_s and now - last_beat >= log_interval_s:
+                eta_min = (len(loader) - num) * (now - start) / num / 60
+                logging.info(f"validate: {num}/{len(loader)} batches "
+                             f"({100 * num / len(loader):.0f}%), ETA {eta_min:.1f} min")
+                last_beat = now
         metrics = {k: v / max(num, 1) for k, v in run.items()}
         metrics["nme"] = nme_sum / nme_count if nme_count else float("nan")
         metrics.update(prior_metrics(tp, fp, fn, tn))
@@ -624,6 +665,20 @@ class RFBLandmark:
         for k, v in overrides.items():
             setattr(cfg, k, v)
 
+        if cfg.img_size:
+            # rebuild priors for the requested input size (net is size-agnostic)
+            define_img_size(cfg.img_size)
+            logging.info(f"Input size {cfg.img_size}x{cfg.img_size} -> "
+                         f"{fd_config.priors.size(0)} priors")
+
+        roots = cfg.data if isinstance(cfg.data, list) else [cfg.data]
+        if any(str(r).startswith("/content/drive") for r in roots if r):
+            logging.warning(
+                "Dataset is read from Google Drive - every epoch will be VERY slow "
+                "(high per-file latency). Copy it to local disk first, e.g.:\n"
+                "    !cp -r '/content/drive/MyDrive/M1/dataset' /content/data/\n"
+                "then pass data='/content/data/dataset'.")
+
         if cfg.seed is not None:
             torch.manual_seed(cfg.seed)
         if self.device.type == "cuda":
@@ -664,7 +719,10 @@ class RFBLandmark:
         results.wandb_url = wb.run_url
 
         # Baseline with the pretrained weights: detection must not fall below this.
-        results.baseline = self.validate(val_loader, criterion, cfg.pck_threshold)
+        if cfg.verbose:
+            logging.info(f"Computing baseline on the val set ({len(val_loader)} batches)...")
+        results.baseline = self.validate(val_loader, criterion, cfg.pck_threshold,
+                                         cfg.log_interval_s)
         if cfg.map_period > 0:
             results.baseline.update(self.compute_map(
                 map_loader, cfg.map_conf, cfg.map_nms_iou, cfg.map_max_det))
@@ -684,9 +742,11 @@ class RFBLandmark:
         epoch_logger = _CsvLogger(
             os.path.join(save_dir, "train_epochs.csv"),
             ["epoch", "stage", "lr", "landm_weight", "train_time_s",
-             "train_loss", "train_reg", "train_cls", "train_landm",
+             "train_loss", "train_reg", "train_cls", "train_landm", "train_nme",
              "train_acc", "train_landm_acc",
+             *[f"train_landm_acc_{n}" for n in POINT_NAMES],
              "train_pos_precision", "train_pos_recall", "train_pos_f1",
+             "train_neg_precision", "train_neg_recall",
              "val_time_s", "val_loss", "val_reg", "val_cls", "val_landm", "val_nme",
              "val_acc", "val_landm_acc",
              *[f"val_landm_acc_{n}" for n in POINT_NAMES],
@@ -742,17 +802,24 @@ class RFBLandmark:
                         f"Landmark {train_metrics['landm']:.4f}, "
                         f"Train Acc {train_metrics['acc']:.4f}, "
                         f"Landmark Acc {train_metrics['landm_acc']:.4f}, "
+                        f"NME {train_metrics['nme']:.4f}, "
                         f"Face Recall {train_metrics['pos_recall']:.4f} F1 {train_metrics['pos_f1']:.4f}, "
                         f"lr {optimizer.param_groups[0]['lr']:.2e}")
                 epoch_row = {"epoch": epoch, "stage": stage,
                              "lr": optimizer.param_groups[0]["lr"],
                              "landm_weight": round(criterion.landm_weight, 4),
-                             "train_time_s": round(train_time, 1),
-                             **{f"train_{k}": round(v, 6) for k, v in train_metrics.items()}}
+                             "train_time_s": round(train_time, 1)}
+                for k, v in train_metrics.items():
+                    if k == "landm_acc_points":  # expand to per-point columns like val
+                        epoch_row.update({f"train_landm_acc_{n}": round(a, 6)
+                                          for n, a in zip(POINT_NAMES, v)})
+                    else:
+                        epoch_row[f"train_{k}"] = round(v, 6)
 
                 if epoch % cfg.val_period == 0 or epoch == cfg.epochs - 1:
                     val_start = time.perf_counter()
-                    m = self.validate(val_loader, criterion, cfg.pck_threshold)
+                    m = self.validate(val_loader, criterion, cfg.pck_threshold,
+                                      cfg.log_interval_s)
                     m["epoch"] = epoch
                     m["lr"] = optimizer.param_groups[0]["lr"]
                     m["stage"] = stage
@@ -860,7 +927,8 @@ class RFBLandmark:
                 if results.best_checkpoint and os.path.isfile(results.best_checkpoint):
                     self.load(results.best_checkpoint)
                     self.net.to(self.device)
-                results.test = self.validate(test_loader, criterion, cfg.pck_threshold)
+                results.test = self.validate(test_loader, criterion, cfg.pck_threshold,
+                                             cfg.log_interval_s)
                 if cfg.map_period > 0 and test_map_loader is not None:
                     results.test.update(self.compute_map(
                         test_map_loader, cfg.map_conf, cfg.map_nms_iou, cfg.map_max_det))

@@ -9,6 +9,7 @@ API:
 """
 import argparse
 import logging
+import multiprocessing as mp
 import os
 import sys
 
@@ -17,8 +18,10 @@ from vision.utils.misc import str2bool
 parser = argparse.ArgumentParser(
     description='Fine-tune RFB-640 face detector with a 5-point landmark head')
 
-parser.add_argument('--datasets', nargs='+', default=["../data/exp"],
+parser.add_argument('--datasets', nargs='+', default=["../../data/exp"],
                     help='Training dataset root(s) (each containing images/ and labels/)')
+parser.add_argument('--img_size', default=None, type=int,
+                    help='square input size (320/480/640...); default: fd_config current (320)')
 parser.add_argument('--validation_dataset', default=None,
                     help='Validation dataset root (default: the first --datasets root)')
 parser.add_argument('--test_dataset', default=None,
@@ -84,13 +87,15 @@ parser.add_argument('--t_max', default=-1, type=float,
                     help='T_max for CosineAnnealingLR; -1 = remaining epochs after stage 1')
 
 # Train params
-parser.add_argument('--batch_size', default=24, type=int, help='Batch size for training')
+parser.add_argument('--batch_size', default=16, type=int, help='Batch size for training')
 parser.add_argument('--num_epochs', default=50, type=int,
                     help='total number of epochs (stage 1 + stage 2)')
 parser.add_argument('--num_workers', default=4, type=int,
                     help='Number of workers used in dataloading')
 parser.add_argument('--validation_epochs', default=1, type=int,
                     help='validate (and checkpoint) every this many epochs')
+parser.add_argument('--log_interval_s', default=60.0, type=float,
+                    help='mid-epoch progress heartbeat every N seconds (0 = off)')
 parser.add_argument('--use_cuda', default=True, type=str2bool, help='Use CUDA to train model')
 parser.add_argument('--cuda_index', default="0", type=str, help='CUDA device index')
 parser.add_argument('--checkpoint_folder', default='models/train-landmark/',
@@ -141,6 +146,30 @@ if __name__ == '__main__':
     if device.startswith("cuda"):
         logging.info("Use Cuda.")
 
+    # --- Weights & Biases auto-login (only when --wandb) ------------------
+    # Key is read from the WANDB_API_KEY env var (never hardcode it in this
+    # tracked file). Set it once per shell, e.g.
+    #     export WANDB_API_KEY=<your-key>
+    # or run `wandb login` once (~/.netrc). Falls back to netrc if no env key.
+    if args.wandb:
+        try:
+            import wandb
+
+            key = os.environ.get("WANDB_API_KEY")
+            wandb.login(key=key) if key else wandb.login()
+            if args.wandb_entity is None:
+                args.wandb_entity = os.environ.get("WANDB_ENTITY", "trantrung20023")
+            os.environ.setdefault("WANDB_ENTITY", args.wandb_entity)
+            logging.info(
+                f"wandb {wandb.__version__} | api_key set: "
+                f"{wandb.api.api_key is not None} | entity: {args.wandb_entity}")
+        except ImportError:
+            logging.warning("wandb not installed (pip install wandb); training without it.")
+            args.wandb = False
+        except Exception:
+            logging.exception("wandb login failed; training without it.")
+            args.wandb = False
+
     checkpoint_folder = args.checkpoint_folder.rstrip("/\\")
     project, name = os.path.split(checkpoint_folder)
 
@@ -151,6 +180,7 @@ if __name__ == '__main__':
         train_split=args.train_split,
         val_split=args.val_split,
         test_split=args.test_split,
+        img_size=args.img_size,
         epochs=args.num_epochs,
         freeze_epochs=args.freeze_epochs,
         batch=args.batch_size,
@@ -181,6 +211,7 @@ if __name__ == '__main__':
         name=name or "train-landmark",
         exist_ok=True,  # CLI keeps writing into the folder the user named
         val_period=args.validation_epochs,
+        log_interval_s=args.log_interval_s,
         map_period=args.map_period,
         map_conf=args.map_conf,
         map_nms_iou=args.map_nms_iou,
@@ -197,8 +228,26 @@ if __name__ == '__main__':
         wandb_save_model=not args.wandb_no_model,
     )
 
-    model = RFBLandmark(weights=args.resume or args.pretrained_ssd, device=device,
-                        require_cuda=require_cuda)
-    results = model.train(cfg)
-    logging.info(f"Done. Best NME {results.best_nme:.4f} @ epoch {results.best_epoch} "
-                 f"-> {results.best_checkpoint}")
+    code = 0
+    try:
+        model = RFBLandmark(weights=args.resume or args.pretrained_ssd, device=device,
+                            require_cuda=require_cuda)
+        results = model.train(cfg)
+        logging.info(f"Done. Best NME {results.best_nme:.4f} @ epoch {results.best_epoch} "
+                     f"-> {results.best_checkpoint}")
+    except KeyboardInterrupt:
+        logging.info("Interrupted.")
+        code = 130
+    except Exception:
+        logging.exception("Training failed")
+        code = 1
+    finally:
+        # dataloader workers (cv2 + fork, WSL) can deadlock interpreter teardown
+        for p in mp.active_children():
+            p.terminate()
+        for p in mp.active_children():
+            p.join(2)
+            if p.is_alive():
+                p.kill()
+        sys.stdout.flush()
+        os._exit(code)
