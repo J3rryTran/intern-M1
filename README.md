@@ -105,21 +105,36 @@ Applies to trained checkpoints from either model.
 
 **Evaluation protocol.** All models are trained and evaluated on the same train/val split, at the same input resolution (**320×320**), and benchmarked on the same machine at batch size 1. Report the exact CPU/GPU model together with the numbers — latency is meaningless without it.
 
-- Test machine: `<CPU model>` / `<GPU model>`
-- Runtime: PyTorch `<version>`, ONNX Runtime `<version>`, CUDA `<version>`
-- Python 3.12
+- Test machine: Intel Core i5-13500
+- Runtime: PyTorch 2.9.0+cu128, ONNX Runtime 1.28.0, CUDA 12.8, TensorFlow 2.21
+- Python 3.13
 
 ### 1. Model comparison
 
 | Model | Input | Params (M) | GFLOPs | Size (MB) | box mAP50 | box mAP50-95 | pose mAP50 | PCK@0.05 | NME | CPU latency (ms) | CPU FPS |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| RFB-320 + landmark | 320 | | | | | | | | | | |
-| yolo26n **base** (detection only, reference) | 320 | | | | | | — | — | — | | |
-| yolo26n-shufflenetv2-face-pose-**slim** | 320 | | | | | | | | | | |
-| yolo26n-shufflenetv2-face-pose-**slim2** | 320 | | | | | | | | | | |
-| yolo26n-repvit-face-pose-**slim** | 320 | | | | | | | | | | |
+| RFB-320 + landmark ⁴ | 320 | **0.36** | **0.28** | **1.53** | 0.9971 | 0.7953 |0.9926 | 0.8832 | 0.0279 | 8.9 | 112 |
+| yolo26n-shufflenetv2-face-pose-**slim2** | 320 | 0.52 | 0.40 | 1.44 | 0.9942 | 0.9436 | 0.9941 | TBD | TBD | 10.3 | 97 |
+| yolo26n-repvit-face-pose-**slim** | 320 | 0.85 | 0.54 | 2.14 | 0.9937 | **0.9506** | 0.9936 | TBD | TBD | 12.7 | 79 |
+| yolo26n-repvit-face-pose-**slim2** ² | 320 | 0.76 | 0.52 | 1.94 | 0.9942 | 0.9453 | 0.9941 | TBD | TBD | 12.2 | 82 |
+| yolo26n-repvit-face-pose-**slim3** ³ | 320 | 0.72 | 0.52 | 1.85 | 0.9939 | 0.9452 | 0.9937 | TBD | TBD | 11.5 | 87 |
 
 All numbers are FP32. `Params`, `GFLOPs` and `Size` measure model cost; `box mAP` measures detection quality; `pose mAP50`, `PCK@0.05` and `NME` measure landmark quality (NME is the only metric where lower is better). `base` has no landmark head, so its pose columns stay empty — it is there to show what the lightweight backbones give up relative to the stock YOLO26n detector.
+
+**Measurement notes.**
+
+- **mAP**: final-epoch validation during training on the shared **7,642-image val split** at 320×320 (150 epochs, AdamW `lr0=5e-3`; `repvit-slim2` early-stopped at epoch 147). All runs share the same dataset, split, and hyper-parameters.
+- **CPU latency / FPS**: end-to-end `model.predict` (preprocess + inference + postprocess), batch 1, average of 50 runs after warm-up, on the i5-13500 with the **fused** inference model. Reproduce with `ultralytics/_bench_readme.py`.
+- **Params / GFLOPs**: full training graph. At inference, `fuse()` removes the one2many, RLE and σ branches — e.g. `shufflenet-slim2` deploys with **354K** params.
+- **PCK@0.05 / NME**: measured for RFB only (`vision/trainer.py::landmark_stats`, normalized by √box-area, evaluated on positive priors with a labelled keypoint). The YOLO rows still have no equivalent tooling (`infer.py` reports pose mAP only) — TBD.
+- ¹ Only a 480-input checkpoint of `shufflenet-slim` exists (`shufflenet-slim-250e.pt`); its row stays empty until it is re-trained at 320 for a fair comparison.
+- ² `slim2` variants replace `SPPF` with **SimSPPF** (ReLU) for INT8-friendliness — same parameter count, better quantization behaviour.
+- ³ `slim3` removes the SPPF block entirely (RepViT's SE + FFN provides enough context at 320 input — box mAP50-95 ties with `slim2`).
+- ⁴ **RFB-320 + landmark**: two-stage landmark fine-tune of `version-RFB-640.pth` (run `rfb_landmark_20260723_092141`, SGD + cosine, stopped at epoch 110 once val NME had converged). Read its accuracy columns with two caveats: **(a)** they come from this repo's own evaluator, not ultralytics — `box mAP` uses VOC all-point AP (conf 0.02, NMS IoU 0.5) instead of the 101-point COCO interpolation, so small gaps against the YOLO rows are partly methodological; **(b)** `pose mAP50` is an ultralytics OKS metric with no implementation here, hence the dash. Landmark quality for RFB is the PCK/NME pair instead (PCK@0.10 = 0.9701; weakest point is the nose at 0.965). Latency measured over 300 real images from `data/data_inference` (batch 1, preprocess + forward + NMS, 15-image warm-up, 10 CPU threads, PyTorch 2.11.0+cu128) — same machine as the YOLO rows, slightly newer torch. Reproduce with `Ultra-Lightweight-Face-Detector/_bench_readme.py --weights models/<run>/best.pth`.
+
+**Takeaway.** At 320 input, all four YOLO variants are statistically tied on accuracy (box mAP50 ≈ 0.994); `repvit-slim` leads box mAP50-95 by ~0.5 point but costs +63% params and +23% latency versus `shufflenet-slim2`, which is the best accuracy-per-cost choice and also the strongest INT8 candidate.
+
+**RFB vs YOLO.** RFB is the cheapest model in every cost column — 0.36M params, 0.28 GFLOPs, 8.9 ms (112 FPS), roughly 30% less compute and 14% faster than `shufflenet-slim2` — and it finds faces just as reliably (box mAP50 0.997). Its weakness is localization precision: box mAP50-95 0.795 versus 0.944, i.e. it puts a box on the face but fits it ~15 points less tightly under strict IoU, which is what a 2016-era SSD anchor/regression head costs. Landmarks land in the same place: 96.9% of points fall within 10% of face size, but only 88.3% within 5%. Pick RFB when detection recall per FLOP is what matters, and a YOLO26n variant when tight boxes or precise keypoints do.
 
 ### 2. FP32 vs INT8 (after pruning / quantization)
 
